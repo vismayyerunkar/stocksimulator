@@ -31,7 +31,7 @@ app.get('/',async (req,res)=>{
 //Routes
 app.use("/api/user", userRoutes);
 app.use("/api/watchlist",checkUserAuth,watchlistRoutes)
-app.use("/api/stock",checkUserAuth,stockRoutes);
+app.use("/api/stock",stockRoutes);
 
 const server = http.createServer(app); // Add this
 server.listen(PORT, () => {
