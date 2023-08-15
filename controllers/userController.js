@@ -24,7 +24,7 @@ class UserController {
             await doc.save()
             const saved_user = await UserModel.findOne({ email: email })
             // Generate JWT Token
-            const token = jwt.sign({ userID: saved_user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '5d' })
+            const token = jwt.sign({ userID: saved_user._id,userEmail:saved_user.email }, process.env.JWT_SECRET_KEY, { expiresIn: '1d' })
             res.status(201).send({ "status": "success", "message": "Registration Success", "token": token })
           } catch (error) {
             console.log(error)
@@ -48,7 +48,7 @@ class UserController {
           const isMatch = await bcrypt.compare(password, user.password)
           if ((user.email === email) && isMatch) {
             // Generate JWT Token
-            const token = jwt.sign({ userID: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '5d' })
+            const token = jwt.sign({ userID: user._id,userEmail:user.email }, process.env.JWT_SECRET_KEY, { expiresIn: '1d' })
             res.send({ "status": "success", "message": "Login Success", "token": token })
           } else {
             res.send({ "status": "failed", "message": "Email or Password is not Valid" })
@@ -66,6 +66,7 @@ class UserController {
   }
 
   static changeUserPassword = async (req, res) => {
+    console.log("pass change req");
     const { password, password_confirmation } = req.body
     if (password && password_confirmation) {
       if (password !== password_confirmation) {
@@ -92,18 +93,19 @@ class UserController {
       if (user) {
         const secret = user._id + process.env.JWT_SECRET_KEY
         const token = jwt.sign({ userID: user._id }, secret, { expiresIn: '15m' })
+        //frontend link 1:48:09
         const link = `http://127.0.0.1:3000/api/user/reset/${user._id}/${token}`
         console.log(link)
         // // Send Email
-        // let info = await transporter.sendMail({
-        //   from: process.env.EMAIL_FROM,
-        //   to: user.email,
-        //   subject: "GeekShop - Password Reset Link",
-        //   html: `<a href=${link}>Click Here</a> to Reset Your Password`
-        // })
+        let info = await transporter.sendMail({
+          from: process.env.EMAIL_FROM,
+          to: user.email,
+          subject: "RichIn - Password Reset Link",
+          html: `<a href=${link}>Click Here</a> to Reset Your Password`
+        })
         res.send({ "status": "success", "message": "Password Reset Email Sent... Please Check Your Email" })
       } else {
-        res.send({ "status": "failed", "message": "Email doesn't exists" })
+        res.send({ "status": "failed", "message":"Email doesn't exists" })
       }
     } else {
       res.send({ "status": "failed", "message": "Email Field is Required" })
