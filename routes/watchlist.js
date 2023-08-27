@@ -1,16 +1,10 @@
 import express from 'express';
 const router = express.Router();
-import watchlistController from '../controllers/watchlistController.js';
+import WatchlistController from '../controllers/watchlistController.js';
 
 // Public Routes
-// router.post('/register', UserController.userRegistration)
-// router.post('/login', UserController.userLogin)
-// router.post('/send-reset-password-email', UserController.sendUserPasswordResetEmail)
-// router.post('/reset-password/:id/:token', UserController.userPasswordReset)
+router.post('/createWatchList', WatchlistController.createWatchList)
+router.post('/removeWatchList', WatchlistController.removeWatchList)
+router.get("/watchlists",WatchlistController.getWatchListData);
 
-// // Protected Routes
-// router.post('/changepassword' ,checkUserAuth,UserController.changeUserPassword)
-// router.get('/loggeduser',checkUserAuth, UserController.loggedUser)
-
-
-export default router
+export default router;

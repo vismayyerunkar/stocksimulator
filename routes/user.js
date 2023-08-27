@@ -3,9 +3,6 @@ const router = express.Router();
 import UserController from '../controllers/userController.js';
 import checkUserAuth from '../middlewares/auth-middleware.js';
 
-// Route Level Middleware - To Protect Route
-// router.use('/changepassword',checkUserAuth)
-// router.use('/loggeduser', checkUserAuth)
 
 // Public Routes
 router.post('/register', UserController.userRegistration)
