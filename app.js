@@ -5,15 +5,12 @@ import cors from 'cors';
 import connectDB from './config/connectdb.js'
 import userRoutes from './routes/user.js'
 import watchlistRoutes from './routes/watchlist.js'
+import assetRoutes from './routes/assets.js'
+import transactionRoutes from './routes/transactions.js'
 import stockRoutes from './routes/stock.js'
 import http from 'http';
 import {handleSocket} from './socket/socketHandler.js'
 import checkUserAuth from './middlewares/auth-middleware.js';
-import * as URL from './helpers/constants.js';
-import axios from 'axios';
-import {getCurrentStockPrice,getGainersAndLoosers,getStockPriceBetweenDateRange} from "./controllers/stockController.js"
-
-
 
 // constants
 const PORT = process.env.PORT
@@ -31,11 +28,15 @@ app.get('/',async (req,res)=>{
 //Routes
 app.use("/api/user", userRoutes);
 app.use("/api/watchlist",checkUserAuth,watchlistRoutes)
-app.use("/api/stock",stockRoutes);
+app.use("/api/assets",checkUserAuth,assetRoutes);
+app.use("/api/transactions",checkUserAuth,transactionRoutes);
+// app.use("/api/stock",stockRoutes);
 
 const server = http.createServer(app); // Add this
 server.listen(PORT, () => {
   console.log(`Server listening at ${process.env.BACKEND_URL}:${PORT}`)
   handleSocket(server);
   connectDB(DATABASE_URL);
+  // processDataChange();
 });
+

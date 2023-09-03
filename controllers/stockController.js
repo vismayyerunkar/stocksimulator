@@ -1,18 +1,17 @@
+import axios from "axios";
 import { NseIndia } from  "stock-nse-india";
 const  nseIndia = new  NseIndia()
-import StockSocket from "stocksocket";
 
-export const getCurrentStockPrice = async (req,res) =>{
+export const getCurrentStockPrice = async (symbol) =>{
+    console.log("getting price")
     try {
-        const {symbol} = req.body;
         const resp = await nseIndia.getEquityDetails(symbol);
-        console.log(resp);
-        return res.send({data:resp.priceInfo});
-        // return resp.priceInfo;
+        return resp.priceInfo.lastPrice;
     }catch(err){
         throw Error(err);
     }
 }
+
 
 export const getStockPriceBetweenDateRange = async (req,res)=>{
 
@@ -33,8 +32,7 @@ export const getStockPriceBetweenDateRange = async (req,res)=>{
     }
 }
 
-export const getGainersAndLoosers = async (req,res)=>{
-    const {limit} = req.body
+export const getGainersAndLoosers = async (limit)=>{
     const indexData = await nseIndia.getEquityStockIndices("NIFTY 50");
     
     const gainers = [];
@@ -54,15 +52,19 @@ export const getGainersAndLoosers = async (req,res)=>{
         gainers: [...gainers].sort((a, b) => b.pChange - a.pChange),
         losers: [...losers].sort((a, b) => a.pChange - b.pChange)
     }   
-    console.log(data.gainers);
-    return res.send({data:data}); 
+    return data; 
 }
 
+export const isMarketOpen = async ()=>{
+    try{
 
-// StockSocket.addTicker("AAPL", stockPriceChanged);
-
-// function stockPriceChanged(data) {
-//   //Choose what to do with your data as it comes in.
-//   console.log(data);
-// }
-
+        const data = await axios.get("https://www.nseindia.com/api/marketStatus");
+        const marketStatus = data.data.marketState[0].marketStatus;
+        if(marketStatus.toLowerCase() == 'close'){
+            return false;
+        }
+        return true;
+    }catch(err){
+        console.log("Failed to fetch market status : ",err)
+    }
+}
