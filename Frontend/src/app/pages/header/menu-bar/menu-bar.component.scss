@@ -1,0 +1,99 @@
+/* Style for the tooltip/card */
+.profile-tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 4px;
+  z-index: 1;
+  top: 100%;
+  right: 0;
+
+  #name {
+    margin-bottom: 10px;
+    font-size: large;
+  }
+  #fund {
+    color: green;
+  }
+}
+
+/* Show the tooltip/card on hover */
+.profile-tooltip:hover .tooltip-content {
+  display: block;
+}
+/* Style for the tooltip/card */
+.profile-tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+
+  // Card styles
+  .tooltip-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 4px;
+    z-index: 1;
+    top: 100%;
+    right: 0;
+    width: 250px; /* Increase the width as needed */
+
+    // Card header
+    .card-header {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    // Card content
+    .card-content {
+      margin-bottom: 15px;
+
+      p {
+        margin: 0;
+      }
+    }
+
+    // Buttons container
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+
+      .p-button {
+        flex: 1;
+        margin-right: 5px;
+        background-color: white;
+      }
+    }
+
+    // Logout link
+    a {
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      color: #007bff; // Link color
+      margin-top: 10px;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  // Show the tooltip/card on hover
+  &:hover .tooltip-content {
+    display: block;
+  }
+}
