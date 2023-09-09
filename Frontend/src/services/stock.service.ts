@@ -98,7 +98,7 @@ export class StockService {
   }
   fetchTransactions(): Observable<ITransactionsResponse> {
     const token = `Bearer ${localStorage.getItem('authToken')}`;
-    const url = `http://localhost:8000/api/`;
+    const url = `http://localhost:8000/api/transactions/`;
     let httpOptions = {
       headers: new HttpHeaders({ Authorization: token }),
     };

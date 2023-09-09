@@ -54,15 +54,35 @@ export class AssetService {
     let httpOptions = {};
     return this.http.get<IAssetDetailResponse>(url, httpOptions);
   }
-
-  fetchAssetInvestments(assetId: string): Observable<IAssetInvestmentResponse> {
+//Buy Assest 
+  BuyAsset(): Observable<IAssetInvestmentResponse> {
     const token = `Token ${localStorage.getItem('authToken')}`;
-    const url = `${environment.baseUrl}apis/investor/staff/assets/v1/investments/?asset_id=${assetId}`;
+    const url = `http://localhost:8000/api/purchaseAsset/`;
     let httpOptions = {
       headers: new HttpHeaders({ Authorization: token }),
     };
     return this.http.get<IAssetInvestmentResponse>(url, httpOptions);
   }
+
+// Sell Assest
+SellAssest(): Observable<IAssetInvestmentResponse> {
+  const token = `Token ${localStorage.getItem('authToken')}`;
+  const url = `http://localhost:8000/api/sellAsset/`;
+  let httpOptions = {
+    headers: new HttpHeaders({ Authorization: token }),
+  };
+  return this.http.get<IAssetInvestmentResponse>(url, httpOptions);
+}
+
+//Get All assest
+GetAssest(): Observable<IAssetInvestmentResponse> {
+  const token = `Token ${localStorage.getItem('authToken')}`;
+  const url = `http://localhost:8000/api/`;
+  let httpOptions = {
+    headers: new HttpHeaders({ Authorization: token }),
+  };
+  return this.http.get<IAssetInvestmentResponse>(url, httpOptions);
+}
 
   fetchInvestableAsset(
     investmentId: string
