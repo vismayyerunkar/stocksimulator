@@ -15,13 +15,17 @@ function App() {
   useEffect(() => {
 
     socket.on("TRENDING_STOCKS",(data)=>{
-      console.log(data);
       setTrendings(data);
     });
-    socket.emit("GET_STOCK_DATA",{symbols:["TCS"]},(data)=>{
-      console.log(data);
-      setTestData(data);
+    socket.emit("GET_STOCK_DATA",{symbols:["TCS.NS"]},(vals)=>{
+      console.log("kkkkkkk" ,vals);
+      setTestData(vals);
     });
+
+    socket.on("PRICE_CHANGED",(datta)=>{
+      console.log("REceived new price ",datta);
+      setTestData(datta);
+    })
 
   }, [])
 

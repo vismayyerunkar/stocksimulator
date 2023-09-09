@@ -20,10 +20,10 @@ export class StockDataHandler {
             var stocktickers = payload.symbols;
             const is_market_open = await isMarketOpen();
             if (is_market_open) {
+                // stocktickers.forEach((symbolData)=>{
+                //     this.socket.join(symbolData);
+                // });
                 console.log("market is open");
-                stocksocket.addTickers(stocktickers, (newPrice) => {
-                    cb(newPrice);
-                });
             } else {
                 getStockData(stocktickers).then((data) => {
                     const transformedData = [];
