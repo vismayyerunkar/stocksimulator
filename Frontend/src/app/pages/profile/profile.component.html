@@ -1,0 +1,97 @@
+<app-header></app-header>
+<div class="card">
+  <div class="card__header">
+    <div class="card__profile">
+      <img
+        src="https://randomuser.me/api/portraits/men/52.jpg"
+        alt="A man smiling"
+      />
+    </div>
+    <div class="card__name">
+      <h2>Aryan Agrawal</h2>
+      <div class="card__handle">
+        <span class="handle">@_Aryan_</span>
+        <span class="circle"></span>
+        <span class="category">Investor</span>
+      </div>
+    </div>
+    <div class="card__button"></div>
+  </div>
+  <hr class="border" />
+  <nav>
+    <ul class="navlinks">
+      <li class="link__item">Home</li>
+      <li class="link__item">Stocks</li>
+      <li class="link__item">Crpto</li>
+      <li class="link__item">Equity</li>
+      <li class="link__item">Funds</li>
+    </ul>
+  </nav>
+  <div class="card__insights">
+    <div class="card__heading">
+      <div class="heading">India, Navi Mumbai</div>
+      <div class="date">
+        May 24 - June 24
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="feather feather-chevron-down"
+        >
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+<h1><b>Transactions</b></h1>
+<div class="table">
+  <p-table
+    [value]="transactions"
+    [paginator]="true"
+    [rows]="4"
+    class="ipo-table"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Date</th>
+        <th>Company Logo</th>
+        <th>Company Name</th>
+        <th>Amount</th>
+        <th>Current</th>
+        <th>Change (%)</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-stock>
+      <tr>
+        <td>{{ stock.symbol }}</td>
+        <td>
+          <img
+            src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK539254.png"
+            alt="Company Logo"
+            style="width: 20%"
+          />
+        </td>
+        <td>
+          <b>{{ stock.name }}</b>
+        </td>
+        <td>₹ {{ stock.price }}</td>
+        <td><b>₹ 200.67</b></td>
+        <td
+          [ngClass]="{
+            'change-percentage-positive': stock.changePercentage > 0,
+            'change-percentage-negative': stock.changePercentage < 0
+          }"
+        >
+          {{ stock.changePercentage }} %
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

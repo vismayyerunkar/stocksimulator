@@ -1,0 +1,61 @@
+<app-header></app-header>
+<div class="card">
+  <p-tabMenu [model]="items"></p-tabMenu>
+</div>
+<div class="card-container">
+  <div class="mycard left-card">
+    <p-card header="Current">
+      <p class="m-0" style="color: green; font-size: 30px"><b>₹ 34.6K</b></p>
+    </p-card>
+  </div>
+  <div class="mycard right-card">
+    <p-card header="Invested">
+      <p class="m-0" style="color: gray; font-size: 30px"><b>₹ 30.50K</b></p>
+    </p-card>
+  </div>
+</div>
+
+<app-wallet-pie-chart></app-wallet-pie-chart>
+
+<div class="my-app">
+  <div class="my-card card">
+    <div class="my-card__header card-header">
+      <h3 class="my-card__header-title card-title"><b>Stocks</b></h3>
+      <!-- <a class="my-card__header-link" href="#">See all →</a> -->
+    </div>
+    <div *ngFor="let stock of stocksData" class="my-card card">
+      <ul class="my-list list-group list-group-flush">
+        <li class="my-list-item list-group-item">
+          <div class="my-list-item__date">
+            <span class="my-list-item__date-day">28</span>
+            <span class="my-list-item__date-month">jul</span>
+          </div>
+          <div class="my-list-item__image">
+            <img
+              class="stock-logo"
+              src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK543320.png"
+              alt="{{ stock.name }} Logo"
+            />
+          </div>
+          <div class="my-list-item__text">
+            <h4 class="my-list-item__text-title">{{ stock.name }}</h4>
+            <p class="my-list-item__text-description">
+              {{ stock.symbol }}
+            </p>
+          </div>
+
+          <div class="my-list-item__fee">
+            <span class="my-list-item__fee-delta">₹ {{ stock.price }}</span>
+            <span
+              class="my-list-item__fee-currency"
+              [class.green]="stock.changePercentage > 0"
+              [class.red]="stock.changePercentage < 0"
+            >
+              {{ stock.changePercentage }}</span
+            >
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
