@@ -8,16 +8,20 @@ import { StockService } from 'src/services/stock.service';
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-  transactions: Stock[] = [];
+  transactions: any[];
 
   constructor(private stockService: StockService) {}
 
   ngOnInit(): void {
     this.fetchTransactions();
   }
-  fetchTransactions(): void {
-    this.stockService.getStocks().subscribe((data) => {
-      this.transactions = data;
+  
+  fetchTransactions() {
+    this.stockService.fetchTransactions().subscribe({
+      next: (res: any) => {
+        this.transactions = res;
+        console.log(res);
+      },
     });
   }
 }

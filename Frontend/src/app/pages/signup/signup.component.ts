@@ -41,7 +41,7 @@ export class SignupComponent implements OnInit {
   signup() {
     var body = this.signupForm.value;
 
-    this.userAuthService.login(body).subscribe({
+    this.userAuthService.signup(body).subscribe({
       next: (res: ISignupResponse) => {
         console.log('Login Response:', res);
 

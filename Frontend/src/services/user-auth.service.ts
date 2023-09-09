@@ -26,7 +26,7 @@ export class UserAuthService {
     return this.http.post<ILoginResponse>(url, data, httpOptions);
   }
   signup(data: any): Observable<ISignupResponse> {
-    const url = `http://localhost:8000/api/user/signup`;
+    const url = `http://localhost:8000/api/user/register`;
     const httpOptions = {};
     return this.http.post<ISignupResponse>(url, data, httpOptions);
   }
