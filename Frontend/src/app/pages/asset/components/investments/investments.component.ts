@@ -21,7 +21,7 @@ export class InvestmentsComponent implements OnInit {
 
   getInvestments() {
     if(this.assetId) {
-      this.assetService.fetchAssetInvestments(this.assetId).subscribe({
+      this.assetService.SellAssest().subscribe({
         next: (res: IAssetInvestmentResponse) => {
           this.investmentList = res.data;
           console.log('Asset Investment Response:', res);

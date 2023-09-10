@@ -38,7 +38,7 @@
 
 <div class="table">
   <p-table
-    [value]="filteredStocks"
+    [value]="assests"
     [paginator]="true"
     [rows]="4"
     class="ipo-table"
@@ -53,9 +53,9 @@
         <th>Change (%)</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-stock>
+    <ng-template pTemplate="body" let-assest>
       <tr>
-        <td>{{ stock.symbol }}</td>
+        <td>{{ assest.assetSymbol }}</td>
         <td>
           <img
             src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK539254.png"
@@ -64,17 +64,17 @@
           />
         </td>
         <td>
-          <b>{{ stock.name }}</b>
+          <b>{{ assest.assetName }}</b>
         </td>
-        <td>₹ {{ stock.price }}</td>
+        <td>₹ {{ assest.assetPrice }}</td>
         <td><b>₹ 200.67</b></td>
         <td
           [ngClass]="{
-            'change-percentage-positive': stock.changePercentage > 0,
-            'change-percentage-negative': stock.changePercentage < 0
+            'change-percentage-positive': 1 > 0,
+            'change-percentage-negative': -1 < 0
           }"
         >
-          {{ stock.changePercentage }} %
+          {{ assest.assetType }} %
         </td>
       </tr>
     </ng-template>

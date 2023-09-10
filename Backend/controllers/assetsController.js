@@ -18,7 +18,7 @@ class AssetsController {
       try {
         // Find the existing user by userId
         const existingUser = req.user;
-
+console.log(existingUser._id.toString());
         const newAssetItem = new AssetsModel({
           userId: existingUser._id, // Use the _id of the existing user document
           assetSymbol: assetSymbol,
@@ -30,6 +30,7 @@ class AssetsController {
 
         // create a transaction
         const user = await UserModel.findOne({_id:req.user});
+        console.log(user)
         if(user.availableTokens < assetPrice*assetQuantity){
             return res.send({
                 status:200,
@@ -41,11 +42,12 @@ class AssetsController {
         await newAssetItem.save();
 
         const transaction = new Transaction({
+            userId: existingUser._id,// Use the _id of the existing user document
             price:assetPrice,
             type:"BUY",
             symbol:assetSymbol,
+            
         });
-
         transaction.save();
         return res.status(201).send({ status: 'success', message: 'Asset Purchased successfully' });
       } catch (error) {
@@ -80,9 +82,11 @@ class AssetsController {
             await AssetsModel.deleteOne({_id:assetId});
            
             const transaction = new Transaction({
-                price:asset.assetPrice,
-                type:"SELL",
-                symbol:asset.assetSymbol,
+              userId: existingUser._id,// Use the _id of the existing user document
+              price:assetPrice,
+              type:"SELL",
+              symbol:asset.assetSymbol,
+            
             });
 
             transaction.save();

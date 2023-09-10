@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuItem, SelectItem } from 'primeng/api';
 import { Stock } from 'src/models/stock';
-import { StockService } from 'src/services/stock.service';
+import { AssetService } from 'src/services/asset.service';
 
 @Component({
   selector: 'app-portfolio',
@@ -13,6 +13,7 @@ export class PortfolioComponent implements OnInit {
   sortOptions: SelectItem[];
   stocks: Stock[] = [];
   items: MenuItem[] = [];
+  assests: any[];
 
   ngOnInit(): void {
     this.fetchStocks();
@@ -22,7 +23,7 @@ export class PortfolioComponent implements OnInit {
       { label: 'Crypto', icon: 'pi pi-fw pi-bitcoin' },
     ];
   }
-  constructor(private stockService: StockService) {
+  constructor(private stockService: AssetService) {
     this.sortOptions = [
       { label: 'Symbol', value: 'symbol' },
       { label: 'Company Name', value: 'name' },
@@ -31,9 +32,12 @@ export class PortfolioComponent implements OnInit {
     ];
   }
   fetchStocks(): void {
-    this.stockService.getStocks().subscribe((data) => {
-      this.stocks = data;
-      this.filteredStocks = data;
-    });
+      this.stockService.GetAssest().subscribe({
+        next: (res: any) => {
+          this.assests = res;
+          console.log(res);
+        },
+      });
+    }
   }
-}
+
