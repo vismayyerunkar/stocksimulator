@@ -1,10 +1,10 @@
 import { IGenericResponse } from './genericModels';
 
 export interface Transactions {
-price: string;
-type:string;
-symbol:string;
-date:string;
+  price:Number;
+  type: String;
+  symbol: String;
+  date:Date;
 }
 
 export interface ITransactionsResponse extends IGenericResponse {
