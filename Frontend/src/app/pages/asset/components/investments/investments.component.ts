@@ -20,16 +20,16 @@ export class InvestmentsComponent implements OnInit {
   }
 
   getInvestments() {
-    // if(this.assetId) {
-    //   this.assetService?.fetchAssetInvestments(this.assetId).subscribe({
-    //     next: (res: IAssetInvestmentResponse) => {
-    //       this.investmentList = res.data;
-    //       console.log('Asset Investment Response:', res);
-    //     },
-    //     error: (err: any) => {
-    //       console.error('Asset Investment Error:', err);
-    //     },
-    //   });
-    // }
+    if(this.assetId) {
+      this.assetService.SellAssest().subscribe({
+        next: (res: IAssetInvestmentResponse) => {
+          this.investmentList = res.data;
+          console.log('Asset Investment Response:', res);
+        },
+        error: (err: any) => {
+          console.error('Asset Investment Error:', err);
+        },
+      });
+    }
   }
 }

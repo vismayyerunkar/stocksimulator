@@ -10,7 +10,9 @@ import {
   IAssetInvestmentResponse,
   IAddOrUpdateAssetResponse,
   IInvestableAssetResponse,
+ 
 } from 'src/models/asset';
+import {IGetAllAssest} from 'src/models/allAssest'
 import { IGenericResponse } from 'src/models/genericModels';
 
 @Injectable({
@@ -56,8 +58,8 @@ export class AssetService {
   }
 //Buy Assest 
   BuyAsset(): Observable<IAssetInvestmentResponse> {
-    const token = `Token ${localStorage.getItem('authToken')}`;
-    const url = `http://localhost:8000/api/purchaseAsset/`;
+    const token = `Bearer ${localStorage.getItem('authToken')}`;
+    const url = `http://localhost:8000/api/purchaseAsset`;
     let httpOptions = {
       headers: new HttpHeaders({ Authorization: token }),
     };
@@ -65,23 +67,23 @@ export class AssetService {
   }
 
 // Sell Assest
-SellAssest(): Observable<IAssetInvestmentResponse> {
-  const token = `Token ${localStorage.getItem('authToken')}`;
-  const url = `http://localhost:8000/api/sellAsset/`;
+  SellAssest(): Observable<IAssetInvestmentResponse> {
+  const token = `Bearer ${localStorage.getItem('authToken')}`;
+  const url = `http://localhost:8000/api/sellAsset`;
   let httpOptions = {
     headers: new HttpHeaders({ Authorization: token }),
   };
   return this.http.get<IAssetInvestmentResponse>(url, httpOptions);
 }
 
-//Get All assest
-GetAssest(): Observable<IAssetInvestmentResponse> {
-  const token = `Token ${localStorage.getItem('authToken')}`;
-  const url = `http://localhost:8000/api/`;
+//Get All assest for portfolio page
+GetAssest(): Observable<IGetAllAssest> {
+  const token = `Bearer ${localStorage.getItem('authToken')}`;
+  const url = `http://localhost:8000/api/assets`;
   let httpOptions = {
     headers: new HttpHeaders({ Authorization: token }),
   };
-  return this.http.get<IAssetInvestmentResponse>(url, httpOptions);
+  return this.http.get<IGetAllAssest>(url, httpOptions);
 }
 
   fetchInvestableAsset(
