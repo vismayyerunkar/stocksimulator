@@ -45,7 +45,6 @@ export class WatchlistComponent implements OnInit {
       stock.symbol.toLowerCase().includes(filterText)
     );
   }
-  //usable
   getWatchlistList() {
     this.stockService.fetchWatchList().subscribe({
       next: (res: any) => {

@@ -30,7 +30,6 @@ import { ImageModule } from 'primeng/image';
 import { ToastModule } from 'primeng/toast';
 import { SignupComponent } from './pages/signup/signup.component';
 import { InputTextModule } from 'primeng/inputtext';
-
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { environment } from 'src/environments/environment';
 
@@ -42,7 +41,12 @@ const config: SocketIoConfig = {
 	}
 }
 
-
+import { InvestedValueComponent } from './portfolio/components/invested-value/invested-value.component';
+import { AllComponent } from './pages/wallet/components/all/all.component';
+import { StocksComponent } from './pages/wallet/components/stocks/stocks.component';
+import { CryptoComponent } from './pages/wallet/components/crypto/crypto.component';
+import { GoalComponent } from './pages/goal/goal.component';
+import { GptComponent } from './pages/gpt/gpt.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +59,12 @@ const config: SocketIoConfig = {
     PortfolioComponent,
     ProfileComponent,
     SignupComponent,
+    InvestedValueComponent,
+    AllComponent,
+    StocksComponent,
+    CryptoComponent,
+    GoalComponent,
+    GptComponent,
   ],
   bootstrap: [AppComponent],
   providers: [DatePipe, ProductService],
@@ -82,6 +92,7 @@ const config: SocketIoConfig = {
     ButtonModule,
     InputTextModule,
     SocketIoModule.forRoot(config), 
+
   ],
 })
 export class AppModule {}
