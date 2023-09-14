@@ -59,7 +59,7 @@ export class AssetService {
 //Buy Assest 
   BuyAsset(): Observable<IAssetInvestmentResponse> {
     const token = `Bearer ${localStorage.getItem('authToken')}`;
-    const url = `http://localhost:8000/api/purchaseAsset`;
+    const url = `${environment.baseUrl}/api/purchaseAsset`;
     let httpOptions = {
       headers: new HttpHeaders({ Authorization: token }),
     };
@@ -69,7 +69,7 @@ export class AssetService {
 // Sell Assest
   SellAssest(): Observable<IAssetInvestmentResponse> {
   const token = `Bearer ${localStorage.getItem('authToken')}`;
-  const url = `http://localhost:8000/api/sellAsset`;
+  const url = `${environment.baseUrl}/api/sellAsset`;
   let httpOptions = {
     headers: new HttpHeaders({ Authorization: token }),
   };
@@ -79,7 +79,7 @@ export class AssetService {
 //Get All assest for portfolio page
 GetAssest(): Observable<IGetAllAssest> {
   const token = `Bearer ${localStorage.getItem('authToken')}`;
-  const url = `http://localhost:8000/api/assets`;
+  const url = `${environment.baseUrl}/api/assets`;
   let httpOptions = {
     headers: new HttpHeaders({ Authorization: token }),
   };
