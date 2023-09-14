@@ -14,7 +14,6 @@ export class StockDetailsComponent implements AfterViewInit {
   title: string; // Add this property to store the title
 
   //Added explisitly to check
-  stockname : string = "AAPL"
 
   constructor(private route: ActivatedRoute) {
     // Retrieve the title parameter from the route
@@ -42,7 +41,7 @@ export class StockDetailsComponent implements AfterViewInit {
       new TradingView.widget({
         width: 900,
         height: 610,
-        symbol: 'HDFCBANK',
+        symbol: this.title,
         interval: 'D',
         timezone: 'Etc/UTC',
         theme: 'light',

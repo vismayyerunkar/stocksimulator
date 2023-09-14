@@ -1,28 +1,12 @@
 <app-header></app-header>
 <p-tabView>
-  <!-- Tab for Stocks -->
-  <p-tabPanel header="Stocks">
-    <ng-template pTemplate="content">
-      <h2>Top Gainers</h2>
-      <div class="grid">
-        <!-- Display most traded stocks -->
-        <div
-          class="col-12 md:col-6 lg:col-3 clickable-card"
-          *ngFor="let stock of mostTradedStocks"
-          [routerLink]="['/stock-details', { title: stock.title }]"
-        >
-          <div class="surface-card shadow-2 p-3 border-round">
-            <div class="flex justify-content-between mb-3">
-              <div>
-                <span class="block text-500 font-medium mb-3">{{
-                  stock.title
     <!-- Tab for Stocks -->
     <p-tabPanel header="Stocks">
         <ng-template pTemplate="content">
             <h2>Top Gainers</h2>
             <div class="grid">
                 <!-- Display most traded stocks -->
-                <div class="col-12 md:col-6 lg:col-3" *ngFor="let stock of topGainers" [routerLink]="['/stock-details',stock.symbol]">
+                <div class="col-12 md:col-6 lg:col-3" *ngFor="let stock of topGainers" [routerLink]="['/stock-details',{ title: stock.symbol }]">
 
                     <ng-template #inactivebox>
                         <div style="height: 100px; background-color: #f1f5f9;" class="surface-card shadow-2 border-round">
@@ -61,7 +45,7 @@
                     </div>
                 </ng-template>
 
-                <div class="col-12 md:col-6 lg:col-3" *ngFor="let stock of topLoosers">
+                <div class="col-12 md:col-6 lg:col-3" *ngFor="let stock of topLoosers" [routerLink]="['/stock-details',{ title: stock.symbol }]">
                     <div class="surface-card shadow-2 p-3 border-round" *ngIf="stock.meta; else inactiveboxloosers">
                         <div class="flex justify-content-between mb-3">
                             <div>
