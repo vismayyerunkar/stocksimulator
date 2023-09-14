@@ -91,10 +91,20 @@ export interface InvestmentUtilization {
   asset: number;
   transaction: number;
 }
+
+export interface ByAssestModel{
+  assetSymbol: string,
+  assetName: string,
+  assetPrice: Number,
+  assetType:string,
+  assetQuantity:Number
+}
+
 export interface IAssetDetail extends IAsset {
   invested_amount: number;
   investor_count: number;
 }
+
 
 export interface IAssetClassesResponse extends IGenericResponse {
   data: Array<IName>;
@@ -137,4 +147,8 @@ export interface IAssetInvestmentResponse extends IGenericResponse {
 
 export interface IAddOrUpdateAssetResponse extends IGenericResponse {
   data: IAsset;
+}
+
+export interface IBuyAssest extends IGenericResponse{
+  data: ByAssestModel;
 }

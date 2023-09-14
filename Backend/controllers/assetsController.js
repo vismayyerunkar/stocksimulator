@@ -18,7 +18,7 @@ class AssetsController {
       try {
         // Find the existing user by userId
         const existingUser = req.user;
-console.log(existingUser._id.toString());
+          console.log(existingUser._id.toString());
         const newAssetItem = new AssetsModel({
           userId: existingUser._id, // Use the _id of the existing user document
           assetSymbol: assetSymbol,
@@ -62,7 +62,7 @@ console.log(existingUser._id.toString());
         try{
 
             const asset = await AssetsModel.findById({_id:assetId});
-            if(!asset){
+                        if(!asset){
                 return res.send({
                     status:400,
                     message:"Asset not found"
