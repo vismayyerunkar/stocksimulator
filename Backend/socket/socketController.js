@@ -18,7 +18,9 @@ export class StockDataHandler {
     GetStockDataStream = async(payload, cb) => {
         try {
             var stocktickers = payload.symbols;
+            console.log(stocktickers)
             const is_market_open = await isMarketOpen();
+            console.log(is_market_open)
             if (is_market_open) {
                 stocktickers.forEach((symbolData) => {
                     this.socket.join(symbolData);
@@ -58,10 +60,12 @@ export class StockDataHandler {
             for (const symbol of symbols) {
                 try {
                     if (!symbol) {
-                        throw new Error("No Symbol specified");
+                        return;
+                        // throw new Error("No Symbol specified");
                     }
 
                     const response = await nseIndia.getEquityDetails(symbol);
+                    console.log(response)
                     responses.push(response);
                 } catch (error) {
                     console.error(`Error fetching data for ${symbol}`);

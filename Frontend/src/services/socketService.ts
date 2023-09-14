@@ -9,8 +9,8 @@ export class SocketService {
 	constructor(private socket: Socket) { }
 
 	// emit event
-	getStockData() {
-		return this.socket.emit('GET_STOCK_DATA');
+	getStockData(data:any) {
+		return this.socket.emit('GET_STOCK_DATA',{symbols:data});
 	} 
 
 	subscribeToContinousData(){
