@@ -37,9 +37,6 @@ export const getGainersAndLoosers = async(limit) => {
 
     const gainers = [];
     const losers = [];
-
-    if (!indexData.data) return
-
     indexData.data.forEach((equityInfo) => {
         if (gainers.length < limit && equityInfo.pChange > 0)
             gainers.push(equityInfo)
