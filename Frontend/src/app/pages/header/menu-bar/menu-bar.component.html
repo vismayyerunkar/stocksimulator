@@ -9,7 +9,12 @@
         style="margin-right: 2rem"
         placeholder="Search"
       />
-      <i class="pi pi-wallet" style="font-size: 2rem; margin-right: 2rem"></i>
+      <i
+        id="wallet"
+        class="pi pi-wallet"
+        style="font-size: 2rem; margin-right: 2rem"
+        [routerLink]="['/wallet']"
+      ></i>
 
       <!-- Profile image with tooltip/card -->
       <div class="profile-tooltip">
@@ -19,14 +24,29 @@
           width="30"
           height="30"
           class="mr-5 mt-1"
+          [routerLink]="['/profile']"
         />
         <div class="tooltip-content p-card p-fluid">
           <!-- Content for the tooltip/card -->
-          <div id="name"><b>Aryan Agrawal</b></div>
+          <div class="profile-info">
+            <!-- Your header content -->
+
+            <div id="name">
+              <b>Aryan Agrawal</b>
+            </div>
+            <p-button
+              id="logout"
+              icon="pi pi-power-off"
+              styleClass="p-button-rounded p-button-outlined"
+            ></p-button>
+          </div>
           <div>
             Funds: <span id="fund"><b>$78.89</b></span>
           </div>
-          <div class="button-container">
+          <div
+            class="button-container"
+            style="display: flex; justify-content: space-between"
+          >
             <p-button label="Add" styleClass="p-button-outlined"></p-button>
             <p-button
               label="Withdraw"
@@ -40,12 +60,15 @@
 
     <ng-template pTemplate="start">
       <div style="display: flex; align-items: center">
-        <p-avatar
-          image="https://pps.whatsapp.net/v/t61.24694-24/359737587_266686759398692_147281179015507304_n.jpg?ccb=11-4&oh=01_AdSiTHo71Gvw9fKWNgdn3W9p7stYgvrzKbvBn8oTTV9q4g&oe=6501AF3F&_nc_cat=105"
-          styleClass="mr-2"
-          size="xlarge"
-          shape="circle"
-        ></p-avatar>
+        <a [routerLink]="['/dashboard']">
+          <p-avatar
+            image="https://pps.whatsapp.net/v/t61.24694-24/359737587_266686759398692_147281179015507304_n.jpg?ccb=11-4&oh=01_AdSiTHo71Gvw9fKWNgdn3W9p7stYgvrzKbvBn8oTTV9q4g&oe=6501AF3F&_nc_cat=105"
+            styleClass="mr-2"
+            size="xlarge"
+            shape="circle"
+            routerLink="dashboard"
+          ></p-avatar>
+        </a>
         <p-menubar [model]="items"></p-menubar>
       </div>
     </ng-template>

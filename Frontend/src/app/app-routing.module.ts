@@ -10,6 +10,8 @@ import { TestComponent } from './test/test.component';
 import { PortfolioComponent } from './portfolio/portfolio.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { SignupComponent } from './pages/signup/signup.component';
+import { GoalComponent } from './pages/goal/goal.component';
+import { GptComponent } from './pages/gpt/gpt.component';
 const routes: Routes = [
   {
     path: 'login',
@@ -22,42 +24,62 @@ const routes: Routes = [
     path: 'signup',
     component: SignupComponent,
     pathMatch: 'full',
+    canActivate: [AuthGuard],
   },
   {
     path: 'stock-details',
     component: StockDetailsComponent,
     pathMatch: 'full',
+    canActivate: [AuthGuard],
   },
   {
     path: 'wallet',
     component: WalletComponent,
     pathMatch: 'full',
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'gpt',
+    component: GptComponent,
+    pathMatch: 'full',
+    canActivate: [AuthGuard],
   },
 
   {
     path: 'footer',
     component: FooterComponent,
     pathMatch: 'full',
+    canActivate: [AuthGuard],
   },
   {
     path: 'watchlist',
     component: WatchlistComponent,
     pathMatch: 'full',
+    canActivate: [AuthGuard],
   },
   {
     path: 'test',
     component: TestComponent,
     pathMatch: 'full',
+    canActivate: [AuthGuard],
   },
   {
     path: 'portfolio',
     component: PortfolioComponent,
     pathMatch: 'full',
+    canActivate: [AuthGuard],
   },
   {
     path: 'profile',
     component: ProfileComponent,
     pathMatch: 'full',
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'goal',
+    component: GoalComponent,
+    pathMatch: 'full',
+    canActivate: [AuthGuard],
   },
   {
     path: 'dashboard',
@@ -136,7 +158,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     canActivateChild: [AuthGuard],
   },
-  // { path: '**', redirectTo: 'login' },
+  { path: '**', redirectTo: 'dashboard' },
 ];
 
 @NgModule({

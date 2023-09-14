@@ -22,10 +22,12 @@ export class MenuBarComponent implements OnInit {
           {
             label: 'Stocks',
             icon: 'pi pi-fw pi-shield',
+            routerLink: ['/wallet'],
           },
           {
             label: 'Crypto',
             icon: 'pi pi-fw pi-bitcoin',
+            routerLink: ['/wallet'],
           },
           {
             separator: true,
@@ -33,20 +35,29 @@ export class MenuBarComponent implements OnInit {
           {
             label: 'New',
             icon: 'pi pi-fw pi-external-link',
+            routerLink: ['/dashboard'],
           },
         ],
       },
       {
         label: 'Goal',
         icon: 'pi pi-fw pi-map',
+        routerLink: ['/goal'],
       },
       {
         label: 'Portfolio',
         icon: 'pi pi-fw pi-server',
+        routerLink: ['/portfolio'],
       },
       {
         label: 'Watchlist',
         icon: 'pi pi-fw pi-sliders-h',
+        routerLink: ['/watchlist'],
+      },
+      {
+        label: 'AI-GPT',
+        icon: 'pi pi-search-plus',
+        routerLink: ['/gpt'],
       },
     ];
   }

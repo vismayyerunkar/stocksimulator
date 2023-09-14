@@ -1,6 +1,6 @@
 /* Variables */
-// $primary-color: #9c27b0;
-// $secondary-color: #333333;
+/* $primary-color: #9c27b0; */
+/* $secondary-color: #333333; */
 
 /* Mixins */
 @mixin flex-center {
@@ -16,7 +16,7 @@ body {
 
 /* Header */
 .app-header-container {
-  // background-color: $primary-color;
+  /* background-color: $primary-color; */
   color: white;
 
   .p-menubar {
@@ -39,7 +39,7 @@ body {
     box-shadow: none;
 
     .p-menuitem-link {
-      // color: $secondary-color;
+      /* color: $secondary-color; */
 
       &.p-highlight {
         background-color: #f0f0f0;
@@ -48,9 +48,7 @@ body {
   }
 
   input[type="text"].p-inputtext {
-    @media screen and (max-width: 600px) {
-      width: 100%;
-    }
+    width: 100%; /* Make the input field 100% width on small screens */
   }
 
   .p-avatar {
@@ -66,16 +64,21 @@ body {
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
+  gap: 5px;
 }
-
+h2 {
+  margin-left: 10px;
+}
+.clickable-card {
+  cursor: pointer;
+}
 .surface-card {
-  width: 100%;
+  width: 90%;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 15px;
-  margin: 10px 0;
+  margin: 10px; /* Add margin to all sides (top, right, bottom, left) */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 
   .block {
@@ -83,7 +86,6 @@ body {
     font-weight: bold;
     margin-bottom: 10px;
   }
-
   .text-900 {
     font-size: 20px;
     font-weight: bold;
@@ -114,7 +116,7 @@ body {
     @include flex-center;
     width: 2.5rem;
     height: 2.5rem;
-    // background-color: $primary-color;
+    /* background-color: $primary-color; */
     border-radius: 50%;
 
     img {
@@ -159,11 +161,10 @@ body {
 .lg\:col-3 {
   width: 100%;
 }
-/* ... (existing styles) ... */
 
 /* IPO Table */
 .ipo-table {
-  width: 80%;
+  width: 100%; /* Make the table full width on all screens */
   margin: 0 auto;
   border-collapse: collapse;
   border: 1px solid #ccc;
@@ -195,3 +196,16 @@ body {
   border-radius: 50%;
   object-fit: cover;
 }
+
+@media screen and (max-width: 768px) {
+  /* Adjust styles for screens smaller than 768px */
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+  }
+
+  .chart-container {
+    width: 100%; /* Make the chart container full width on small screens */
+  }
+}
+
+/* Add more media queries as needed */
