@@ -1,188 +1,175 @@
-<!-- stocks.component.html -->
 <app-header></app-header>
 <p-tabView>
-  <!-- Tab for Stocks -->
-  <p-tabPanel header="Stocks">
-    <ng-template pTemplate="content">
-      <h2>Top Gainers</h2>
-      <div class="grid">
-        <!-- Display most traded stocks -->
-        <div
-          class="col-12 md:col-6 lg:col-3 clickable-card"
-          *ngFor="let stock of mostTradedStocks"
-          [routerLink]="['/stock-details']"
-        >
-          <div class="surface-card shadow-2 p-3 border-round">
-            <div class="flex justify-content-between mb-3">
-              <div>
-                <span class="block text-500 font-medium mb-3">{{
-                  stock.title
-                }}</span>
-                <div class="text-900 font-medium text-xl">
-                  {{ stock.value }}
-                </div>
-              </div>
-              <div
-                class="flex align-items-center justify-content-center bg-blue-100 border-round"
-                style="width: 2.5rem; height: 2.5rem"
-              >
-                <img
-                  src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK540005.png"
-                  alt="{{ stock.title }}"
-                />
-              </div>
-            </div>
-            <span class="text-green-500" *ngIf="stock.isNew"
-              >+{{ stock.newCount }}%</span
-            >
-            <span class="text-green-400" *ngIf="stock.isNew">(7.90)</span>
-          </div>
-        </div>
-      </div>
-      <br /><br />
-      <h2>Top Losers</h2>
-      <div class="grid">
-        <!-- Display top losers stocks -->
-        <div
-          class="col-12 md:col-6 lg:col-3 clickable-card"
-          *ngFor="let loser of topLosersStocks"
-          [routerLink]="['/stock-details', loser.id]"
-        >
-          <div class="surface-card shadow-2 p-3 border-round">
-            <div class="flex justify-content-between mb-3">
-              <div>
-                <span class="block text-500 font-medium mb-3">{{
-                  loser.title
-                }}</span>
-                <div class="text-900 font-medium text-xl">
-                  {{ loser.value }}
-                </div>
-              </div>
-              <div
-                class="flex align-items-center justify-content-center bg-red-100 border-round"
-                style="width: 2.5rem; height: 2.5rem"
-              >
-                <img
-                  src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK532822.png"
-                  alt="{{ loser.title }}"
-                />
-              </div>
-            </div>
-            <span class="text-red-500">{{ loser.percentageChange }}</span>
-            <span class="text-red-400"> (5.89)</span>
-          </div>
-        </div>
-      </div>
-      <br /><br />
-      <h2>New Listing / IPO</h2>
-      <div class="grid">
-        <!-- Display top losers stocks -->
-        <div
-          class="col-12 md:col-6 lg:col-3 clickable-card"
-          *ngFor="let loser of topLosersCryptos"
-          [routerLink]="['/stock-details', loser.id]"
-        >
-          <div class="surface-card shadow-2 p-3 border-round">
-            <div class="flex justify-content-between mb-3">
-              <div>
-                <span class="block text-500 font-medium mb-3">{{
-                  loser.title
-                }}</span>
-                <div class="text-900 font-medium text-xl">
-                  {{ loser.value }}
-                </div>
-              </div>
-              <div
-                class="flex align-items-center justify-content-center bg-red-100 border-round"
-                style="width: 2.5rem; height: 2.5rem"
-              >
-                <img
-                  src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK500209.png"
-                  alt="{{ loser.title }}"
-                />
-              </div>
-            </div>
-            <span class="text-red-500">{{ loser.percentageChange }}</span>
-            <span class="text-red-400"> (4.57)</span>
-          </div>
-        </div>
-      </div>
-    </ng-template>
-  </p-tabPanel>
+    <!-- Tab for Stocks -->
+    <p-tabPanel header="Stocks">
+        <ng-template pTemplate="content">
+            <h2>Top Gainers</h2>
+            <div class="grid">
+                <!-- Display most traded stocks -->
+                <div class="col-12 md:col-6 lg:col-3" *ngFor="let stock of topGainers" [routerLink]="['/stock-details',stock.symbol]">
 
-  <!-- Tab for Crypto -->
-  <p-tabPanel header="Crypto">
-    <ng-template pTemplate="content">
-      <h2>Top Gainers</h2>
-      <div class="grid">
-        <!-- Display most traded cryptos -->
-        <div
-          class="col-12 md:col-6 lg:col-3 clickable-card"
-          *ngFor="let crypto of mostTradedCryptos"
-          [routerLink]="['/stock-details', crypto.id]"
-        >
-          <div class="surface-card shadow-2 p-3 border-round">
-            <div class="flex justify-content-between mb-3">
-              <div>
-                <span class="block text-500 font-medium mb-3">{{
+                    <ng-template #inactivebox>
+                        <div style="height: 100px; background-color: #f1f5f9;" class="surface-card shadow-2 border-round">
+                            Loading...
+                        </div>
+                    </ng-template>
+
+                    <div class="surface-card shadow-2 p-3 border-round" *ngIf="stock.meta; else inactivebox">
+                        <div class="flex justify-content-between mb-3">
+                            <div>
+                                <span class="block text-500 font-medium mb-3">{{
+                  stock?.meta?.symbol ?? stock?.symbol
+                }}</span>
+                                <div class="text-900 font-medium text-xl">
+                                    {{ stock?.lastPrice }}
+                                </div>
+                            </div>
+                            <div class="flex align-items-center justify-content-center bg-blue-100 border-round" style="width: 2.5rem; height: 2.5rem">
+                                <img src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK540005.png" alt="{{ 'stock.title' }}" />
+                            </div>
+                        </div>
+                        <span class="text-green-500" *ngIf="true">{{stock?.pChange}}%</span
+            >
+            <span class="text-green-400">({{stock?.change > 0 ? "+" : "-"}}{{stock?.change}})</span>
+                    </div>
+                </div>
+            </div>
+            <br /><br />
+            <h2>Top Losers</h2>
+            <div class="grid">
+                <!-- Display top losers stocks -->
+
+                <ng-template #inactiveboxloosers>
+                    <div style="height: 100px; background-color: #f1f5f9;" class="surface-card shadow-2 border-round">
+                        Loading...
+                    </div>
+                </ng-template>
+
+                <div class="col-12 md:col-6 lg:col-3" *ngFor="let stock of topLoosers">
+                    <div class="surface-card shadow-2 p-3 border-round" *ngIf="stock.meta; else inactiveboxloosers">
+                        <div class="flex justify-content-between mb-3">
+                            <div>
+                                <span class="block text-500 font-medium mb-3">{{
+                  stock?.meta?.symbol ?? stock?.symbol
+                }}</span>
+                                <div class="text-900 font-medium text-xl">
+                                    {{ stock?.lastPrice }}
+                                </div>
+                            </div>
+                            <div class="flex align-items-center justify-content-center bg-red-100 border-round" style="width: 2.5rem; height: 2.5rem">
+                                <img src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK532822.png" alt="{{ 'loser.title' }}" />
+                            </div>
+                        </div>
+                        <span class="text-red-500">{{stock?.change}}%</span>
+                        <span class="text-red-400">({{stock?.pChange}})</span>
+                    </div>
+                </div>
+            </div>
+            <br /><br />
+
+            <h2>New Listing / IPO</h2>
+            <div class="grid">
+                <!-- Display top losers cryptos -->
+                <div class="col-12 md:col-6 lg:col-3" *ngFor="let loser of topLosersCryptos">
+                    <div class="surface-card shadow-2 p-3 border-round">
+                        <div class="flex justify-content-between mb-3">
+                            <div>
+                                <span class="block text-500 font-medium mb-3">{{
+                  loser.title
+                }}</span>
+                                <div class="text-900 font-medium text-xl">
+                                    {{ loser.value }}
+                                </div>
+                            </div>
+                            <div class="flex align-items-center justify-content-center bg-red-100 border-round" style="width: 2.5rem; height: 2.5rem">
+                                <img src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK500209.png" alt="{{ loser.title }}" />
+                            </div>
+                        </div>
+                        <span class="text-red-500">{{ loser.percentageChange }}</span>
+                        <span class="text-red-400"> (4.57)</span>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </p-tabPanel>
+
+    <!-- Tab for Crypto -->
+    <p-tabPanel header="Crypto">
+        <ng-template pTemplate="content">
+            <h2>Top Gainers</h2>
+            <div class="grid">
+                <!-- Display most traded cryptos -->
+                <div class="col-12 md:col-6 lg:col-3" *ngFor="let crypto of mostTradedCryptos">
+                    <div class="surface-card shadow-2 p-3 border-round">
+                        <div class="flex justify-content-between mb-3">
+                            <div>
+                                <span class="block text-500 font-medium mb-3">{{
                   crypto.title
                 }}</span>
-                <div class="text-900 font-medium text-xl">
-                  {{ crypto.value }}
-                </div>
-              </div>
-              <div
-                class="flex align-items-center justify-content-center bg-blue-100 border-round"
-                style="width: 2.5rem; height: 2.5rem"
-              >
-                <img
-                  src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK500112.png"
-                  alt="{{ crypto.title }}"
-                />
-              </div>
-            </div>
-            <span class="text-green-500" *ngIf="crypto.isNew"
-              >+{{ crypto.newCount }}%</span
+                                <div class="text-900 font-medium text-xl">
+                                    {{ crypto.value }}
+                                </div>
+                            </div>
+                            <div class="flex align-items-center justify-content-center bg-blue-100 border-round" style="width: 2.5rem; height: 2.5rem">
+                                <img src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK500112.png" alt="{{ crypto.title }}" />
+                            </div>
+                        </div>
+                        <span class="text-green-500" *ngIf="crypto.isNew">+{{ crypto.newCount }}</span
             >
             <span class="text-green-400" *ngIf="crypto.isNew">(20.89)</span>
-          </div>
-        </div>
-      </div>
-      <br /><br />
-      <h2>Top Losers</h2>
-      <div class="grid">
-        <!-- Display top losers cryptos -->
-        <div
-          class="col-12 md:col-6 lg:col-3 clickable-card"
-          *ngFor="let loser of topLosersCryptos"
-          [routerLink]="['/stock-details', loser.id]"
-        >
-          <div class="surface-card shadow-2 p-3 border-round">
-            <div class="flex justify-content-between mb-3">
-              <div>
-                <span class="block text-500 font-medium mb-3">{{
+                    </div>
+                </div>
+            </div>
+            <br /><br />
+
+            <h2>Top Losers</h2>
+            <div class="grid">
+                <!-- Display top losers cryptos -->
+                <div class="col-12 md:col-6 lg:col-3" *ngFor="let loser of topLosersCryptos">
+                    <div class="surface-card shadow-2 p-3 border-round">
+                        <div class="flex justify-content-between mb-3">
+                            <div>
+                                <span class="block text-500 font-medium mb-3">{{
                   loser.title
                 }}</span>
-                <div class="text-900 font-medium text-xl">
-                  {{ loser.value }}
+                                <div class="text-900 font-medium text-xl">
+                                    {{ loser.value }}
+                                </div>
+                            </div>
+                            <div class="flex align-items-center justify-content-center bg-red-100 border-round" style="width: 2.5rem; height: 2.5rem">
+                                <img src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK500209.png" alt="{{ loser.title }}" />
+                            </div>
+                        </div>
+                        <span class="text-red-500">{{ loser.percentageChange }}</span>
+                        <span class="text-red-400"> (4.57)</span>
+                    </div>
                 </div>
-              </div>
-              <div
-                class="flex align-items-center justify-content-center bg-red-100 border-round"
-                style="width: 2.5rem; height: 2.5rem"
-              >
-                <img
-                  src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK500209.png"
-                  alt="{{ loser.title }}"
-                />
-              </div>
             </div>
-            <span class="text-red-500">{{ loser.percentageChange }}</span>
-            <span class="text-red-400"> (4.57)</span>
-          </div>
-        </div>
-      </div>
-      <br /><br />
-    </ng-template>
-  </p-tabPanel>
+            <br /><br />
+
+            <h2>New Listing / IPO</h2>
+            <div class="grid">
+                <!-- Display top losers cryptos -->
+                <div class="col-12 md:col-6 lg:col-3" *ngFor="let loser of topLosersCryptos">
+                    <div class="surface-card shadow-2 p-3 border-round">
+                        <div class="flex justify-content-between mb-3">
+                            <div>
+                                <span class="block text-500 font-medium mb-3">{{
+                  loser.title
+                }}</span>
+                                <div class="text-900 font-medium text-xl">
+                                    {{ loser.value }}
+                                </div>
+                            </div>
+                            <div class="flex align-items-center justify-content-center bg-red-100 border-round" style="width: 2.5rem; height: 2.5rem">
+                                <img src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK500209.png" alt="{{ loser.title }}" />
+                            </div>
+                        </div>
+                        <span class="text-red-500">{{ loser.percentageChange }}</span>
+                        <span class="text-red-400"> (4.57)</span>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </p-tabPanel>
 </p-tabView>
