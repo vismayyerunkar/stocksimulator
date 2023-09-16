@@ -7,7 +7,6 @@ declare const TradingView: any;
   templateUrl: './stock-details.component.html',
   styleUrls: ['./stock-details.component.scss'],
 })
-
 export class StockDetailsComponent implements AfterViewInit {
   quantity: number = 1;
   subtotal: number = 79.899;
@@ -17,7 +16,7 @@ export class StockDetailsComponent implements AfterViewInit {
 
   constructor(private route: ActivatedRoute) {
     // Retrieve the title parameter from the route
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe((params) => {
       this.title = params['title'];
     });
   }
@@ -39,7 +38,7 @@ export class StockDetailsComponent implements AfterViewInit {
   initializeTradingViewWidget() {
     if (typeof TradingView !== 'undefined') {
       new TradingView.widget({
-        width: 900,
+        width: 800,
         height: 610,
         symbol: this.title,
         interval: 'D',
@@ -62,10 +61,7 @@ export class StockDetailsComponent implements AfterViewInit {
   }
 
   //this function will accept a name of stock
-  buyAssest(){
+  buyAssest() {
     //Fire a socket connection
-    
   }
-
-
 }

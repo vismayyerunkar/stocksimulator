@@ -20,6 +20,7 @@
         <th>Company Name</th>
         <th>Price</th>
         <th>Change (%)</th>
+        <th>Sell</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-watchlist>
@@ -41,6 +42,9 @@
           }"
         >
           {{ watchlist.number }} %
+        </td>
+        <td>
+          <p-button label="Primary" styleClass="p-button-outlined"></p-button>
         </td>
       </tr>
     </ng-template>
