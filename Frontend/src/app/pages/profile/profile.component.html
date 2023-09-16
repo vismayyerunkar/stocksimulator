@@ -3,14 +3,14 @@
   <div class="card__header">
     <div class="card__profile">
       <img
-        src="https://randomuser.me/api/portraits/men/52.jpg"
+        src={{randomImgUrl}}
         alt="A man smiling"
       />
     </div>
     <div class="card__name">
-      <h2>Aryan Agrawal</h2>
+      <h2>{{userData.name}}</h2>
       <div class="card__handle">
-        <span class="handle">@_Aryan_</span>
+        <span class="handle">{{userData.email}}</span>
         <span class="circle"></span>
         <span class="category">Investor</span>
       </div>

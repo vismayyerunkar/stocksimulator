@@ -9,8 +9,14 @@ import { StockService } from 'src/services/stock.service';
 })
 export class ProfileComponent implements OnInit {
   transactions: any[];
+  userData:any;
+  randomImgUrl = `https://randomuser.me/api/portraits/men/${Math.floor(Math.random()*10)}.jpg`
 
-  constructor(private stockService: StockService) {}
+
+
+  constructor(private stockService: StockService) {
+    this.userData = JSON.parse(localStorage.getItem("user") ?? "{}");
+  }
 
   ngOnInit(): void {
     this.fetchTransactions();
