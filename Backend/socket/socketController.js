@@ -6,6 +6,7 @@ const nseIndia = new NseIndia()
 
 
 
+
 export class StockDataHandler {
     // Maintaining the client to emit the socket events
     socket = null;
@@ -18,7 +19,7 @@ export class StockDataHandler {
     GetStockDataStream = async(payload, cb) => {
         try {
             var stocktickers = payload.symbols;
-            console.log(stocktickers)
+            console.log("stock tickers",stocktickers)
             const is_market_open = await isMarketOpen();
             console.log(is_market_open)
             if (is_market_open) {
@@ -26,25 +27,27 @@ export class StockDataHandler {
                     this.socket.join(symbolData);
                 });
                 console.log("market is open");
-                cb({
-                    status: 200,
-                    message: "Market is open hence subscribed to the stock"
-                })
+                // cb({
+                //     status: 200,
+                //     message: "Market is open hence subscribed to the stock"
+                // })
             } else {
                 console.log("market is closed");
                 getStockData(stocktickers).then((data) => {
+                    // console.log("received data from api as market is closed : ",data)
                     const transformedData = [];
-                    if (data.length > 0) {
-                        data.forEach(stock => {
+                    if (data?.length > 0) {
+                        data?.forEach(stock => {
                             const rawData = stock;
                             transformedData.push({
-                                id: rawData.info.symbol,
-                                price: rawData.priceInfo.lastPrice,
-                                dayVolume: rawData.preOpenMarket.totalTradedVolume
+                                id: rawData?.info?.symbol,
+                                price: rawData?.priceInfo?.lastPrice,
+                                dayVolume: rawData?.preOpenMarket?.totalTradedVolume
                             });
                         });
                     }
-                    cb(transformedData);
+                    console.log("successfully subscribed to the stocks")
+                   this.socket?.emit("STATIC_STOCK_DATA",transformedData)
                 }).catch((err) => {
                     console.log("Something went wrong while fetching stock data when the market is closed")
                 })
@@ -65,7 +68,6 @@ export class StockDataHandler {
                     }
 
                     const response = await nseIndia.getEquityDetails(symbol);
-                    console.log(response)
                     responses.push(response);
                 } catch (error) {
                     console.error(`Error fetching data for ${symbol}`);

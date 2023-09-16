@@ -1,3 +1,4 @@
+import { SocketService } from 'src/services/socketService';
 import { Component, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AssetService } from 'src/services/asset.service';
@@ -14,23 +15,33 @@ declare const TradingView: any;
 
 export class StockDetailsComponent implements AfterViewInit {
   quantity: number = 1;
-  subtotal: number = 79.899;
+  subtotal: number = 1;
   title: string; // Add this property to store the title
 
   //For Buy
   assetSymbol:string;
   assetName: string;
-  assetPrice: number=3;
+  assetPrice: number;
   assetType: string ="STOCK";
   assetQuantity: number;
 
+  currentStock:any
+
   //Added explisitly to check
 
-  constructor(private route: ActivatedRoute , private buyreq: AssetService) {
+  constructor(private route: ActivatedRoute , private buyreq: AssetService,private socketService :SocketService) {
     // Retrieve the title parameter from the route
     this.route.params.subscribe(params => {
       this.title = params['title'];
     });
+
+    socketService.getStockData([this.title]);
+    socketService.getStaticStockData()?.subscribe((data:any)=>{
+      console.log("static stock data : ",data)
+      this.currentStock = data[0];
+      this.subtotal = data[0].price;
+      this.assetPrice = data[0]?.price;
+    })
   }
 
 
@@ -70,7 +81,7 @@ export class StockDetailsComponent implements AfterViewInit {
   }
   calculateSubtotal() {
     // Calculate the subtotal based on the quantity
-    this.subtotal = this.quantity * 79.899; // Replace with the actual stock price
+    this.subtotal = this.quantity * this.currentStock?.price; // Replace with the actual stock price
   }
 
   //this function will accept a name of stock

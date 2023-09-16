@@ -15,7 +15,6 @@ export class WalletComponent implements OnInit {
   stocksData: any[] = [];
   products: Product[] = [];
 
-
   // get the list of stocks from the api and then get the live data for this stock if the market is open the subscribe to continous data
 
   constructor(private stockService: StockService,private socketService: SocketService) {

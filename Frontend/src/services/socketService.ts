@@ -10,11 +10,15 @@ export class SocketService {
 
 	// emit event
 	getStockData(data:any) {
-		return this.socket.emit('GET_STOCK_DATA',{symbols:data});
+		this.socket.emit('GET_STOCK_DATA',{symbols:data});
 	} 
 
 	subscribeToContinousData(){
 		return this.socket.fromEvent("PRICE_CHANGED")
+	}
+
+	getStaticStockData(){
+		return this.socket.fromEvent("STATIC_STOCK_DATA");
 	}
 
 	fetchTopStocks() {
