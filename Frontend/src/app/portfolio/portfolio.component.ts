@@ -1,3 +1,5 @@
+import { environment } from 'src/environments/environment';
+import  axios from 'axios';
 import { Component, OnInit } from '@angular/core';
 import { MenuItem, SelectItem } from 'primeng/api';
 import { Stock } from 'src/models/stock';
@@ -16,6 +18,22 @@ export class PortfolioComponent implements OnInit {
   items: MenuItem[] = [];
   assests: any[];
   symbols:string[] = [];
+  
+
+  sellAsset(assetId:any){
+    axios.interceptors.request.use(function (config) {
+      config.headers.Authorization = `Bearer ${localStorage.getItem("authToken")}`;
+      return config;
+    });
+
+    console.log(assetId)
+      axios.post(`${environment.baseUrl}/api/assets/sellAsset`,{assetId:assetId}).then((res:any)=>{
+        console.log(res.data);
+        alert("Asset sold successfully");
+        window.location.reload();
+      }).catch((err:any)=>
+      console.log(err))
+  }
 
 
   ngOnInit(): void {
@@ -47,6 +65,9 @@ export class PortfolioComponent implements OnInit {
       this.stockService.GetAssest().subscribe({
         next: (res: any) => {
           this.assests = res;
+          if(typeof res == typeof []){
+            this.assests.reverse();
+          }
           console.log(res);
           res?.forEach((d:any)=>{
             this.symbols?.push(d?.assetSymbol)

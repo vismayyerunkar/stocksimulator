@@ -38,26 +38,29 @@
                 <th>Invested</th>
                 <th>Current</th>
                 <th>Change (%)</th>
+                <th></th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-assest>
+        <ng-template pTemplate="body" let-asset>
             <tr>
-                <td>{{ assest.assetSymbol }}</td>
+                <td>{{ asset.assetSymbol }}</td>
                 <td>
                     <img src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK539254.png" alt="Company Logo" style="width: 20%" />
                 </td>
                 <td>
-                    <b>{{ assest.assetName }}</b>
+                    <b>{{ asset.assetName }}</b>
                 </td>
-                <td>₹ {{ assest.assetPrice }}</td>
+                <td>₹ {{ asset.assetPrice }}</td>
                 <td><b>₹ 200.67</b></td>
                 <td [ngClass]="{
             'change-percentage-positive': 1 > 0,
             'change-percentage-negative': -1 < 0
           }">
-                    {{ assest.assetType }} %
+                    {{ asset.assetType }} %
                 </td>
+                <td><button (click)="sellAsset(asset._id)" class="sell-btn">Sell</button></td>
             </tr>
         </ng-template>
     </p-table>
 </div>
+

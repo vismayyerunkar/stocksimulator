@@ -20,6 +20,9 @@ export class ProfileComponent implements OnInit {
     this.stockService.fetchTransactions().subscribe({
       next: (res: any) => {
         this.transactions = res;
+        if(typeof this.transactions == typeof []){
+          this.transactions.reverse();
+        }
         console.log(res);
       },
     });

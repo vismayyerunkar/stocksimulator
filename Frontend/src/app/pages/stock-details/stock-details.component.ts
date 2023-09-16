@@ -1,6 +1,9 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AssetService } from 'src/services/asset.service';
+import axios from "axios";
+import { environment } from 'src/environments/environment';
+
 declare const TradingView: any;
 
 @Component({
@@ -72,28 +75,29 @@ export class StockDetailsComponent implements AfterViewInit {
 
   //this function will accept a name of stock
   buyAssest(){
+    axios.interceptors.request.use(function (config) {
+        config.headers.Authorization = `Bearer ${localStorage.getItem("authToken")}`;
+        return config;
+    });
+    axios.post(`${environment.baseUrl}/api/assets/purchaseAsset`, {
+      assetSymbol:this.title,
+      assetName:this.title,
+      assetPrice: this.assetPrice,
+      assetType: this.assetType,
+      assetQuantity: this.quantity
+    })
+    .then(function (response) {
+      console.log(response);
+      alert("Buy successfull");
+
+    })
+    .catch(function (error) {
+      console.log(error);
+      alert("Something went wrong , please try again");
+    })
+
+    return 
     // Create a FormData object with your data
-    const body = new FormData();
-    body.append('assetSymbol', this.title);
-    body.append('assetName', this.title);
-    body.append('assetPrice', this.assetPrice.toString());
-    body.append('assetType', this.assetType);
-    body.append('assetQuantity', this.quantity.toString());
-
-    // Call the API service to make the POST request
-    this.buyreq.BuyAsset(body).subscribe(
-      (response) => {
-        // Handle the API response (success)
-        console.log('Purchase successful:', response);
-        // You can perform other actions like displaying a success message.
-      },
-      (error) => {
-        // Handle errors from the API
-        console.error('Purchase failed:', error);
-        // You can display an error message to the user or take other actions.
-      }
-    );
   }
-
 
 }
