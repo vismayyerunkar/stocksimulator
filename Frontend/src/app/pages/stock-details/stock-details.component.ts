@@ -1,5 +1,6 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AssetService } from 'src/services/asset.service';
 declare const TradingView: any;
 
 @Component({
@@ -13,14 +14,22 @@ export class StockDetailsComponent implements AfterViewInit {
   subtotal: number = 79.899;
   title: string; // Add this property to store the title
 
+  //For Buy
+  assetSymbol:string;
+  assetName: string;
+  assetPrice: number=3;
+  assetType: string ="STOCK";
+  assetQuantity: number;
+
   //Added explisitly to check
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute , private buyreq: AssetService) {
     // Retrieve the title parameter from the route
     this.route.params.subscribe(params => {
       this.title = params['title'];
     });
   }
+
 
   ngAfterViewInit(): void {
     this.loadTradingViewLibrary();
@@ -63,8 +72,27 @@ export class StockDetailsComponent implements AfterViewInit {
 
   //this function will accept a name of stock
   buyAssest(){
-    //Fire a socket connection
-    
+    // Create a FormData object with your data
+    const body = new FormData();
+    body.append('assetSymbol', this.title);
+    body.append('assetName', this.title);
+    body.append('assetPrice', this.assetPrice.toString());
+    body.append('assetType', this.assetType);
+    body.append('assetQuantity', this.quantity.toString());
+
+    // Call the API service to make the POST request
+    this.buyreq.BuyAsset(body).subscribe(
+      (response) => {
+        // Handle the API response (success)
+        console.log('Purchase successful:', response);
+        // You can perform other actions like displaying a success message.
+      },
+      (error) => {
+        // Handle errors from the API
+        console.error('Purchase failed:', error);
+        // You can display an error message to the user or take other actions.
+      }
+    );
   }
 
 
