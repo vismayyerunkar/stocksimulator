@@ -10,6 +10,7 @@ import {
   IAssetInvestmentResponse,
   IAddOrUpdateAssetResponse,
   IInvestableAssetResponse,
+  IBuyAssest
  
 } from 'src/models/asset';
 import {IGetAllAssest} from 'src/models/allAssest'
@@ -57,14 +58,21 @@ export class AssetService {
     return this.http.get<IAssetDetailResponse>(url, httpOptions);
   }
 //Buy Assest 
-  BuyAsset(): Observable<IAssetInvestmentResponse> {
+  BuyAsset(body: FormData): Observable<IBuyAssest> {
     const token = `Bearer ${localStorage.getItem('authToken')}`;
     const url = `${environment.baseUrl}/api/purchaseAsset`;
     let httpOptions = {
       headers: new HttpHeaders({ Authorization: token }),
     };
-    return this.http.get<IAssetInvestmentResponse>(url, httpOptions);
+    return this.http.post<IBuyAssest>(url, body, httpOptions);
   }
+
+  //requirenment for this api req buy asset
+  // assetSymbol: string,
+  // assetName: string,
+  // assetPrice: Number,
+  // assetType:string,
+  // assetQuantity:Number
 
 // Sell Assest
   SellAssest(): Observable<IAssetInvestmentResponse> {

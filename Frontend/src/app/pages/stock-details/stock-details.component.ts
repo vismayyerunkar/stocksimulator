@@ -1,5 +1,5 @@
 import { Component, AfterViewInit } from '@angular/core';
-
+import { ActivatedRoute } from '@angular/router';
 declare const TradingView: any;
 
 @Component({
@@ -7,10 +7,20 @@ declare const TradingView: any;
   templateUrl: './stock-details.component.html',
   styleUrls: ['./stock-details.component.scss'],
 })
+
 export class StockDetailsComponent implements AfterViewInit {
   quantity: number = 1;
   subtotal: number = 79.899;
-  constructor() {}
+  title: string; // Add this property to store the title
+
+  //Added explisitly to check
+
+  constructor(private route: ActivatedRoute) {
+    // Retrieve the title parameter from the route
+    this.route.params.subscribe(params => {
+      this.title = params['title'];
+    });
+  }
 
   ngAfterViewInit(): void {
     this.loadTradingViewLibrary();
@@ -29,9 +39,9 @@ export class StockDetailsComponent implements AfterViewInit {
   initializeTradingViewWidget() {
     if (typeof TradingView !== 'undefined') {
       new TradingView.widget({
-        width: 800,
+        width: 900,
         height: 610,
-        symbol: 'AAPL',
+        symbol: this.title,
         interval: 'D',
         timezone: 'Etc/UTC',
         theme: 'light',
@@ -50,4 +60,12 @@ export class StockDetailsComponent implements AfterViewInit {
     // Calculate the subtotal based on the quantity
     this.subtotal = this.quantity * 79.899; // Replace with the actual stock price
   }
+
+  //this function will accept a name of stock
+  buyAssest(){
+    //Fire a socket connection
+    
+  }
+
+
 }

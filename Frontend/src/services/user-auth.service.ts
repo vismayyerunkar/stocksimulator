@@ -33,7 +33,7 @@ export class UserAuthService {
 
   logout() {
     console.log('In logout');
-    // localStorage.clear();
+    localStorage.clear();
     this.router.navigate(['login']);
   }
 
