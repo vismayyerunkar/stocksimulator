@@ -6,7 +6,7 @@
             <h2>Top Gainers</h2>
             <div class="grid">
                 <!-- Display most traded stocks -->
-                <div class="col-12 md:col-6 lg:col-3" *ngFor="let stock of topGainers" [routerLink]="['/stock-details',{ title: stock.symbol }]">
+                <div class="col-12 md:col-6 lg:col-3" *ngFor="let stock of topGainers" [routerLink]="['/stock-details',{ title: stock.symbol,type:'STOCK' }]">
 
                     <ng-template #inactivebox>
                         <div style="height: 100px; background-color: #f1f5f9;" class="surface-card shadow-2 border-round">
@@ -45,7 +45,7 @@
                     </div>
                 </ng-template>
 
-                <div class="col-12 md:col-6 lg:col-3" *ngFor="let stock of topLoosers" [routerLink]="['/stock-details',{ title: stock.symbol }]">
+                <div class="col-12 md:col-6 lg:col-3" *ngFor="let stock of topLoosers" [routerLink]="['/stock-details',{ title: stock.symbol,type:'STOCK' }]">
                     <div class="surface-card shadow-2 p-3 border-round" *ngIf="stock.meta; else inactiveboxloosers">
                         <div class="flex justify-content-between mb-3">
                             <div>

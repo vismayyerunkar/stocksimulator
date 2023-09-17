@@ -1,3 +1,5 @@
+import { SocketService } from 'src/services/socketService';
+import { AssetService } from 'src/services/asset.service';
 import { environment } from 'src/environments/environment';
 import  axios from 'axios';
 import { Component, OnInit } from '@angular/core';
@@ -121,4 +123,4 @@ export class PortfolioComponent implements OnInit {
       });
     }
   }
-}
+

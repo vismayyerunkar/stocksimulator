@@ -16,7 +16,7 @@ export class StockDetailsComponent implements AfterViewInit {
   quantity: number = 1;
   subtotal: number = 1;
   title: string; // Add this property to store the title
-
+  ASSET_TYPE:string;
   
   //For Buy
   assetSymbol:string;
@@ -32,20 +32,42 @@ export class StockDetailsComponent implements AfterViewInit {
     stockName: string;
     type: string ="STOCK";
   //Added explisitly to check
+  
 
   constructor(private route: ActivatedRoute , private buyreq: AssetService,private socketService :SocketService) {
     // Retrieve the title parameter from the route
     this.route.params.subscribe((params) => {
       this.title = params['title'];
+      this.ASSET_TYPE = params['type'];
     });
 
-    socketService.getStockData([this.title]);
-    socketService.getStaticStockData()?.subscribe((data:any)=>{
-      console.log("static stock data : ",data)
-      this.currentStock = data[0];
-      this.subtotal = data[0].price;
-      this.assetPrice = data[0]?.price;
-    })
+    if(this.ASSET_TYPE === "STOCK"){
+
+      const pricesWs = new WebSocket('wss://ws.coincap.io/prices?assets=bitcoin,ethereum,monero,litecoin')
+
+      pricesWs.onmessage = function (msg) {
+          console.log(msg.data)
+      }
+
+      socketService.getStockData([this.title]);
+      socketService.getStaticStockData()?.subscribe((data:any)=>{
+        console.log("static stock data : ",data)
+        this.currentStock = data[0];
+        this.subtotal = data[0].price;
+        this.assetPrice = data[0]?.price;
+      })
+
+    }else{
+      //dfghjk
+
+      const pricesWs = new WebSocket('wss://ws.coincap.io/prices?assets=bitcoin,ethereum,monero,litecoin')
+
+      pricesWs.onmessage = function (msg) {
+          console.log(msg.data)
+      }
+    }
+
+   
   }
 
 

@@ -16,6 +16,7 @@ export class MenuBarComponent implements OnInit {
   visibleSidebar: any;
   userData:any;
   funds:string | number 
+  router:any
   // randomProfilePic:string
 
   constructor(private userAuthService: UserAuthService) {
