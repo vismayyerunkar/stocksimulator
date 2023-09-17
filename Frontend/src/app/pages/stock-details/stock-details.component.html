@@ -12,9 +12,13 @@
             alt="Stock Logo"
             class="stock-logo"
           />
-          <div class="stock-name">Adani Power Ltd.</div>
+          <div class="stock-name">{{currentStock.id}}</div> &nbsp;
+          <p-button icon="pi pi-bookmark" 
+            styleClass="p-button-rounded p-button-secondary p-button-outlined" (click)="addToWatchlist()">
+          </p-button>
         </div>
 
+        <div class="stock-price"><b>₹{{currentStock.price}}</b></div>
         <div style="display: flex; justify-content: flex-start">
           <p-button
             label="Delivery"
@@ -55,7 +59,7 @@
           <span class="p-inputgroup-addon">.00</span>
         </div> -->
         <h1 id="subtotal">
-          Total Price: <b>₹ {{ subtotal.toFixed(3) }}</b>
+          Total Price: <b>₹ {{ subtotal.toFixed(4) }}</b>
         </h1>
         <div class="buy-sell-buttons">
           <button class="buy-button" (click)="buyAssest()">Buy</button>

@@ -3,14 +3,14 @@
   <div class="card__header">
     <div class="card__profile">
       <img
-        src="https://randomuser.me/api/portraits/men/52.jpg"
+        src={{randomImgUrl}}
         alt="A man smiling"
       />
     </div>
     <div class="card__name">
-      <h2>Aryan Agrawal</h2>
+      <h2>{{userData.name}}</h2>
       <div class="card__handle">
-        <span class="handle">@_Aryan_</span>
+        <span class="handle">{{userData.email}}</span>
         <span class="circle"></span>
         <span class="category">Investor</span>
       </div>
@@ -59,35 +59,31 @@
     <ng-template pTemplate="header">
       <tr>
         <th>Date</th>
-        <th>Company Logo</th>
         <th>Company Name</th>
-        <th>Amount</th>
-        <th>Current</th>
-        <th>Change (%)</th>
+        <th>Assest Type</th>
+        <th>Quantity</th>
+        <th>Buy/Sell</th>
+        <th>Price</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-stock>
       <tr>
-        <td>{{ stock.symbol }}</td>
+        <td>{{ stock.date | date:'dd/MM/yyyy HH:mm:ss' }}</td>
         <td>
-          <img
+          <!-- <img
             src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK539254.png"
             alt="Company Logo"
             style="width: 20%"
-          />
+          /> -->
+          {{ stock.symbol }}
         </td>
+        <td >
+            {{ stock.assetType }}
+        </td>
+        <td>{{ stock.quantity }}</td>
+        <td><b>{{ stock.type }}</b></td>
         <td>
-          <b>{{ stock.name }}</b>
-        </td>
-        <td>₹ {{ stock.price }}</td>
-        <td><b>₹ 200.67</b></td>
-        <td
-          [ngClass]="{
-            'change-percentage-positive': stock.changePercentage > 0,
-            'change-percentage-negative': stock.changePercentage < 0
-          }"
-        >
-          {{ stock.changePercentage }} %
+        ₹{{ stock.price.toFixed(2) }}
         </td>
       </tr>
     </ng-template>

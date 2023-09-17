@@ -1,9 +1,10 @@
 import { Server } from "socket.io";
 import { StockDataHandler } from "./socketController.js";
-import { getGainersAndLoosers } from "../controllers/stockController.js";
+import { getGainersAndLoosers, isMarketOpen } from "../controllers/stockController.js";
 import stocksocket from "stocksocket"
 import CoinGecko from 'coingecko-api';
 import axios from "axios";
+import { getTopCryptos } from "./crypto.js";
 
 async function getCryptoSymbolsAndNames() {
     try {
@@ -105,23 +106,39 @@ setInterval(() => {
 // 4) when the client does not want the stock data just leave the room
 
 
-setInterval(() => {
+function sleep(){
+ 
+    var date = new Date();
+    var curDate = null;
+    do { curDate = new Date(); }
+    while(curDate-date < millis);
+}
+
+setInterval(async () => {
     const tickers = io.of("/").adapter.rooms;
-    if (tickers.length > 0) {
+    const marketStatus = await isMarketOpen();
+    if (tickers.length > 0 && marketStatus) {
+        stocksocket.removeAllTickers();
+        sleep(2000);
         stocksocket.addTickers(tickers, (newPrice) => {
             console.log("Price changed for : ", newPrice.id);
             io.to(newPrice.id).emit("PRICE_CHANGED", newPrice);
         });
+    }else{
+        // console.log("market is close")
     }
-}, 4000)
+}, 5000)
 
 
 
 const listenSocketEvents = (io) => {
 
     try {
+        console.log(io.of("/").adapter.rooms)
+
 
         io.on("connection", (socket) => {
+
             const handler = new StockDataHandler(socket);
             // listening to events 
             socket.on("GET_STOCK_DATA", (payload, cb) => {
@@ -139,7 +156,8 @@ const listenSocketEvents = (io) => {
         // Getting the list of trending stocks
         let timeout = setInterval(async() => {
             io.sockets.emit("TRENDING_STOCKS", await getGainersAndLoosers(6));
-        }, 2000);
+            io.sockets.emit("TRENDING_CRYPTOS", await getTopCryptos(6));
+        }, 5000);
 
         io.on("disconnect", () => {
             clearInterval(timeout);

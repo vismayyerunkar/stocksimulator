@@ -1,3 +1,5 @@
+import { environment } from 'src/environments/environment';
+import  axios from 'axios';
 import { Component, OnInit } from '@angular/core';
 import { MenuItem, SelectItem } from 'primeng/api';
 import { Stock } from 'src/models/stock';
@@ -14,6 +16,29 @@ export class PortfolioComponent implements OnInit {
   stocks: Stock[] = [];
   items: MenuItem[] = [];
 
+  assests: any[];
+  symbols:string[] = [];
+  updatedStocks:any;
+  investedAmount:number = 0;
+  currentAmount:number = 0
+
+  //API SELL
+  sellAsset(assetId:any){
+    axios.interceptors.request.use(function (config) {
+      config.headers.Authorization = `Bearer ${localStorage.getItem("authToken")}`;
+      return config;
+    });
+
+    console.log(assetId)
+      axios.post(`${environment.baseUrl}/api/assets/sellAsset`,{assetId:assetId}).then((res:any)=>{
+        console.log(res.data);
+        alert("Asset sold successfully");
+        window.location.reload();
+      }).catch((err:any)=>
+      console.log(err))
+  }
+
+
   ngOnInit(): void {
     this.fetchStocks();
     this.items = [
@@ -22,18 +47,78 @@ export class PortfolioComponent implements OnInit {
       { label: 'Crypto', icon: 'pi pi-fw pi-bitcoin' },
     ];
   }
-  constructor(private stockService: StockService) {
+
+  constructor(private stockService: AssetService,private socketService: SocketService) {
+    this.fetchStocks()
+    
     this.sortOptions = [
       { label: 'Symbol', value: 'symbol' },
       { label: 'Company Name', value: 'name' },
       { label: 'Price', value: 'price' },
       { label: 'Change (%)', value: 'changePercentage' },
     ];
+
+
+    setTimeout(()=>{
+      const set = new Set(this.symbols);
+      socketService.getStockData([...set]);
+      console.log("symbol",this.symbols);
+    },1000);
+   
+    socketService.getStaticStockData()?.subscribe((data:any)=>{
+      console.log("static stock data : ",data);
+      console.log(data);
+      this.updatedStocks = data
+
+      const map = new Map();
+
+      data?.forEach((ele:any) => {
+          map.set(ele?.id,ele?.price);
+      });
+
+      const copy:any[] = [];
+
+      this.assests.map((asset:any)=>{
+        const entry = {
+          ...asset,
+          currentPrice:map.get(asset?.assetSymbol)
+        }
+
+        this.currentAmount += entry?.currentPrice * entry?.assetQuantity;
+        this.investedAmount += entry?.assetQuantity * entry?.assetPrice
+        console.log(entry);
+        copy.push(entry);
+      });
+
+      console.log(copy);
+      this.assests = copy;
+    })
+    
+    // setTimeout(()=>{
+    //   const set = new Set(this.symbols);
+    //   socketService.getStockData([...set]).subscribe((data: any) => {
+    //     console.log(data);
+    //   });
+    // },2000);
   }
+
   fetchStocks(): void {
-    this.stockService.getStocks().subscribe((data) => {
-      this.stocks = data;
-      this.filteredStocks = data;
-    });
+        
+      this.stockService.GetAssest().subscribe({
+        next: (res: any) => {
+          this.assests = res;
+          if(typeof res == typeof []){
+            this.assests.reverse();
+          }
+          console.log(res);
+          const temp:any[] = []
+          res?.forEach((d:any)=>{
+            temp?.push(d?.assetSymbol)
+          })
+
+          this.symbols = temp;
+        },
+      });
+    }
   }
 }

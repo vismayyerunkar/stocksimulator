@@ -1,5 +1,10 @@
+import { SocketService } from 'src/services/socketService';
 import { Component, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AssetService } from 'src/services/asset.service';
+import axios from "axios";
+import { environment } from 'src/environments/environment';
+
 declare const TradingView: any;
 
 @Component({
@@ -9,17 +14,40 @@ declare const TradingView: any;
 })
 export class StockDetailsComponent implements AfterViewInit {
   quantity: number = 1;
-  subtotal: number = 79.899;
+  subtotal: number = 1;
   title: string; // Add this property to store the title
 
+  
+  //For Buy
+  assetSymbol:string;
+  assetName: string;
+  assetPrice: number;
+  assetType: string ="STOCK";
+  assetQuantity: number;
+
+  currentStock:any
+
+//WatchList
+    stockSymbol:string;
+    stockName: string;
+    type: string ="STOCK";
   //Added explisitly to check
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute , private buyreq: AssetService,private socketService :SocketService) {
     // Retrieve the title parameter from the route
     this.route.params.subscribe((params) => {
       this.title = params['title'];
     });
+
+    socketService.getStockData([this.title]);
+    socketService.getStaticStockData()?.subscribe((data:any)=>{
+      console.log("static stock data : ",data)
+      this.currentStock = data[0];
+      this.subtotal = data[0].price;
+      this.assetPrice = data[0]?.price;
+    })
   }
+
 
   ngAfterViewInit(): void {
     this.loadTradingViewLibrary();
@@ -56,8 +84,58 @@ export class StockDetailsComponent implements AfterViewInit {
   }
   calculateSubtotal() {
     // Calculate the subtotal based on the quantity
-    this.subtotal = this.quantity * 79.899; // Replace with the actual stock price
+    this.subtotal = this.quantity * this.currentStock?.price; // Replace with the actual stock price
   }
 
-  buyAssest() {}
+
+  //this function will accept a name of stock
+  buyAssest(){
+    axios.interceptors.request.use(function (config) {
+        config.headers.Authorization = `Bearer ${localStorage.getItem("authToken")}`;
+        return config;
+    });
+    axios.post(`${environment.baseUrl}/api/assets/purchaseAsset`, {
+      assetSymbol:this.title,
+      assetName:this.title,
+      assetPrice: this.assetPrice,
+      assetType: this.assetType,
+      assetQuantity: this.quantity
+    })
+    .then(function (response) {
+      console.log(response);
+      alert("Buy successfull");
+
+    })
+    .catch(function (error) {
+      console.log(error);
+      alert("Something went wrong , please try again");
+    })
+
+    return 
+    // Create a FormData object with your data
+  }
+
+  addToWatchlist(){
+    axios.interceptors.request.use(function (config) {
+      config.headers.Authorization = `Bearer ${localStorage.getItem("authToken")}`;
+      return config;
+  });
+  axios.post(`${environment.baseUrl}/api/watchlist/createWatchList`, {
+    stockSymbol:this.title,
+    stockName:this.title,
+    type: this.assetType,
+  })
+  .then(function (response) {
+    console.log(response);
+    alert("Added To the Watchlist");
+
+  })
+  .catch(function (error) {
+    console.log(error);
+    alert("Something went wrong , please try again");
+  })
+
+  return 
+  }
+
 }

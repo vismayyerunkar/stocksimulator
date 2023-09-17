@@ -60,7 +60,7 @@ export class AssetService {
 //Buy Assest 
   BuyAsset(body: FormData): Observable<IBuyAssest> {
     const token = `Bearer ${localStorage.getItem('authToken')}`;
-    const url = `${environment.baseUrl}/api/purchaseAsset`;
+    const url = `${environment.baseUrl}/api/assets/purchaseAsset`;
     let httpOptions = {
       headers: new HttpHeaders({ Authorization: token }),
     };

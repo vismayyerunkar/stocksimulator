@@ -93,7 +93,7 @@ export class StockService {
   
   fetchWatchList(): Observable<IWatchListResponse> {
     const token = `Bearer ${localStorage.getItem('authToken')}`;
-    const url = `${environment.baseUrl}/api/watchlist/`;
+    const url = `${environment.baseUrl}/api/watchlist/watchlists`;
     let httpOptions = {
       headers: new HttpHeaders({ Authorization: token }),
     };

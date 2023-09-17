@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
   email: { type: String, required: true, trim: true },
   password: { type: String, required: true, trim: true },
-  availableTokens:{type:Number,required:true,default:50000000000000}
+  availableTokens:{type:Number,required:true,default:50000000000}
 });
 
 // Model

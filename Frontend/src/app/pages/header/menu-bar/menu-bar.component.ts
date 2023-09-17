@@ -1,3 +1,6 @@
+import { Category } from 'src/models/feedback';
+import { environment } from 'src/environments/environment';
+import axios from 'axios';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
@@ -11,8 +14,31 @@ import { UserAuthService } from 'src/services/user-auth.service';
 export class MenuBarComponent implements OnInit {
   items: MenuItem[] = [];
   visibleSidebar: any;
+  userData:any;
+  funds:string | number 
+  // randomProfilePic:string
 
-  constructor(private router: Router) {}
+  constructor(private userAuthService: UserAuthService) {
+    // const temp:any = localStorage.getItem("loggedUserRandomProfile")
+
+    // if(typeof temp == typeof undefined){
+    //   localStorage.setItem("loggedUserRandomProfile",`https://randomuser.me/api/portraits/men/${Math.floor(Math.random()*10)}.jpg`)
+    // }else{
+    //   this.randomProfilePic = JSON.parse(temp == "undefined" ? "https://randomuser.me/api/portraits/men/12.jpg" : temp);
+    // }
+
+    this.userData = JSON.parse(localStorage.getItem("user") ?? "{}");
+    axios.interceptors.request.use(function (config) {
+      config.headers.Authorization = `Bearer ${localStorage.getItem("authToken")}`;
+      return config;
+  });
+    axios.get(`${environment.baseUrl}/api/user/loggedUser`).then((res:any)=>{
+      console.log(res.data)
+      this.funds = res.data?.user?.availableTokens
+    }).catch((err:any)=>{
+      console.log("Error occured : ",err);
+    })
+  }
 
   ngOnInit() {
     this.items = [
