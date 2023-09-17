@@ -1,3 +1,4 @@
+import { StockService } from 'src/services/stock.service';
 import { Category } from 'src/models/feedback';
 import { environment } from 'src/environments/environment';
 import axios from 'axios';
@@ -17,9 +18,11 @@ export class MenuBarComponent implements OnInit {
   userData:any;
   funds:string | number 
   router:Router
+  searchTerm = '';
+  stockSymbols: any[] = [];
   // randomProfilePic:string
 
-  constructor(private userAuthService: UserAuthService) {
+  constructor(private userAuthService: UserAuthService,private stockService:StockService) {
     // const temp:any = localStorage.getItem("loggedUserRandomProfile")
 
     // if(typeof temp == typeof undefined){
@@ -39,6 +42,11 @@ export class MenuBarComponent implements OnInit {
     }).catch((err:any)=>{
       console.log("Error occured : ",err);
     })
+  }
+
+  searchAsset(searchValue?:string){
+    console.log(searchValue ?? this.searchTerm);
+    window.location.href = `/stock-details;title=${searchValue ?? this.searchTerm};type=STOCK`
   }
 
   ngOnInit() {
@@ -89,6 +97,21 @@ export class MenuBarComponent implements OnInit {
       },
     ];
   }
+
+  onInputChange(){
+    console.log(this.searchTerm)
+    if (this.searchTerm.trim() !== '') {
+      this.stockService.searchStockSymbols(this.searchTerm)
+        .subscribe((data: any) => {
+          console.log(data.bestMatches)
+          this.stockSymbols = data.bestMatches;
+        });
+    } else {
+      this.stockSymbols = [];
+    }
+  }
+
+
   logout() {
     console.log("sdfg")
     localStorage.removeItem('authToken');

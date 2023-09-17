@@ -2,14 +2,23 @@
 
 <div class="app-header-container">
   <p-menubar>
+    
     <ng-template pTemplate="end">
       <input
         id="search"
         type="text"
         pInputText
         style="margin-right: 2rem"
+        [(ngModel)]="searchTerm"
         placeholder="Search"
+        (input)="onInputChange()"
+        (keydown.enter)="searchAsset()"
       />
+      <div class="search-holder">
+        <ul>
+          <li class="search-list-item" (click)="searchAsset(symbol)" *ngFor="let symbol of stockSymbols">{{ symbol['1. symbol'] }}</li>
+        </ul>
+      </div>
       <i
         id="wallet"
         class="pi pi-wallet"
