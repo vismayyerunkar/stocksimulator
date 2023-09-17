@@ -4,6 +4,7 @@
   <p-menubar>
     <ng-template pTemplate="end">
       <input
+        id="search"
         type="text"
         pInputText
         style="margin-right: 2rem"
@@ -38,6 +39,7 @@
               id="logout"
               icon="pi pi-power-off"
               styleClass="p-button-rounded p-button-outlined"
+              (click)="logout()"
             ></p-button>
           </div>
           <div>
@@ -62,7 +64,7 @@
       <div style="display: flex; align-items: center">
         <a [routerLink]="['/dashboard']">
           <p-avatar
-            image="https://pps.whatsapp.net/v/t61.24694-24/359737587_266686759398692_147281179015507304_n.jpg?ccb=11-4&oh=01_AdSiTHo71Gvw9fKWNgdn3W9p7stYgvrzKbvBn8oTTV9q4g&oe=6501AF3F&_nc_cat=105"
+            image="https://pps.whatsapp.net/v/t61.24694-24/359737587_266686759398692_147281179015507304_n.jpg?ccb=11-4&oh=01_AdR0K6AeyL6zIQ03eI6yGQ8now_01oWw79vCg43Df4_7rA&oe=650AE9BF&_nc_sid=000000&_nc_cat=105"
             styleClass="mr-2"
             size="xlarge"
             shape="circle"

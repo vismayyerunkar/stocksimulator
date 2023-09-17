@@ -14,17 +14,11 @@ import { UserAuthService } from './user-auth.service';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthGuard implements CanActivate 
-{
+export class AuthGuard implements CanActivate {
   /**
    * Constructor
    */
-  constructor(
-      private authService: UserAuthService,
-      private router: Router
-  )
-  {
-  }
+  constructor(private authService: UserAuthService, private router: Router) {}
 
   // -----------------------------------------------------------------------------------------------------
   // @ Public methods
@@ -36,8 +30,13 @@ export class AuthGuard implements CanActivate
    * @param route
    * @param state
    */
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-      return this._check();
+  canActivate(): boolean {
+    const isAuthenticated = !!localStorage.getItem('authToken');
+    if (!isAuthenticated) {
+      this.router.navigate(['/login']);
+    }
+
+    return isAuthenticated;
   }
 
   /**
@@ -46,8 +45,15 @@ export class AuthGuard implements CanActivate
    * @param childRoute
    * @param state
    */
-  canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      return this._check();
+  canActivateChild(
+    childRoute: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ):
+    | Observable<boolean | UrlTree>
+    | Promise<boolean | UrlTree>
+    | boolean
+    | UrlTree {
+    return this._check();
   }
 
   /**
@@ -56,8 +62,11 @@ export class AuthGuard implements CanActivate
    * @param route
    * @param segments
    */
-  canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
-      return this._check();
+  canLoad(
+    route: Route,
+    segments: UrlSegment[]
+  ): Observable<boolean> | Promise<boolean> | boolean {
+    return this._check();
   }
 
   // -----------------------------------------------------------------------------------------------------
@@ -70,15 +79,13 @@ export class AuthGuard implements CanActivate
    * @param segments
    * @private
    */
-  private _check(): Observable<boolean>
-  {
-    return this.authService.check()
-    .pipe(
+  private _check(): Observable<boolean> {
+    return this.authService.check().pipe(
       switchMap((authenticated) => {
         if (!authenticated) {
-            this.authService.logout();
-            this.router.navigate(['login']);
-            return of(false);
+          this.authService.logout();
+          this.router.navigate(['login']);
+          return of(false);
         }
         return of(true);
       })

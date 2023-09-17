@@ -12,7 +12,6 @@ declare const TradingView: any;
   templateUrl: './stock-details.component.html',
   styleUrls: ['./stock-details.component.scss'],
 })
-
 export class StockDetailsComponent implements AfterViewInit {
   quantity: number = 1;
   subtotal: number = 1;
@@ -36,7 +35,7 @@ export class StockDetailsComponent implements AfterViewInit {
 
   constructor(private route: ActivatedRoute , private buyreq: AssetService,private socketService :SocketService) {
     // Retrieve the title parameter from the route
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe((params) => {
       this.title = params['title'];
     });
 
@@ -67,8 +66,7 @@ export class StockDetailsComponent implements AfterViewInit {
   initializeTradingViewWidget() {
     if (typeof TradingView !== 'undefined') {
       new TradingView.widget({
-        width: 900,
-        height: 610,
+        with: '100%',
         symbol: this.title,
         interval: 'D',
         timezone: 'Etc/UTC',
@@ -88,6 +86,7 @@ export class StockDetailsComponent implements AfterViewInit {
     // Calculate the subtotal based on the quantity
     this.subtotal = this.quantity * this.currentStock?.price; // Replace with the actual stock price
   }
+
 
   //this function will accept a name of stock
   buyAssest(){

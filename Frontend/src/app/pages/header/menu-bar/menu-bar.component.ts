@@ -2,6 +2,7 @@ import { Category } from 'src/models/feedback';
 import { environment } from 'src/environments/environment';
 import axios from 'axios';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { UserAuthService } from 'src/services/user-auth.service';
 
@@ -86,5 +87,9 @@ export class MenuBarComponent implements OnInit {
         routerLink: ['/gpt'],
       },
     ];
+  }
+  logout() {
+    localStorage.removeItem('authToken');
+    this.router.navigate(['/login']);
   }
 }

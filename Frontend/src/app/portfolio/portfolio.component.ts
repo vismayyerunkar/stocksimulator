@@ -3,8 +3,7 @@ import  axios from 'axios';
 import { Component, OnInit } from '@angular/core';
 import { MenuItem, SelectItem } from 'primeng/api';
 import { Stock } from 'src/models/stock';
-import { AssetService } from 'src/services/asset.service';
-import { SocketService } from 'src/services/socketService';
+import { StockService } from 'src/services/stock.service';
 
 @Component({
   selector: 'app-portfolio',
@@ -16,6 +15,7 @@ export class PortfolioComponent implements OnInit {
   sortOptions: SelectItem[];
   stocks: Stock[] = [];
   items: MenuItem[] = [];
+
   assests: any[];
   symbols:string[] = [];
   updatedStocks:any;
@@ -40,14 +40,14 @@ export class PortfolioComponent implements OnInit {
 
 
   ngOnInit(): void {
-    
-    this.fetchStocks()
+    this.fetchStocks();
     this.items = [
       { label: 'ALL', icon: 'pi pi-fw pi-calendar' },
       { label: 'Stocks', icon: 'pi pi-fw pi-shield' },
       { label: 'Crypto', icon: 'pi pi-fw pi-bitcoin' },
     ];
   }
+
   constructor(private stockService: AssetService,private socketService: SocketService) {
     this.fetchStocks()
     
@@ -57,6 +57,7 @@ export class PortfolioComponent implements OnInit {
       { label: 'Price', value: 'price' },
       { label: 'Change (%)', value: 'changePercentage' },
     ];
+
 
     setTimeout(()=>{
       const set = new Set(this.symbols);
@@ -102,7 +103,7 @@ export class PortfolioComponent implements OnInit {
   }
 
   fetchStocks(): void {
-    
+        
       this.stockService.GetAssest().subscribe({
         next: (res: any) => {
           this.assests = res;
@@ -120,4 +121,4 @@ export class PortfolioComponent implements OnInit {
       });
     }
   }
-
+}
