@@ -16,7 +16,7 @@ export class MenuBarComponent implements OnInit {
   visibleSidebar: any;
   userData:any;
   funds:string | number 
-  router:any
+  router:Router
   // randomProfilePic:string
 
   constructor(private userAuthService: UserAuthService) {
@@ -90,7 +90,8 @@ export class MenuBarComponent implements OnInit {
     ];
   }
   logout() {
+    console.log("sdfg")
     localStorage.removeItem('authToken');
-    this.router.navigate(['/login']);
+    window.location.href = "/login"
   }
 }
