@@ -44,9 +44,9 @@ export class MenuBarComponent implements OnInit {
     })
   }
 
-  searchAsset(searchValue?:string){
+  searchAsset(searchValue?:any){
     console.log(searchValue ?? this.searchTerm);
-    window.location.href = `/stock-details;title=${searchValue ?? this.searchTerm};type=STOCK`
+    window.location.href = `/stock-details;title=${searchValue?.symbol?.split(".")[0] ?? this.searchTerm};type=STOCK`
   }
 
   ngOnInit() {
