@@ -40,15 +40,9 @@ export class StockDetailsComponent implements AfterViewInit {
       this.title = params['title'];
       this.ASSET_TYPE = params['type'];
     });
+    console.log(this.title);
 
     if(this.ASSET_TYPE === "STOCK"){
-
-      const pricesWs = new WebSocket('wss://ws.coincap.io/prices?assets=bitcoin,ethereum,monero,litecoin')
-
-      pricesWs.onmessage = function (msg) {
-          console.log(msg.data)
-      }
-
       socketService.getStockData([this.title]);
       socketService.getStaticStockData()?.subscribe((data:any)=>{
         console.log("static stock data : ",data)
@@ -59,15 +53,11 @@ export class StockDetailsComponent implements AfterViewInit {
 
     }else{
       //dfghjk
-
       const pricesWs = new WebSocket('wss://ws.coincap.io/prices?assets=bitcoin,ethereum,monero,litecoin')
-
       pricesWs.onmessage = function (msg) {
           console.log(msg.data)
       }
     }
-
-   
   }
 
 
@@ -99,6 +89,7 @@ export class StockDetailsComponent implements AfterViewInit {
         enable_publishing: false,
         allow_symbol_change: true,
         container_id: 'trading-chart',
+
       });
     } else {
       console.error('TradingView library is not loaded.');
