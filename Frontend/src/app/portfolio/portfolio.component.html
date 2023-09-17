@@ -18,12 +18,12 @@
 <div class="card-container">
     <div class="mycard left-card">
         <p-card header="Current">
-            <p class="m-0" style="color: green; font-size: 30px"><b>₹{{currentAmount}}</b></p>
+            <p class="m-0" style="color: green; font-size: 30px"><b>₹{{currentAmount.toFixed(2)}}</b></p>
         </p-card>
     </div>
     <div class="mycard right-card">
         <p-card header="Invested">
-            <p class="m-0" style="color: gray; font-size: 30px"><b>₹ {{investedAmount}}</b></p>
+            <p class="m-0" style="color: gray; font-size: 30px"><b>₹ {{investedAmount.toFixed(2)}}</b></p>
         </p-card>
     </div>
 </div>
@@ -53,11 +53,11 @@
                 <td>
                     <b>{{ asset.assetQuantity }}</b>
                 </td>
-                <td>₹ {{ asset.assetPrice }}</td>
+                <td>₹ {{ asset.assetPrice.toFixed(2) }}</td>
                 <td>
-                    {{ asset?.currentPrice }} 
+                    {{ asset?.currentPrice.toFixed(2) }} 
                 </td>
-                <td><b>₹ {{(asset.currentPrice * asset?.assetQuantity) }}</b></td>
+                <td><b>₹ {{(asset.currentPrice * asset?.assetQuantity).toFixed(2) }}</b></td>
                 <td  [ngClass]="{
                     'change-percentage-positive': (asset?.assetPrice  - asset?.currentPrice) >= 0,
                     'change-percentage-negative': (asset?.assetPrice  - asset?.currentPrice) < 0

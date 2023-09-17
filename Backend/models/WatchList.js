@@ -6,7 +6,6 @@ const watchlistSchema = new mongoose.Schema({
     stockSymbol: { type: String, required: true},
     stockName: { type: String, required: false},
     Type: { type: String, required: true },
-    Price:{type:Number,required:true}
 });
 
 // Model

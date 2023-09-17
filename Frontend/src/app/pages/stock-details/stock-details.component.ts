@@ -18,6 +18,7 @@ export class StockDetailsComponent implements AfterViewInit {
   subtotal: number = 1;
   title: string; // Add this property to store the title
 
+  
   //For Buy
   assetSymbol:string;
   assetName: string;
@@ -27,6 +28,10 @@ export class StockDetailsComponent implements AfterViewInit {
 
   currentStock:any
 
+//WatchList
+    stockSymbol:string;
+    stockName: string;
+    type: string ="STOCK";
   //Added explisitly to check
 
   constructor(private route: ActivatedRoute , private buyreq: AssetService,private socketService :SocketService) {
@@ -109,6 +114,29 @@ export class StockDetailsComponent implements AfterViewInit {
 
     return 
     // Create a FormData object with your data
+  }
+
+  addToWatchlist(){
+    axios.interceptors.request.use(function (config) {
+      config.headers.Authorization = `Bearer ${localStorage.getItem("authToken")}`;
+      return config;
+  });
+  axios.post(`${environment.baseUrl}/api/watchlist/createWatchList`, {
+    stockSymbol:this.title,
+    stockName:this.title,
+    type: this.assetType,
+  })
+  .then(function (response) {
+    console.log(response);
+    alert("Added To the Watchlist");
+
+  })
+  .catch(function (error) {
+    console.log(error);
+    alert("Something went wrong , please try again");
+  })
+
+  return 
   }
 
 }

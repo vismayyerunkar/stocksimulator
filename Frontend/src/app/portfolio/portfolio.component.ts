@@ -22,6 +22,7 @@ export class PortfolioComponent implements OnInit {
   investedAmount:number = 0;
   currentAmount:number = 0
 
+  //API SELL
   sellAsset(assetId:any){
     axios.interceptors.request.use(function (config) {
       config.headers.Authorization = `Bearer ${localStorage.getItem("authToken")}`;

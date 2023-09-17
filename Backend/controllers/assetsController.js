@@ -7,10 +7,6 @@ import multiparty from "multiparty"
 
 class AssetsController {
 
-  
-
-   
-    
     static purchaseAsset = async (req, res) => {
 
       const { assetSymbol, assetName,assetType,assetPrice,assetQuantity } = req.body;
@@ -51,7 +47,9 @@ class AssetsController {
             userId: existingUser._id,// Use the _id of the existing user document
             price:assetPrice,
             type:"BUY",
+            assetType:assetType,
             symbol:assetSymbol,
+            quantity:assetQuantity,
             
         });
         transaction.save();
@@ -94,6 +92,8 @@ class AssetsController {
               price:currentPrice,
               type:"SELL",
               symbol:asset.assetSymbol,
+              assetType:asset.assetType,
+              quantity:asset.assetQuantity,
               
             });
 

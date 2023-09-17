@@ -12,7 +12,10 @@
             alt="Stock Logo"
             class="stock-logo"
           />
-          <div class="stock-name">{{currentStock.id}}</div>
+          <div class="stock-name">{{currentStock.id}}</div> &nbsp;
+          <p-button icon="pi pi-bookmark" 
+            styleClass="p-button-rounded p-button-secondary p-button-outlined" (click)="addToWatchlist()">
+          </p-button>
         </div>
         <div class="stock-price"><b>₹{{currentStock.price}}</b></div>
         <div style="display: flex; justify-content: flex-start">
