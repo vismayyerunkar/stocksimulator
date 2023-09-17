@@ -12,7 +12,7 @@
             alt="Stock Logo"
             class="stock-logo"
           />
-          <div class="stock-name">{{currentStock.id}}</div> &nbsp;&nbsp;&nbsp;
+          <div class="stock-name">{{currentStock?.id ?? '...'}}</div> &nbsp;&nbsp;&nbsp;
           <p-button 
           icon="pi pi-bookmark"
   styleClass="p-button-rounded p-button-secondary p-button-outlined"
@@ -21,7 +21,7 @@
           </p-button>
         </div>
 
-        <div class="stock-price"><b>₹{{currentStock.price | number:'1.2-2'}}</b></div>
+        <div class="stock-price"><b>{{ASSET_TYPE === "CRYPTO" ? '$' : '₹'}}{{(currentStock?.price | number:'1.2-2') ?? '...'}}</b></div>
         <div style="display: flex; justify-content: flex-start">
           <p-button
             label="Delivery"

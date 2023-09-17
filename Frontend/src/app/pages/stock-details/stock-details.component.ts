@@ -1,5 +1,5 @@
 import { SocketService } from 'src/services/socketService';
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AssetService } from 'src/services/asset.service';
 import axios from "axios";
@@ -13,10 +13,13 @@ declare const TradingView: any;
   styleUrls: ['./stock-details.component.scss'],
 })
 export class StockDetailsComponent implements AfterViewInit {
+
+  
   quantity: number = 1;
-  subtotal: number = 1;
+  subtotal: number;
   title: string; // Add this property to store the title
   ASSET_TYPE:string;
+  cryptoSocket:any = undefined;
   
   //For Buy
   assetSymbol:string;
@@ -24,24 +27,41 @@ export class StockDetailsComponent implements AfterViewInit {
   assetPrice: number;
   assetType: string ="STOCK";
   assetQuantity: number;
+  cryptoMap = new Map();
 
-  currentStock:any
+  currentStock:any;
 
 //WatchList
     stockSymbol:string;
     stockName: string;
     type: string ="STOCK";
   //Added explisitly to check
+
+  async createCryptoMap(){
+    const response = await axios.get(
+      'https://api.coincap.io/v2/assets'
+    );
+    console.log(response.data.data)
+  
+    for(let i = 0;i<response.data.data.length;i++){
+      this.cryptoMap.set(response.data?.data[i]?.id,response.data?.data[i]?.symbol);
+    }
+  }
   
 
   constructor(private route: ActivatedRoute , private buyreq: AssetService,private socketService :SocketService) {
     // Retrieve the title parameter from the route
-    this.route.params.subscribe((params) => {
-      this.title = params['title'];
-      this.ASSET_TYPE = params['type'];
+    
+    this.route.params.subscribe((params:any) => {
+      this.title = params.title;
+      console.log(params)
+      this.ASSET_TYPE = params?.type;
     });
+
+    
     console.log(this.title);
 
+   console.log(this.ASSET_TYPE)
     if(this.ASSET_TYPE === "STOCK"){
       socketService.getStockData([this.title]);
       socketService.getStaticStockData()?.subscribe((data:any)=>{
@@ -51,18 +71,41 @@ export class StockDetailsComponent implements AfterViewInit {
         this.assetPrice = data[0]?.price;
       })
 
-    }else{
-      //dfghjk
-      const pricesWs = new WebSocket('wss://ws.coincap.io/prices?assets=bitcoin,ethereum,monero,litecoin')
-      pricesWs.onmessage = function (msg) {
-          console.log(msg.data)
+    } else if(this.ASSET_TYPE == "CRYPTO"){
+      if(this.ASSET_TYPE === "CRYPTO"){
+        console.log("established socketiopd")
+        this.cryptoSocket = new WebSocket(`wss://ws.coincap.io/prices?assets=${this.title.toLowerCase()}`);
       }
+
+      if(this.cryptoSocket){
+        const temptite = this.title;
+
+        console.log(temptite)
+          this.cryptoSocket.onmessage = (msg:any) => {
+            console.log(JSON.parse(msg.data));
+            const objCopy = {
+              price: Object.entries(JSON.parse(msg.data))[0][1],
+              id: temptite,
+            };
+            this.currentStock = objCopy; // Update the class variable
+            this.subtotal = this.currentStock?.price * this.quantity
+          };
+      }    
+
+      
+    }else{
+      console.log("invalid asset name")
     }
   }
 
+  
 
   ngAfterViewInit(): void {
-    this.loadTradingViewLibrary();
+    this.createCryptoMap().then(()=>{
+      this.loadTradingViewLibrary();
+    });
+
+     
   }
 
   loadTradingViewLibrary() {
@@ -79,7 +122,7 @@ export class StockDetailsComponent implements AfterViewInit {
     if (typeof TradingView !== 'undefined') {
       new TradingView.widget({
         with: '100%',
-        symbol: this.title,
+        symbol: this.cryptoMap.get(this.title.toLocaleLowerCase()) ?? this.title,
         interval: 'D',
         timezone: 'Etc/UTC',
         theme: 'light',
@@ -103,6 +146,7 @@ export class StockDetailsComponent implements AfterViewInit {
 
   //this function will accept a name of stock
   buyAssest(){
+    console.log(this.currentStock)
     axios.interceptors.request.use(function (config) {
         config.headers.Authorization = `Bearer ${localStorage.getItem("authToken")}`;
         return config;
@@ -110,8 +154,8 @@ export class StockDetailsComponent implements AfterViewInit {
     axios.post(`${environment.baseUrl}/api/assets/purchaseAsset`, {
       assetSymbol:this.title,
       assetName:this.title,
-      assetPrice: this.assetPrice,
-      assetType: this.assetType,
+      assetPrice: this.currentStock.price,
+      assetType: this.ASSET_TYPE,
       assetQuantity: this.quantity
     })
     .then(function (response) {
