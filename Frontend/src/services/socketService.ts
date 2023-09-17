@@ -25,4 +25,8 @@ export class SocketService {
 		// listen event
 		return this.socket.fromEvent('TRENDING_STOCKS')
 	}
+
+	fetchTopCryptos(){
+		return this.socket.fromEvent("TRENDING_CRYPTOS");
+	}
 }

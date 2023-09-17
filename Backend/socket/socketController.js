@@ -1,8 +1,8 @@
 import stocksocket from "stocksocket";
 import { isMarketOpen } from "../controllers/stockController.js";
 import { NseIndia } from "stock-nse-india";
+import { getTopCryptos } from "./crypto.js";
 const nseIndia = new NseIndia()
-
 
 
 
@@ -78,3 +78,5 @@ export class StockDataHandler {
         }
     }
 }
+
+

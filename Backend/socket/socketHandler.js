@@ -4,6 +4,7 @@ import { getGainersAndLoosers, isMarketOpen } from "../controllers/stockControll
 import stocksocket from "stocksocket"
 import CoinGecko from 'coingecko-api';
 import axios from "axios";
+import { getTopCryptos } from "./crypto.js";
 
 async function getCryptoSymbolsAndNames() {
     try {
@@ -155,7 +156,8 @@ const listenSocketEvents = (io) => {
         // Getting the list of trending stocks
         let timeout = setInterval(async() => {
             io.sockets.emit("TRENDING_STOCKS", await getGainersAndLoosers(6));
-        }, 2000);
+            io.sockets.emit("TRENDING_CRYPTOS", await getTopCryptos(6));
+        }, 5000);
 
         io.on("disconnect", () => {
             clearInterval(timeout);
