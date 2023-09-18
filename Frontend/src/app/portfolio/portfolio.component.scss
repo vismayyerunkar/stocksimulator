@@ -14,9 +14,21 @@ h1 {
   width: 80%;
 }
 
+#sale {
+  width: 10px;
+}
 .ipo-table img {
   max-width: 40px;
   max-height: 40px;
+}
+
+.sell-btn{
+  color:red;
+  width:60px;
+  padding:5px;
+  border-radius:10px;
+  border:2px solid red;
+  cursor:pointer;
 }
 
 .ipo-table th,
@@ -86,4 +98,14 @@ h1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+/* Media query for small screens and mobile phones */
+@media (max-width: 768px) {
+  .table {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    width: 100%; /* Make the table full width on small screens */
+  }
+
+  /* Other styles for small screens go here */
 }

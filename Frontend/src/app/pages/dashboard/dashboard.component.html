@@ -6,7 +6,7 @@
             <h2>Top Gainers</h2>
             <div class="grid">
                 <!-- Display most traded stocks -->
-                <div class="col-12 md:col-6 lg:col-3" *ngFor="let stock of topGainers" [routerLink]="['/stock-details',{ title: stock.symbol }]">
+                <div class="col-12 md:col-6 lg:col-3" *ngFor="let stock of topGainers" [routerLink]="['/stock-details',{ title: stock.symbol,type:'STOCK' }]">
 
                     <ng-template #inactivebox>
                         <div style="height: 100px; background-color: #f1f5f9;" class="surface-card shadow-2 border-round">
@@ -21,7 +21,7 @@
                   stock?.meta?.symbol ?? stock?.symbol
                 }}</span>
                                 <div class="text-900 font-medium text-xl">
-                                    {{ stock?.lastPrice }}
+                                    {{ stock?.lastPrice | number:'1.2-2' }}
                                 </div>
                             </div>
                             <div class="flex align-items-center justify-content-center bg-blue-100 border-round" style="width: 2.5rem; height: 2.5rem">
@@ -45,7 +45,7 @@
                     </div>
                 </ng-template>
 
-                <div class="col-12 md:col-6 lg:col-3" *ngFor="let stock of topLoosers" [routerLink]="['/stock-details',{ title: stock.symbol }]">
+                <div class="col-12 md:col-6 lg:col-3" *ngFor="let stock of topLoosers" [routerLink]="['/stock-details',{ title: stock.symbol,type:'STOCK' }]">
                     <div class="surface-card shadow-2 p-3 border-round" *ngIf="stock.meta; else inactiveboxloosers">
                         <div class="flex justify-content-between mb-3">
                             <div>
@@ -53,7 +53,7 @@
                   stock?.meta?.symbol ?? stock?.symbol
                 }}</span>
                                 <div class="text-900 font-medium text-xl">
-                                    {{ stock?.lastPrice }}
+                                    {{ stock?.lastPrice | number:'1.2-2' }}
                                 </div>
                             </div>
                             <div class="flex align-items-center justify-content-center bg-red-100 border-round" style="width: 2.5rem; height: 2.5rem">
@@ -98,25 +98,33 @@
         <ng-template pTemplate="content">
             <h2>Top Gainers</h2>
             <div class="grid">
+               
                 <!-- Display most traded cryptos -->
-                <div class="col-12 md:col-6 lg:col-3" *ngFor="let crypto of mostTradedCryptos">
+                <div class="col-12 md:col-6 lg:col-3" *ngFor="let crypto of mostTradedCryptos" [routerLink]="['/stock-details',{ title: crypto.id,type:'CRYPTO' }]">
+                    <ng-template #inactivebox>
+                        <div style="height: 100px; background-color: #f1f5f9;" class="surface-card shadow-2 border-round">
+                            Loading...
+                        </div>
+                    </ng-template>
                     <div class="surface-card shadow-2 p-3 border-round">
                         <div class="flex justify-content-between mb-3">
                             <div>
                                 <span class="block text-500 font-medium mb-3">{{
-                  crypto.title
+                  crypto.id
                 }}</span>
                                 <div class="text-900 font-medium text-xl">
-                                    {{ crypto.value }}
+                                    {{crypto.priceUsd | number:'1.4-4' }}
                                 </div>
                             </div>
                             <div class="flex align-items-center justify-content-center bg-blue-100 border-round" style="width: 2.5rem; height: 2.5rem">
                                 <img src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK500112.png" alt="{{ crypto.title }}" />
                             </div>
                         </div>
-                        <span class="text-green-500" *ngIf="crypto.isNew">+{{ crypto.newCount }}</span
+                        <span class="text-green-500" *ngIf="crypto.isNew">+{{ crypto.changePercent24Hr.to }}</span
             >
-            <span class="text-green-400" *ngIf="crypto.isNew">(20.89)</span>
+            <span class="text-green-400" >
+                {{ crypto.changePercent24Hr | number:'1.4-4' }}
+            </span>
                     </div>
                 </div>
             </div>
@@ -124,24 +132,33 @@
 
             <h2>Top Losers</h2>
             <div class="grid">
+                <ng-template #inactivebox>
+                    <div style="height: 100px; background-color: #f1f5f9;" class="surface-card shadow-2 border-round">
+                        Loading...
+                    </div>
+                </ng-template>
                 <!-- Display top losers cryptos -->
-                <div class="col-12 md:col-6 lg:col-3" *ngFor="let loser of topLosersCryptos">
+                <div class="col-12 md:col-6 lg:col-3" *ngFor="let loser of topLosersCryptos" [routerLink]="['/stock-details',{ title: loser.id,type:'CRYPTO' }]">
+                  
+
                     <div class="surface-card shadow-2 p-3 border-round">
                         <div class="flex justify-content-between mb-3">
                             <div>
                                 <span class="block text-500 font-medium mb-3">{{
-                  loser.title
+                  loser.id
+
                 }}</span>
                                 <div class="text-900 font-medium text-xl">
-                                    {{ loser.value }}
+                                    {{ loser.priceUsd | number:'1.8-8'
+                                    }}
                                 </div>
                             </div>
                             <div class="flex align-items-center justify-content-center bg-red-100 border-round" style="width: 2.5rem; height: 2.5rem">
                                 <img src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK500209.png" alt="{{ loser.title }}" />
                             </div>
                         </div>
-                        <span class="text-red-500">{{ loser.percentageChange }}</span>
-                        <span class="text-red-400"> (4.57)</span>
+                        <span class="text-red-500">{{ loser.changePercent24Hr | number:'1.8-8' }}</span>
+                        <!-- <span class="text-red-400"> (4.57)</span> -->
                     </div>
                 </div>
             </div>

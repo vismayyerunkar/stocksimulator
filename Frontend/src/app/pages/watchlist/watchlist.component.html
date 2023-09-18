@@ -15,17 +15,14 @@
   <p-table [value]="watchlist" [paginator]="true" [rows]="4" class="ipo-table">
     <ng-template pTemplate="header">
       <tr>
-        <th>Symbol</th>
         <th>Company Logo</th>
         <th>Company Name</th>
         <th>Price</th>
         <th>Change (%)</th>
-        <th>Sell</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-watchlist>
       <tr>
-        <td>{{ watchlist.number }}</td>
         <td>
           <img
             src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK532540.png"
@@ -33,19 +30,13 @@
             style="width: 20%"
           />
         </td>
-        <td>{{ watchlist.stockSymbol }}</td>
-        <td>{{ watchlist.userId }}</td>
-        <td
-          [ngClass]="{
-            'change-percentage-positive': watchlist.changePercentage > 0,
-            'change-percentage-negative': watchlist.changePercentage < 0
-          }"
-        >
-          {{ watchlist.number }} %
+        <td>
+          {{ watchlist.stockSymbol }}
         </td>
         <td>
-          <p-button label="Primary" styleClass="p-button-outlined"></p-button>
+          <b>₹{{ watchlist.currentPrice | number : "1.2-2" }}</b>
         </td>
+        <td>%</td>
       </tr>
     </ng-template>
   </p-table>

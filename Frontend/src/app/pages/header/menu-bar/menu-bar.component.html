@@ -2,13 +2,23 @@
 
 <div class="app-header-container">
   <p-menubar>
+    
     <ng-template pTemplate="end">
       <input
+        id="search"
         type="text"
         pInputText
         style="margin-right: 2rem"
+        [(ngModel)]="searchTerm"
         placeholder="Search"
+        (input)="onInputChange()"
+        (keydown.enter)="searchAsset()"
       />
+      <div class="search-holder">
+        <ul>
+          <li class="search-list-item" (click)="searchAsset(symbol)" *ngFor="let symbol of stockSymbols">{{ symbol['1. symbol'] }}</li>
+        </ul>
+      </div>
       <i
         id="wallet"
         class="pi pi-wallet"
@@ -32,16 +42,17 @@
             <!-- Your header content -->
 
             <div id="name">
-              <b>Aryan Agrawal</b>
+              <b>{{userData?.name}}</b>
             </div>
             <p-button
               id="logout"
               icon="pi pi-power-off"
               styleClass="p-button-rounded p-button-outlined"
+              (click)="logout()"
             ></p-button>
           </div>
           <div>
-            Funds: <span id="fund"><b>$78.89</b></span>
+            Funds: <span id="fund"><b>${{funds}}</b></span>
           </div>
           <div
             class="button-container"

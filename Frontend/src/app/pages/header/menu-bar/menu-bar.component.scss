@@ -4,15 +4,123 @@
   display: inline-block;
   cursor: pointer;
 }
-#wallet {
-  cursor: pointer;
-}
+
 #logout {
   width: 100%;
 }
+
+#wallet {
+  cursor: pointer;
+}
+
 .button-container {
   margin-top: 1rem;
 }
+
+.tooltip-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 4px;
+  z-index: 1;
+  top: 100%;
+  right: 0;
+  width: 250px; /* Adjust the width as needed */
+
+  #name {
+    margin-bottom: 10px;
+    font-size: large;
+  }
+
+  #fund {
+    color: green;
+  }
+}
+
+.search-list-item{
+  padding:5px;
+  margin-bottom:2px;
+  border-radius:7px;
+  background-color:#e7e7e7;
+  width:210px;
+}
+
+.search-holder{
+  // background-color:red;
+  margin-right:100px !important;
+}
+
+/* Show the tooltip/card on hover */
+.profile-tooltip:hover .tooltip-content {
+  display: block;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+  /* Adjust tooltip/card width for smaller screens */
+  .tooltip-content {
+    width: 100%;
+    max-width: 300px; /* Adjust the max-width as needed */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  /* Further adjustments for smaller screens */
+  .tooltip-content {
+    padding: 10px; /* Reduce padding for smaller screens */
+  }
+
+  /* Hide the search input for phone screens */
+  #search {
+    display: none;
+  }
+}
+
+.tooltip-content.active {
+  display: flex;
+}
+
+.profile-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#logout {
+  width: auto; /* Remove fixed width to allow natural width */
+  margin-left: 10px; /* Add margin to separate the Logout button from the name */
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+/* Style for the tooltip/card */
+.profile-tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+
+  @media screen and (max-width: 768px) {
+    text-align: left; /* Align the tooltip to the left */
+  }
+}
+
+#logout {
+  width: auto; /* Remove fixed width to allow natural width */
+  margin-left: 10px; /* Add margin to separate the Logout button from the name */
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
 .tooltip-content {
   display: none;
   position: absolute;
@@ -46,31 +154,9 @@
     width: 100%;
     max-width: 300px; /* Adjust the max-width as needed */
   }
-}
 
-@media screen and (max-width: 480px) {
   /* Further adjustments for smaller screens */
   .tooltip-content {
     padding: 10px; /* Reduce padding for smaller screens */
   }
-}
-.tooltip-content.active {
-  display: flex;
-}
-
-.profile-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-#logout {
-  width: auto; /* Remove fixed width to allow natural width */
-  margin-left: 10px; /* Add margin to separate the Logout button from the name */
-}
-
-.button-container {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
 }

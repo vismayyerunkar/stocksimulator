@@ -1,9 +1,10 @@
 import { Server } from "socket.io";
 import { StockDataHandler } from "./socketController.js";
-import { getGainersAndLoosers } from "../controllers/stockController.js";
+import { getGainersAndLoosers, isMarketOpen } from "../controllers/stockController.js";
 import stocksocket from "stocksocket"
 import CoinGecko from 'coingecko-api';
 import axios from "axios";
+import { getTopCryptos } from "./crypto.js";
 
 async function getCryptoSymbolsAndNames() {
     try {
@@ -105,23 +106,63 @@ setInterval(() => {
 // 4) when the client does not want the stock data just leave the room
 
 
-setInterval(() => {
-    const tickers = io.of("/").adapter.rooms;
-    if (tickers.length > 0) {
-        stocksocket.addTickers(tickers, (newPrice) => {
-            console.log("Price changed for : ", newPrice.id);
-            io.to(newPrice.id).emit("PRICE_CHANGED", newPrice);
-        });
+function sleep(millis){
+ 
+    var date = new Date();
+    var curDate = null;
+    do { curDate = new Date(); }
+    while(curDate-date < millis);
+}
+
+const temptickers = []
+
+const filter= (string)=>{
+    for(let i = 0;i<string?.length;i++){
+        if(/\d/.test(string[i])){
+            return false
+        }
     }
-}, 4000)
+
+    return string;
+}
+
+setInterval(async () => {
+    const tickers = io.of("/").adapter.rooms;
+    const marketStatus = await isMarketOpen();
+    if(!marketStatus){
+        return;
+    }
+
+    for (let [key, value] of tickers) {
+        const filteredData = filter(key)
+        if(filteredData && !temptickers.includes(filteredData+".NS")){
+            temptickers.push(filteredData + ".NS");
+        }
+    }
+
+    console.log("temp tickers :",temptickers)
+    if (temptickers.length > 0 && marketStatus) {
+        stocksocket.removeAllTickers();
+        sleep(2000);
+        stocksocket.addTickers(temptickers, (newPrice) => {
+            console.log("Price changed for : ", newPrice);
+            io.to(newPrice.id?.split(".")[0]).emit("PRICE_CHANGED", newPrice);
+        });
+    }else{
+        // console.log("market is close")
+    }
+}, 10000)
 
 
 
 const listenSocketEvents = (io) => {
 
     try {
+        console.log(io.of("/").adapter.rooms)
+
 
         io.on("connection", (socket) => {
+
             const handler = new StockDataHandler(socket);
             // listening to events 
             socket.on("GET_STOCK_DATA", (payload, cb) => {
@@ -135,11 +176,11 @@ const listenSocketEvents = (io) => {
             });
         });
 
-
         // Getting the list of trending stocks
         let timeout = setInterval(async() => {
             io.sockets.emit("TRENDING_STOCKS", await getGainersAndLoosers(6));
-        }, 2000);
+            io.sockets.emit("TRENDING_CRYPTOS", await getTopCryptos(6));
+        }, 5000);
 
         io.on("disconnect", () => {
             clearInterval(timeout);
@@ -149,3 +190,4 @@ const listenSocketEvents = (io) => {
         console.log("Error while socket client connection")
     }
 }
+

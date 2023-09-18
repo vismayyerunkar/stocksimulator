@@ -1,22 +1,14 @@
-/* Variables */
-/* $primary-color: #9c27b0; */
-/* $secondary-color: #333333; */
-
-/* Mixins */
 @mixin flex-center {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* General Styles */
 body {
   margin-bottom: 2rem;
 }
 
-/* Header */
 .app-header-container {
-  /* background-color: $primary-color; */
   color: white;
 
   .p-menubar {
@@ -39,8 +31,6 @@ body {
     box-shadow: none;
 
     .p-menuitem-link {
-      /* color: $secondary-color; */
-
       &.p-highlight {
         background-color: #f0f0f0;
       }
@@ -48,7 +38,7 @@ body {
   }
 
   input[type="text"].p-inputtext {
-    width: 100%; /* Make the input field 100% width on small screens */
+    width: 100%;
   }
 
   .p-avatar {
@@ -60,32 +50,37 @@ body {
   }
 }
 
-/* Tab Content */
+/* Responsive grid layout */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 5px;
 }
+
 h2 {
   margin-left: 10px;
 }
+
 .clickable-card {
   cursor: pointer;
 }
+
 .surface-card {
   width: 90%;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 15px;
-  margin: 10px; /* Add margin to all sides (top, right, bottom, left) */
+  margin: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 
   .block {
     font-size: 16px;
     font-weight: bold;
     margin-bottom: 10px;
   }
+
   .text-900 {
     font-size: 20px;
     font-weight: bold;
@@ -96,6 +91,7 @@ h2 {
     font-weight: 700;
     font-size: 18px;
   }
+
   .text-green-400 {
     color: #00aa00;
     font-weight: 500;
@@ -107,16 +103,17 @@ h2 {
     font-weight: 700;
     font-size: 18px;
   }
+
   .text-red-400 {
     color: #ff0000;
     font-weight: 500;
     font-size: 15px;
   }
+
   .flex.align-items-center.justify-content-center {
     @include flex-center;
     width: 2.5rem;
     height: 2.5rem;
-    /* background-color: $primary-color; */
     border-radius: 50%;
 
     img {
@@ -128,7 +125,7 @@ h2 {
   }
 }
 
-/* Chart Page */
+/* Responsive chart page */
 .chart-page {
   display: flex;
   flex-wrap: wrap;
@@ -150,6 +147,7 @@ h2 {
   object-fit: cover;
 }
 
+/* Responsive column widths */
 .col-12 {
   width: 100%;
 }
@@ -162,9 +160,9 @@ h2 {
   width: 100%;
 }
 
-/* IPO Table */
+/* Responsive IPO table */
 .ipo-table {
-  width: 100%; /* Make the table full width on all screens */
+  width: 100%;
   margin: 0 auto;
   border-collapse: collapse;
   border: 1px solid #ccc;
@@ -196,16 +194,3 @@ h2 {
   border-radius: 50%;
   object-fit: cover;
 }
-
-@media screen and (max-width: 768px) {
-  /* Adjust styles for screens smaller than 768px */
-  .grid {
-    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
-  }
-
-  .chart-container {
-    width: 100%; /* Make the chart container full width on small screens */
-  }
-}
-
-/* Add more media queries as needed */

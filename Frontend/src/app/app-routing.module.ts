@@ -24,7 +24,7 @@ const routes: Routes = [
     path: 'signup',
     component: SignupComponent,
     pathMatch: 'full',
-    canActivate: [AuthGuard],
+    canActivate: [NoAuthGuard],
   },
   {
     path: 'stock-details',
