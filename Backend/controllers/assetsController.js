@@ -27,7 +27,7 @@ class AssetsController {
           assetPrice:assetPrice,
           assetName: assetName,
           assetQuantity:assetQuantity,
-          assetType: assetType?.toLowerCase() == 'c' ? "CRYPTO" : "STOCK",
+          assetType: assetType,
         });
 
         // create a transaction

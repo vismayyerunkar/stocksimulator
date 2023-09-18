@@ -37,6 +37,9 @@
           <b>₹{{ watchlist.currentPrice | number : "1.2-2" }}</b>
         </td>
         <td>%</td>
+        <td>
+          <button (click)="deleteWatchlist(watchlist._id)">Delete</button>
+        </td>
       </tr>
     </ng-template>
   </p-table>
