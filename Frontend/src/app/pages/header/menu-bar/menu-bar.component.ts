@@ -38,7 +38,7 @@ export class MenuBarComponent implements OnInit {
     axios.interceptors.request.use(function (config) {
       config.headers.Authorization = `Bearer ${localStorage.getItem("authToken")}`;
       return config;
-  });
+   });
     axios.get(`${environment.baseUrl}/api/user/loggedUser`).then((res:any)=>{
       console.log(res.data)
       this.funds = res.data?.user?.availableTokens
@@ -51,9 +51,7 @@ export class MenuBarComponent implements OnInit {
   async createCryptoMap(){
     const response = await axios.get(
       'https://api.coincap.io/v2/assets'
-    );
-    console.log(response.data.data)
-  
+    ); 
     for(let i = 0;i<response.data.data.length;i++){
       this.cryptoMap.set(response.data?.data[i]?.id,response.data?.data[i]?.symbol);
     }
@@ -61,11 +59,14 @@ export class MenuBarComponent implements OnInit {
 
   searchAsset(searchValue?:any){
     console.log(searchValue ?? this.searchTerm);
-    this.createCryptoMap();
+    this.createCryptoMap().then(()=>{
+      console.log(this.cryptoMap.get(searchValue?.symbol?.split(".")[0] ?? this.searchTerm));
+      window.location.href = `/stock-details;title=${searchValue?.symbol?.split(".")[0] ?? this.searchTerm};type=${this.cryptoMap.get(searchValue?.symbol?.split(".")[0] ?? this.searchTerm) ? "CRYPTO" : "STOCK"}`
+    }).catch((err)=>{
+      console.log(err);
+      alert("An error occured please try again")
+    })
 
-    console.log(this.cryptoMap.get(searchValue?.symbol?.split(".")[0] ?? this.searchTerm));
-
-    window.location.href = `/stock-details;title=${searchValue?.symbol?.split(".")[0] ?? this.searchTerm};type=${this.cryptoMap.get(typeof searchValue?.symbol?.split(".")[0] ?? this.searchTerm) === typeof undefined ? "STOCK" : "CRYPTO"}`
   }
 
   ngOnInit() {

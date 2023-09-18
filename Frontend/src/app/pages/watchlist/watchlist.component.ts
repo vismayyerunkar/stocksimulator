@@ -37,6 +37,22 @@ export class WatchlistComponent implements OnInit {
       console.log("symbol",this.symbols);
     },300);
 
+    socketService.subscribeToContinousData().subscribe((data:any)=>{
+      //setting the live price
+      for(let i= 0;i<this.watchlist.length;i++){
+        if(this.watchlist[i]?.stockSymbol == data.id?.split(".")[0]){
+          this.watchlist[i] = {
+            ...this.watchlist[i],
+            currentPrice:data?.price
+          }
+        }
+      }
+      // data.map((item:any)=>{
+      //     console.log(item)
+      // });
+
+    })
+
     socketService.getStaticStockData()?.subscribe((data:any)=>{
       console.log("static stock data : ",data);
 

@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AssetService } from 'src/services/asset.service';
 import axios from "axios";
 import { environment } from 'src/environments/environment';
+import { webSocket } from 'rxjs/webSocket';
 
 declare const TradingView: any;
 
@@ -37,12 +38,23 @@ export class StockDetailsComponent implements AfterViewInit {
     type: string ="STOCK";
   //Added explisitly to check
 
+
+  subscribeToWebsocket() {
+    const subject:any = webSocket('wss://streamer.finance.yahoo.com');
+
+    subject.subscribe((res:any) => {
+      console.log('Response from websocket: ' + res);
+    });
+    console.log("websocket subscribed")
+    subject.next({ subscribe: ['IRCTC'] });
+  }
+
+
   async createCryptoMap(){
     const response = await axios.get(
       'https://api.coincap.io/v2/assets'
     );
-    console.log(response.data.data)
-  
+ 
     for(let i = 0;i<response.data.data.length;i++){
       this.cryptoMap.set(response.data?.data[i]?.id,response.data?.data[i]?.symbol);
     }
@@ -58,11 +70,23 @@ export class StockDetailsComponent implements AfterViewInit {
       this.ASSET_TYPE = params?.type;
     });
 
+    this.subscribeToWebsocket();
+    
+
+    socketService.subscribeToContinousData().subscribe((data:any)=>{
+      console.log("socket live data : ",data)
+
+      if(data?.id?.split(".")[0]?.toLowerCase() == this.title.toLowerCase())
+      this.currentStock = data;
+      this.subtotal = this.currentStock?.price * this.quantity
+
+    })
+
     
     console.log(this.title);
 
    console.log(this.ASSET_TYPE)
-    if(this.ASSET_TYPE === "STOCK"){
+    if(this.ASSET_TYPE == "STOCK"){
       socketService.getStockData([this.title]);
       socketService.getStaticStockData()?.subscribe((data:any)=>{
         console.log("static stock data : ",data)

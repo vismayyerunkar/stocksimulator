@@ -32,7 +32,7 @@
         <td>
           {{ watchlist.stockSymbol }}
         </td>
-        <td><b>₹{{ watchlist.currentPrice }}</b></td>
+        <td><b>₹{{ watchlist.currentPrice | number:'1.2-2'}}</b></td>
         <td>%</td>
       </tr>
     </ng-template>
