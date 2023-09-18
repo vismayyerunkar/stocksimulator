@@ -42,7 +42,6 @@ export class PortfolioComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.fetchStocks();
     this.items = [
       { label: 'ALL', icon: 'pi pi-fw pi-calendar' },
       { label: 'Stocks', icon: 'pi pi-fw pi-shield' },

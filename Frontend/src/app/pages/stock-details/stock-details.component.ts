@@ -79,7 +79,6 @@ export class StockDetailsComponent implements AfterViewInit {
       if(data?.id?.split(".")[0]?.toLowerCase() == this.title.toLowerCase())
       this.currentStock = data;
       this.subtotal = this.currentStock?.price * this.quantity
-
     })
 
     

@@ -64,9 +64,8 @@ export class MenuBarComponent implements OnInit {
       window.location.href = `/stock-details;title=${searchValue?.symbol?.split(".")[0] ?? this.searchTerm};type=${this.cryptoMap.get(searchValue?.symbol?.split(".")[0] ?? this.searchTerm) ? "CRYPTO" : "STOCK"}`
     }).catch((err)=>{
       console.log(err);
-      alert("An error occured please try again")
+      alert("An error occured please try again");
     })
-
   }
 
   ngOnInit() {
