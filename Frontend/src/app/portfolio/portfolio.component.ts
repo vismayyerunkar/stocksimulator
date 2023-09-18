@@ -22,7 +22,13 @@ export class PortfolioComponent implements OnInit {
   symbols:string[] = [];
   updatedStocks:any;
   investedAmount:number = 0;
-  currentAmount:number = 0
+  currentAmount:number = 0;
+
+  investedAmountStocks:number = 0;
+  currentAmountStocks:number = 0;
+
+  investedAmountCrypto:number = 0;
+  currentAmountCrypto:number = 0;
 
   //API SELL
   sellAsset(assetId:any){
@@ -103,7 +109,16 @@ export class PortfolioComponent implements OnInit {
         }
 
         this.currentAmount += entry?.currentPrice * entry?.assetQuantity;
-        this.investedAmount += entry?.assetQuantity * entry?.assetPrice
+        this.investedAmount += entry?.assetQuantity * entry?.assetPrice;
+
+        if(asset.assetType ==='STOCK'){
+        this.currentAmountStocks += entry?.currentPrice * entry?.assetQuantity;
+        this.investedAmountStocks += entry?.assetQuantity * entry?.assetPrice
+        }
+        else{
+        this.currentAmountCrypto += entry?.currentPrice * entry?.assetQuantity;
+        this.investedAmountCrypto += entry?.assetQuantity * entry?.assetPrice
+        }
         console.log(entry);
         copy.push(entry);
       });
@@ -131,7 +146,7 @@ export class PortfolioComponent implements OnInit {
           console.log(res);
           const temp:any[] = []
           res?.forEach((d:any)=>{
-            temp?.push(d?.assetSymbol)
+            temp?.push(d?.assetSymbol?.toUpperCase())
           })
 
           this.symbols = temp;

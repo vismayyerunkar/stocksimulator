@@ -2,7 +2,7 @@ import { SocketService } from 'src/services/socketService';
 import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AssetService } from 'src/services/asset.service';
-import axios from "axios";
+import axios from 'axios';
 import { environment } from 'src/environments/environment';
 import { webSocket } from 'rxjs/webSocket';
 
@@ -14,122 +14,114 @@ declare const TradingView: any;
   styleUrls: ['./stock-details.component.scss'],
 })
 export class StockDetailsComponent implements AfterViewInit {
-
-  
   quantity: number = 1;
   subtotal: number;
   title: string; // Add this property to store the title
-  ASSET_TYPE:string;
-  cryptoSocket:any = undefined;
-  
+  ASSET_TYPE: string;
+  cryptoSocket: any = undefined;
+
   //For Buy
-  assetSymbol:string;
+  assetSymbol: string;
   assetName: string;
   assetPrice: number;
-  assetType: string ="STOCK";
+  assetType: string = 'STOCK';
   assetQuantity: number;
   cryptoMap = new Map();
 
-  currentStock:any;
+  currentStock: any;
 
-//WatchList
-    stockSymbol:string;
-    stockName: string;
-    type: string ="STOCK";
+  //WatchList
+  stockSymbol: string;
+  stockName: string;
+  type: string = 'STOCK';
   //Added explisitly to check
 
-
   subscribeToWebsocket() {
-    const subject:any = webSocket('wss://streamer.finance.yahoo.com');
+    const subject: any = webSocket('wss://streamer.finance.yahoo.com');
 
-    subject.subscribe((res:any) => {
+    subject.subscribe((res: any) => {
       console.log('Response from websocket: ' + res);
     });
-    console.log("websocket subscribed")
+    console.log('websocket subscribed');
     subject.next({ subscribe: ['IRCTC'] });
   }
 
+  async createCryptoMap() {
+    const response = await axios.get('https://api.coincap.io/v2/assets');
 
-  async createCryptoMap(){
-    const response = await axios.get(
-      'https://api.coincap.io/v2/assets'
-    );
- 
-    for(let i = 0;i<response.data.data.length;i++){
-      this.cryptoMap.set(response.data?.data[i]?.id,response.data?.data[i]?.symbol);
+    for (let i = 0; i < response.data.data.length; i++) {
+      this.cryptoMap.set(
+        response.data?.data[i]?.id,
+        response.data?.data[i]?.symbol
+      );
     }
   }
-  
 
-  constructor(private route: ActivatedRoute , private buyreq: AssetService,private socketService :SocketService) {
+  constructor(
+    private route: ActivatedRoute,
+    private buyreq: AssetService,
+    private socketService: SocketService
+  ) {
     // Retrieve the title parameter from the route
-    
-    this.route.params.subscribe((params:any) => {
+
+    this.route.params.subscribe((params: any) => {
       this.title = params.title;
-      console.log(params)
+      console.log(params);
       this.ASSET_TYPE = params?.type;
     });
 
     this.subscribeToWebsocket();
-    
 
-    socketService.subscribeToContinousData().subscribe((data:any)=>{
-      console.log("socket live data : ",data)
+    socketService.subscribeToContinousData().subscribe((data: any) => {
+      console.log('socket live data : ', data);
 
-      if(data?.id?.split(".")[0]?.toLowerCase() == this.title.toLowerCase())
-      this.currentStock = data;
-      this.subtotal = this.currentStock?.price * this.quantity
+      if (data?.id?.split('.')[0]?.toLowerCase() == this.title.toLowerCase())
+        this.currentStock = data;
+      this.subtotal = this.currentStock?.price * this.quantity;
+    });
 
-    })
-
-    
     console.log(this.title);
 
-   console.log(this.ASSET_TYPE)
-    if(this.ASSET_TYPE == "STOCK"){
+    console.log(this.ASSET_TYPE);
+    if (this.ASSET_TYPE == 'STOCK') {
       socketService.getStockData([this.title]);
-      socketService.getStaticStockData()?.subscribe((data:any)=>{
-        console.log("static stock data : ",data)
+      socketService.getStaticStockData()?.subscribe((data: any) => {
+        console.log('static stock data : ', data);
         this.currentStock = data[0];
         this.subtotal = data[0].price;
         this.assetPrice = data[0]?.price;
-      })
-
-    } else if(this.ASSET_TYPE == "CRYPTO"){
-      if(this.ASSET_TYPE === "CRYPTO"){
-        console.log("established socketiopd")
-        this.cryptoSocket = new WebSocket(`wss://ws.coincap.io/prices?assets=${this.title.toLowerCase()}`);
+      });
+    } else if (this.ASSET_TYPE == 'CRYPTO') {
+      if (this.ASSET_TYPE === 'CRYPTO') {
+        console.log('established socketiopd');
+        this.cryptoSocket = new WebSocket(
+          `wss://ws.coincap.io/prices?assets=${this.title.toLowerCase()}`
+        );
       }
 
-      if(this.cryptoSocket){
+      if (this.cryptoSocket) {
         const temptite = this.title;
 
-        console.log(temptite)
-          this.cryptoSocket.onmessage = (msg:any) => {
-            console.log(JSON.parse(msg.data));
-            const objCopy = {
-              price: Object.entries(JSON.parse(msg.data))[0][1],
-              id: temptite,
-            };
-            this.currentStock = objCopy; // Update the class variable
-            this.subtotal = this.currentStock?.price * this.quantity
+        console.log(temptite);
+        this.cryptoSocket.onmessage = (msg: any) => {
+          console.log(JSON.parse(msg.data));
+          const objCopy = {
+            price: Object.entries(JSON.parse(msg.data))[0][1],
+            id: temptite,
           };
-      }    
-
-      
-    }else{
-      console.log("invalid asset name")
+          this.currentStock = objCopy; // Update the class variable
+          this.subtotal = this.currentStock?.price * this.quantity;
+        };
+      }
+    } else {
+      console.log('invalid asset name');
     }
   }
 
-  
-
   ngAfterViewInit(): void {
-    this.createCryptoMap().then(()=>{
+    this.createCryptoMap().then(() => {
       this.loadTradingViewLibrary();
     });
-
-     
   }
 
   loadTradingViewLibrary() {
@@ -146,7 +138,8 @@ export class StockDetailsComponent implements AfterViewInit {
     if (typeof TradingView !== 'undefined') {
       new TradingView.widget({
         with: '100%',
-        symbol: this.cryptoMap.get(this.title.toLocaleLowerCase()) ?? this.title,
+        symbol:
+          this.cryptoMap.get(this.title.toLocaleLowerCase()) ?? this.title,
         interval: 'D',
         timezone: 'Etc/UTC',
         theme: 'light',
@@ -156,7 +149,6 @@ export class StockDetailsComponent implements AfterViewInit {
         enable_publishing: false,
         allow_symbol_change: true,
         container_id: 'trading-chart',
-
       });
     } else {
       console.error('TradingView library is not loaded.');
@@ -167,56 +159,58 @@ export class StockDetailsComponent implements AfterViewInit {
     this.subtotal = this.quantity * this.currentStock?.price; // Replace with the actual stock price
   }
 
-
   //this function will accept a name of stock
-  buyAssest(){
-    console.log(this.currentStock)
+  buyAssest() {
+    console.log(this.currentStock);
     axios.interceptors.request.use(function (config) {
-        config.headers.Authorization = `Bearer ${localStorage.getItem("authToken")}`;
-        return config;
+      config.headers.Authorization = `Bearer ${localStorage.getItem(
+        'authToken'
+      )}`;
+      return config;
     });
-    axios.post(`${environment.baseUrl}/api/assets/purchaseAsset`, {
-      assetSymbol:this.title,
-      assetName:this.title,
-      assetPrice: this.currentStock.price,
-      assetType: this.ASSET_TYPE,
-      assetQuantity: this.quantity
-    })
-    .then(function (response) {
-      console.log(response);
-      alert("Buy successfull");
+    axios
+      .post(`${environment.baseUrl}/api/assets/purchaseAsset`, {
+        assetSymbol: this.title.toUpperCase(),
+        assetName: this.title.toUpperCase(),
+        assetPrice: this.currentStock.price,
+        assetType: this.ASSET_TYPE,
+        assetQuantity: this.quantity,
+      })
+      .then(function (response) {
+        console.log(response);
+        alert('Buy successfull');
+      })
+      .catch(function (error) {
+        console.log(error);
+        alert('Something went wrong , please try again');
+      });
 
-    })
-    .catch(function (error) {
-      console.log(error);
-      alert("Something went wrong , please try again");
-    })
-
-    return 
+    return;
     // Create a FormData object with your data
   }
 
-  addToWatchlist(){
+  addToWatchlist() {
     axios.interceptors.request.use(function (config) {
-      config.headers.Authorization = `Bearer ${localStorage.getItem("authToken")}`;
+      config.headers.Authorization = `Bearer ${localStorage.getItem(
+        'authToken'
+      )}`;
       return config;
-  });
-  axios.post(`${environment.baseUrl}/api/watchlist/createWatchList`, {
-    stockSymbol:this.title,
-    stockName:this.title,
-    type: this.assetType,
-  })
-  .then(function (response) {
-    console.log(response);
-    alert("Added To the Watchlist");
+    });
+    axios
+      .post(`${environment.baseUrl}/api/watchlist/createWatchList`, {
+        stockSymbol: this.title.toUpperCase(),
+        stockName: this.title.toUpperCase(),
+        type: this.assetType,
+      })
+      .then(function (response) {
+        console.log(response);
+        alert('Added To the Watchlist');
+      })
+      .catch(function (error) {
+        console.log(error);
+        alert('Something went wrong , please try again');
+      });
 
-  })
-  .catch(function (error) {
-    console.log(error);
-    alert("Something went wrong , please try again");
-  })
-
-  return 
+    return;
   }
-
 }
