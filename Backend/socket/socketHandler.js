@@ -106,7 +106,7 @@ setInterval(() => {
 // 4) when the client does not want the stock data just leave the room
 
 
-function sleep(){
+function sleep(millis){
  
     var date = new Date();
     var curDate = null;
@@ -114,20 +114,44 @@ function sleep(){
     while(curDate-date < millis);
 }
 
+const temptickers = []
+
+const filter= (string)=>{
+    for(let i = 0;i<string?.length;i++){
+        if(/\d/.test(string[i])){
+            return false
+        }
+    }
+
+    return string;
+}
+
 setInterval(async () => {
     const tickers = io.of("/").adapter.rooms;
     const marketStatus = await isMarketOpen();
-    if (tickers.length > 0 && marketStatus) {
+    if(!marketStatus){
+        return;
+    }
+
+    for (let [key, value] of tickers) {
+        const filteredData = filter(key)
+        if(filteredData && !temptickers.includes(filteredData+".NS")){
+            temptickers.push(filteredData + ".NS");
+        }
+    }
+
+    console.log("temp tickers :",temptickers)
+    if (temptickers.length > 0 && marketStatus) {
         stocksocket.removeAllTickers();
         sleep(2000);
-        stocksocket.addTickers(tickers, (newPrice) => {
-            console.log("Price changed for : ", newPrice.id);
-            io.to(newPrice.id).emit("PRICE_CHANGED", newPrice);
+        stocksocket.addTickers(temptickers, (newPrice) => {
+            console.log("Price changed for : ", newPrice);
+            io.to(newPrice.id?.split(".")[0]).emit("PRICE_CHANGED", newPrice);
         });
     }else{
         // console.log("market is close")
     }
-}, 5000)
+}, 10000)
 
 
 
@@ -152,7 +176,6 @@ const listenSocketEvents = (io) => {
             });
         });
 
-
         // Getting the list of trending stocks
         let timeout = setInterval(async() => {
             io.sockets.emit("TRENDING_STOCKS", await getGainersAndLoosers(6));
@@ -167,3 +190,4 @@ const listenSocketEvents = (io) => {
         console.log("Error while socket client connection")
     }
 }
+

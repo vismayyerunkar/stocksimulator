@@ -21,9 +21,6 @@ export async function getTopCryptos(n) {
       }
 
         // Print the top 5 cryptocurrencies
-        console.log('Top 5 Cryptocurrencies:');
-        console.log(gainers?.length);
-        console.log(loosers?.length);
         return {
             gainers:gainers,
             loosers:loosers

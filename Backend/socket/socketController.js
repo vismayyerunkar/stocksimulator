@@ -17,6 +17,7 @@ export class StockDataHandler {
 
     //Getting live data for list of specified stocks
     GetStockDataStream = async(payload, cb) => {
+        console.log("getting socket data stream")
         try {
             var stocktickers = payload.symbols;
             console.log("stock tickers",stocktickers)

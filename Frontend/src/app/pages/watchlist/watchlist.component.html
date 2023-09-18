@@ -19,20 +19,23 @@
         <th>Company Name</th>
         <th>Price</th>
         <th>Change (%)</th>
-   
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-watchlist>
       <tr>
-        <td> <img
-          src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK532540.png"
-          alt="Company Logo"
-          style="width: 20%"
-        /></td>
+        <td>
+          <img
+            src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK532540.png"
+            alt="Company Logo"
+            style="width: 20%"
+          />
+        </td>
         <td>
           {{ watchlist.stockSymbol }}
         </td>
-        <td><b>₹{{ watchlist.currentPrice }}</b></td>
+        <td>
+          <b>₹{{ watchlist.currentPrice | number : "1.2-2" }}</b>
+        </td>
         <td>%</td>
       </tr>
     </ng-template>

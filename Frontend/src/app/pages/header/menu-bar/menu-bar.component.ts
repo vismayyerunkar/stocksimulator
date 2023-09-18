@@ -1,3 +1,4 @@
+import { SocketService } from 'src/services/socketService';
 import { StockService } from 'src/services/stock.service';
 import { Category } from 'src/models/feedback';
 import { environment } from 'src/environments/environment';
@@ -20,6 +21,8 @@ export class MenuBarComponent implements OnInit {
   router:Router
   searchTerm = '';
   stockSymbols: any[] = [];
+  cryptoMap = new Map();
+
   // randomProfilePic:string
 
   constructor(private userAuthService: UserAuthService,private stockService:StockService) {
@@ -35,7 +38,7 @@ export class MenuBarComponent implements OnInit {
     axios.interceptors.request.use(function (config) {
       config.headers.Authorization = `Bearer ${localStorage.getItem("authToken")}`;
       return config;
-  });
+   });
     axios.get(`${environment.baseUrl}/api/user/loggedUser`).then((res:any)=>{
       console.log(res.data)
       this.funds = res.data?.user?.availableTokens
@@ -44,9 +47,26 @@ export class MenuBarComponent implements OnInit {
     })
   }
 
+
+  async createCryptoMap(){
+    const response = await axios.get(
+      'https://api.coincap.io/v2/assets'
+    ); 
+    for(let i = 0;i<response.data.data.length;i++){
+      this.cryptoMap.set(response.data?.data[i]?.id,response.data?.data[i]?.symbol);
+    }
+  }
+
   searchAsset(searchValue?:any){
     console.log(searchValue ?? this.searchTerm);
-    window.location.href = `/stock-details;title=${searchValue?.symbol?.split(".")[0] ?? this.searchTerm};type=STOCK`
+    this.createCryptoMap().then(()=>{
+      console.log(this.cryptoMap.get(searchValue?.symbol?.split(".")[0] ?? this.searchTerm));
+      window.location.href = `/stock-details;title=${searchValue?.symbol?.split(".")[0] ?? this.searchTerm};type=${this.cryptoMap.get(searchValue?.symbol?.split(".")[0] ?? this.searchTerm) ? "CRYPTO" : "STOCK"}`
+    }).catch((err)=>{
+      console.log(err);
+      alert("An error occured please try again")
+    })
+
   }
 
   ngOnInit() {
@@ -118,3 +138,5 @@ export class MenuBarComponent implements OnInit {
     window.location.href = "/login"
   }
 }
+
+
