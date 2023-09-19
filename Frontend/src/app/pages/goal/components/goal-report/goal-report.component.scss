@@ -1,0 +1,103 @@
+/* Style for the container */
+.surface-section {
+  background-color: #f5f5f5;
+  padding: 2rem;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 10px;
+  margin-top: 2rem;
+}
+
+/* Style for the title */
+.font-medium.text-3xl {
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.text-900 {
+  font-weight: 900;
+}
+
+.text-500 {
+  font-weight: 500;
+  margin-right: 2rem;
+}
+
+/* Style for p-button */
+.p-button-outlined.p-button-success {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+/* Style for p-button label */
+.p-button-outlined.p-button-success .p-button-label {
+  font-weight: 600;
+  color: #4caf50;
+}
+
+/* Style for p-button on hover */
+.p-button-outlined.p-button-success:hover {
+  background-color: transparent;
+  box-shadow: none;
+  color: #4caf50;
+  border-color: #4caf50;
+}
+
+/* Style for the movie information list */
+ul.list-none {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Style for movie information list items */
+li {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-top: 1px solid #ddd;
+}
+
+.text-900.w-full {
+  text-align: left;
+}
+/* Style for the button container */
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%; /* Make sure the button takes full width */
+  margin-top: 1rem;
+}
+
+/* Style for the p-button on hover */
+.p-button-outlined.p-button-success:hover {
+  background-color: transparent;
+  box-shadow: none;
+  color: #4caf50;
+  border-color: #4caf50;
+}
+
+/* Style for responsive adjustments */
+@media screen and (max-width: 768px) {
+  .surface-section {
+    padding: 1rem;
+  }
+
+  /* Adjust width for the left section on smaller screens */
+  .text-500.w-6 {
+    font-weight: 500;
+    width: 100%; /* Make the left section full width on mobile */
+    text-align: left;
+    margin-right: 0;
+    margin-left: 0; /* Reset margin left */
+  }
+
+  /* Style for p-button on mobile */
+  .p-button-outlined.p-button-success {
+    justify-content: flex-start; /* Align button to the left on mobile */
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+}

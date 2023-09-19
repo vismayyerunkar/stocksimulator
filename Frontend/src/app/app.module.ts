@@ -32,22 +32,25 @@ import { SignupComponent } from './pages/signup/signup.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { environment } from 'src/environments/environment';
-
-
-const config: SocketIoConfig = {
-	url: environment?.socketUrl, // socket server url;
-	options: {
-		transports: ['websocket']
-	}
-}
-
+import { InputNumberModule } from 'primeng/inputnumber';
+import { CalendarModule } from 'primeng/calendar';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InvestedValueComponent } from './portfolio/components/invested-value/invested-value.component';
 import { AllComponent } from './pages/wallet/components/all/all.component';
 import { StocksComponent } from './pages/wallet/components/stocks/stocks.component';
 import { CryptoComponent } from './pages/wallet/components/crypto/crypto.component';
 import { GoalComponent } from './pages/goal/goal.component';
 import { GptComponent } from './pages/gpt/gpt.component';
-
+import { ToggleButtonModule } from 'primeng/togglebutton';
+import { DropdownModule } from 'primeng/dropdown';
+import { GoalReportComponent } from './pages/goal/components/goal-report/goal-report.component';
+import { ChipsModule } from 'primeng/chips';
+const config: SocketIoConfig = {
+  url: environment?.socketUrl, // socket server url;
+  options: {
+    transports: ['websocket'],
+  },
+};
 @NgModule({
   declarations: [
     AppComponent,
@@ -65,6 +68,7 @@ import { GptComponent } from './pages/gpt/gpt.component';
     CryptoComponent,
     GoalComponent,
     GptComponent,
+    GoalReportComponent,
   ],
   bootstrap: [AppComponent],
   providers: [DatePipe, ProductService],
@@ -76,6 +80,7 @@ import { GptComponent } from './pages/gpt/gpt.component';
     BrowserAnimationsModule,
     HeaderModule,
     PanelMenuModule,
+    ChipsModule,
     ButtonModule,
     CardModule,
     TableModule,
@@ -83,16 +88,20 @@ import { GptComponent } from './pages/gpt/gpt.component';
     TabMenuModule,
     MenubarModule,
     ChartModule,
+    ToggleButtonModule,
+    InputNumberModule,
     ImageModule,
     TagModule,
     DataViewModule,
     WatchlistModule,
     ReactiveFormsModule,
+    DropdownModule,
     ToastModule,
     ButtonModule,
     InputTextModule,
-    SocketIoModule.forRoot(config), 
-
+    CalendarModule,
+    InputTextareaModule,
+    SocketIoModule.forRoot(config),
   ],
 })
 export class AppModule {}

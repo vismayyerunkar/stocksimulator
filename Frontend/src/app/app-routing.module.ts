@@ -12,6 +12,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { GoalComponent } from './pages/goal/goal.component';
 import { GptComponent } from './pages/gpt/gpt.component';
+import { GoalReportComponent } from './pages/goal/components/goal-report/goal-report.component';
 const routes: Routes = [
   {
     path: 'login',
@@ -29,6 +30,12 @@ const routes: Routes = [
   {
     path: 'stock-details',
     component: StockDetailsComponent,
+    pathMatch: 'full',
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'goal-report',
+    component: GoalReportComponent,
     pathMatch: 'full',
     canActivate: [AuthGuard],
   },
