@@ -39,17 +39,17 @@
   }
 }
 
-.search-list-item{
-  padding:5px;
-  margin-bottom:2px;
-  border-radius:7px;
-  background-color:#e7e7e7;
-  width:210px;
+.search-list-item {
+  padding: 5px;
+  margin-bottom: 2px;
+  border-radius: 7px;
+  background-color: #e7e7e7;
+  width: 210px;
 }
 
-.search-holder{
+.search-holder {
   // background-color:red;
-  margin-right:100px !important;
+  margin-right: 100px !important;
 }
 
 /* Show the tooltip/card on hover */
@@ -67,12 +67,10 @@
 }
 
 @media screen and (max-width: 480px) {
-  /* Further adjustments for smaller screens */
   .tooltip-content {
-    padding: 10px; /* Reduce padding for smaller screens */
+    padding: 10px;
   }
 
-  /* Hide the search input for phone screens */
   #search {
     display: none;
   }
@@ -89,8 +87,8 @@
 }
 
 #logout {
-  width: auto; /* Remove fixed width to allow natural width */
-  margin-left: 10px; /* Add margin to separate the Logout button from the name */
+  width: auto;
+  margin-left: 10px;
 }
 
 .button-container {
@@ -111,8 +109,8 @@
 }
 
 #logout {
-  width: auto; /* Remove fixed width to allow natural width */
-  margin-left: 10px; /* Add margin to separate the Logout button from the name */
+  width: auto;
+  margin-left: 10px;
 }
 
 .button-container {
@@ -144,6 +142,85 @@
 
 /* Show the tooltip/card on hover */
 .profile-tooltip:hover .tooltip-content {
+  display: block;
+}
+/* Style the search input */
+#search {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none; /* Remove default input focus outline */
+  flex: 1; /* Allow the input to grow and take available space */
+}
+
+/* Style the wallet icon */
+#wallet {
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+/* Style the profile tooltip */
+.profile-tooltip {
+  display: flex;
+  align-items: center; /* Vertically align items */
+  cursor: pointer;
+}
+
+/* Additional styles for the tooltip content (if needed) */
+
+/* Adjust the spacing between items */
+.search-wallet-profile-container {
+  display: flex; /* Use flexbox to arrange items horizontally */
+  align-items: center; /* Vertically align items to the center */
+  gap: 2rem; /* Add spacing between items */
+}
+
+/* Container for the search bar and results */
+.search-container {
+  position: relative;
+  width: 100%;
+  max-width: 300px; /* Adjust as needed */
+  font-family: Arial, sans-serif; /* Specify your preferred font */
+}
+
+/* Search input */
+#search {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none; /* Remove default input focus outline */
+}
+
+/* Search results dropdown */
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  display: none; /* Initially hidden */
+  z-index: 1;
+}
+
+/* Style the list items */
+.search-list-item {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #e0e0e0; /* Hover background color */
+  }
+}
+
+/* Show the results when input is focused */
+#search:focus + .search-results {
   display: block;
 }
 
