@@ -170,8 +170,8 @@ export class StockDetailsComponent implements AfterViewInit {
     });
     axios
       .post(`${environment.baseUrl}/api/assets/purchaseAsset`, {
-        assetSymbol: this.title,
-        assetName: this.title,
+        assetSymbol: this.title.toUpperCase(),
+        assetName: this.title.toUpperCase(),
         assetPrice: this.currentStock.price,
         assetType: this.ASSET_TYPE,
         assetQuantity: this.quantity,
@@ -198,8 +198,8 @@ export class StockDetailsComponent implements AfterViewInit {
     });
     axios
       .post(`${environment.baseUrl}/api/watchlist/createWatchList`, {
-        stockSymbol: this.title,
-        stockName: this.title,
+        stockSymbol: this.title.toUpperCase(),
+        stockName: this.title.toUpperCase(),
         type: this.assetType,
       })
       .then(function (response) {

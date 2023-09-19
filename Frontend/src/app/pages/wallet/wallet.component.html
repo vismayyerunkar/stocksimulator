@@ -7,14 +7,14 @@
       <div class="mycard left-card">
         <p-card header="Current">
           <p class="m-0" style="color: green; font-size: 30px">
-            <b>₹ 50.1K</b>
+            <b>₹ {{allCurrentPrice | number:'1.2-2'}}</b>
           </p>
         </p-card>
       </div>
       <div class="mycard right-card">
         <p-card header="Invested">
           <p class="m-0" style="color: gray; font-size: 30px">
-            <b>₹ 43.17K</b>
+            <b>₹ {{allInvestedPrice | number:'1.2-2'}}</b>
           </p>
         </p-card>
       </div>
@@ -134,15 +134,15 @@
     <div class="card-container">
       <div class="mycard left-card">
         <p-card header="Current">
-          <p class="m-0" style="color: green; font-size: 30px">
-            <b>₹ 17.60K</b>
+          <p class="m-0" style="font-size:30px" [ngStyle]="{'color': cryptoInvestedPrice > cryptoCurrentPrice ? 'red' : 'green'}">
+            <b>$ {{!loader ? "loading..." :  cryptoCurrentPrice | number:'1.3-3'}}</b>
           </p>
         </p-card>
       </div>
       <div class="mycard right-card">
         <p-card header="Invested">
           <p class="m-0" style="color: gray; font-size: 30px">
-            <b>₹ 15.10K</b>
+            <b>$ {{cryptoInvestedPrice | number:'1.3-3'}}</b>
           </p>
         </p-card>
       </div>
@@ -153,7 +153,7 @@
           <h3 class="my-card__header-title card-title"><b>Stocks</b></h3>
           <!-- <a class="my-card__header-link" href="#">See all →</a> -->
         </div>
-        <app-crypto></app-crypto>
+        <app-crypto  [quantityMap]="cryptoQuantityMap"></app-crypto>
 
         <div *ngFor="let stock of stocksData" class="my-card card">
           <ul class="my-list list-group list-group-flush">
