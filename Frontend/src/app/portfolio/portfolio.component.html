@@ -73,7 +73,10 @@
               {{ asset?.assetPrice - asset?.currentPrice | number : "1.2-2" }}
             </td>
             <td>
-              <button (click)="sellAsset(asset._id)" class="sell-btn">Sell</button>
+              <p-button
+              styleClass="p-button-danger p-button-sm"
+              (click)="sellAsset(asset._id)"
+            >Sell</p-button>
             </td>
           </tr>
         </ng-template>
@@ -155,7 +158,10 @@
               {{ asset?.assetPrice - asset?.currentPrice | number : "1.2-2" }}
             </td>
             <td>
-              <button (click)="sellAsset(asset._id)" class="sell-btn">Sell</button>
+              <p-button
+            styleClass="p-button-danger p-button-sm"
+            (click)="sellAsset(asset._id)"
+          >Sell</p-button>
             </td>
           </tr>
      
@@ -239,9 +245,13 @@
               {{ asset?.assetPrice - asset?.currentPrice | number : "1.2-2" }}
             </td>
             <td>
-              <button (click)="sellAsset(asset._id)" class="sell-btn">Sell</button>
+              <p-button
+            styleClass="p-button-danger p-button-sm"
+            (click)="sellAsset(asset._id)"
+          >Sell</p-button>
             </td>
           </tr>
+         
      
         </ng-template>
       </p-table>

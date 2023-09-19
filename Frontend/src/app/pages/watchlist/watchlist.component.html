@@ -19,6 +19,7 @@
         <th>Company Name</th>
         <th>Price</th>
         <th>Change (%)</th>
+        <th>Remove</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-watchlist>
@@ -38,8 +39,14 @@
         </td>
         <td>%</td>
         <td>
-          <button (click)="deleteWatchlist(watchlist._id)">Delete</button>
+          <p-button
+            label="Delete"
+            styleClass="p-button-danger p-button-sm"
+            (click)="deleteWatchlist(watchlist)"
+          ></p-button>
+         
         </td>
+        
       </tr>
     </ng-template>
   </p-table>
