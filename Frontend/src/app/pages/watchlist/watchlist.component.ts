@@ -136,6 +136,7 @@ export class WatchlistComponent implements OnInit {
       .then(function (response) {
         console.log(response);
         alert('Watchlist removed successfully');
+        window.location.reload();
       })
       .catch(function (error) {
         console.log(error);
@@ -143,7 +144,6 @@ export class WatchlistComponent implements OnInit {
       });
 
     return;
-    // Create a FormData object with your data
   }
 
 }
