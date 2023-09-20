@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import axios from 'axios';
 
 import { SelectItem } from 'primeng/api';
+import { environment } from 'src/environments/environment';
 import { Stock } from 'src/models/stock';
 import { IWatchListResponse, Watchlist } from 'src/models/watchlist';
 import { SocketService } from 'src/services/socketService';
@@ -19,6 +21,8 @@ export class WatchlistComponent implements OnInit {
   assests: any[];
   updatedStocks:any;
   symbols:string[] = [];
+
+  removeWatchlist:any;
 
 
   constructor(private stockService: StockService,private socketService: SocketService) {
@@ -101,4 +105,45 @@ export class WatchlistComponent implements OnInit {
       },
     });
   }
+
+  // deleteStock(watchlistId: string): void {
+  //   // Send a request to your backend API to remove the watchlist by its ID
+  //   this.stockService.removeWatchList(watchlistId).subscribe({
+  //     next: (response: any) => {
+  //       console.log('Watchlist removed successfully:', response.message);
+  
+  //       // Remove the deleted watchlist from the frontend array
+  //       this.watchlist = this.watchlist.filter((watchlist) => watchlist.id !== watchlistId);
+  //     },
+  //     error: (error: any) => {
+  //       console.error('Error removing watchlist:', error);
+  //     },
+  //   });
+  // }
+
+  deleteWatchlist(watchlistId : string) {
+    console.log(watchlistId);
+    axios.interceptors.request.use(function (config) {
+      config.headers.Authorization = `Bearer ${localStorage.getItem(
+        'authToken'
+      )}`;
+      return config;
+    });
+    axios
+      .post(`${environment.baseUrl}/api/watchlist/removeWatchList`, {
+        removeWatchlist : watchlistId
+      })
+      .then(function (response) {
+        console.log(response);
+        alert('Watchlist removed successfully');
+      })
+      .catch(function (error) {
+        console.log(error);
+        alert('Something went wrong , please try again');
+      });
+
+    return;
+    // Create a FormData object with your data
+  }
+
 }
