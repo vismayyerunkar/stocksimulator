@@ -28,10 +28,11 @@ class WatchListController {
 
     static removeWatchList = async (req,res)=>{
       const {watchlistId} = req.body;
+
 console.log(watchlistId);
       try {
 
-       await WatchListModel.findByIdAndRemove(watchlistId).then(()=>{
+       await WatchListModel.deleteOne(watchlistId).then(()=>{
 
           res.send({
             status:200,
