@@ -1,3 +1,4 @@
+import { webSocket } from 'rxjs/webSocket';
 import { Component, OnInit } from '@angular/core';
 import axios from 'axios';
 
@@ -23,10 +24,34 @@ export class WatchlistComponent implements OnInit {
   symbols:string[] = [];
 
   removeWatchlist:any;
+  cryptoMap:Map<string,string> = new Map();
+  cryptoSocket:any
+
+
+  subscribeToWebsocket(cryptoNames:string) {
+    this.cryptoSocket = new WebSocket(
+      `wss://ws.coincap.io/prices?assets=${cryptoNames}`
+    );   
+  }
+
+  async createCryptoMap() {
+    const response = await axios.get('https://api.coincap.io/v2/assets');
+    for (let i = 0; i < response.data.data.length; i++) {
+      this.cryptoMap.set(
+        response.data?.data[i]?.id,
+        response.data?.data[i]?.symbol
+      );
+    }
+  }
 
 
   constructor(private stockService: StockService,private socketService: SocketService) {
-    this.getWatchlistList();
+    this.createCryptoMap().then(()=>{
+      this.getWatchlistList();
+    })
+    
+    console.log(this.cryptoMap)
+
     
     this.sortOptions = [
       { label: 'Symbol', value: 'symbol' },
@@ -35,28 +60,55 @@ export class WatchlistComponent implements OnInit {
       { label: 'Change (%)', value: 'changePercentage' },
     ];
 
+     
+
     setTimeout(()=>{
       const set = new Set(this.symbols);
       socketService.getStockData([...set]);
       console.log("symbol",this.symbols);
-    },300);
 
-    socketService.subscribeToContinousData().subscribe((data:any)=>{
-      //setting the live price
-      for(let i= 0;i<this.watchlist.length;i++){
-        if(this.watchlist[i]?.stockSymbol == data.id?.split(".")[0]){
-          this.watchlist[i] = {
-            ...this.watchlist[i],
-            currentPrice:data?.price
+      socketService.subscribeToContinousData().subscribe((data:any)=>{
+        //setting the live price
+        console.log("socket live data:",data);
+       
+        for(let i= 0;i<this.watchlist.length;i++){
+          if(this.watchlist[i]?.stockSymbol?.toLowerCase() == data.id?.split(".")[0]?.toLowerCase()){
+            this.watchlist[i] = {
+              ...this.watchlist[i],
+              currentPrice:data?.price,
+              changePercent:data?.changePercent
+            }
           }
         }
+  
+  
+      })
+
+      
+    },2000);
+
+   
+    setTimeout(()=>{
+      if(this.cryptoSocket){
+        this.cryptoSocket.onmessage = (msg: any) => {
+          console.log(JSON.parse(msg.data));
+    
+          for(let i= 0;i<this.watchlist.length;i++){
+            if(this.watchlist[i]?.stockSymbol?.toLowerCase() == Object.entries(JSON.parse(msg.data))[0][0]?.toLowerCase()){
+              this.watchlist[i] = {
+                ...this.watchlist[i],
+                currentPrice:Object.entries(JSON.parse(msg.data))[0][1], // current dollar price
+                changePercent: this.calculatePercentageChange(this.watchlist[i].currentPrice ,(Object.entries(JSON.parse(msg.data))[0][1] as number))
+              }
+            }
+          }
+          console.log("crypto live data : ")
+        };
       }
-      // data.map((item:any)=>{
-      //     console.log(item)
-      // });
-
-    })
-
+      
+    },3000)
+    
+    
     socketService.getStaticStockData()?.subscribe((data:any)=>{
       console.log("static stock data : ",data);
 
@@ -82,6 +134,20 @@ export class WatchlistComponent implements OnInit {
 
   }
 
+
+  calculatePercentageChange(oldValue:number, newValue:number) {
+    var change = newValue - oldValue;
+  
+    var absoluteOldValue = Math.abs(oldValue);
+  
+    var percentageChange = (change / absoluteOldValue) * 100;
+  
+    return percentageChange;
+  }
+
+
+  
+
   ngOnInit(): void {
     
   }
@@ -97,11 +163,23 @@ export class WatchlistComponent implements OnInit {
           this.watchlist.reverse();
         }
 
+
+        let cryptos = "";
+        console.log(this.cryptoMap)
         const temp:any[] = []
           res?.forEach((d:any)=>{
-            temp?.push(d?.stockSymbol)
+            temp?.push(d?.stockSymbol);
+            if(this.cryptoMap.get(d?.stockSymbol?.toLowerCase())){
+                cryptos += d?.stockSymbol.toLowerCase() + ","
+            }
           })
+
+          if(cryptos[cryptos.length-1] == ","){
+            cryptos = cryptos.slice(0,cryptos.length - 1);
+          }
           this.symbols = temp;
+          console.log(cryptos);
+          this.subscribeToWebsocket(cryptos);
       },
     });
   }
@@ -136,6 +214,7 @@ export class WatchlistComponent implements OnInit {
       .then(function (response) {
         console.log(response);
         alert('Watchlist removed successfully');
+        window.location.reload();
       })
       .catch(function (error) {
         console.log(error);
@@ -143,7 +222,6 @@ export class WatchlistComponent implements OnInit {
       });
 
     return;
-    // Create a FormData object with your data
   }
 
 }

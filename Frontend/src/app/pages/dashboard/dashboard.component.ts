@@ -28,13 +28,10 @@ export class DashboardComponent implements OnInit {
       this.topLoosers = [...new Array(5)].map(() => 0);
       this.topGainers = [...new Array(5)].map(() => 0);
 
-      console.log("called...")
       socketService.fetchTopStocks()?.subscribe((data: any) => {
         // this.topLosersStocks= data;
         this.topGainers = data?.gainers;
         this.topLoosers = data?.losers;
-        console.log(data?.gainers);
-        console.log(data?.losers);
         this.cleanUp();
       });
 
@@ -42,8 +39,6 @@ export class DashboardComponent implements OnInit {
         // this.topLosersStocks= data;
         this.mostTradedCryptos = data?.gainers;
         this.topLosersCryptos = data?.loosers;
-        console.log(data?.gainers);
-        console.log(data?.loosers);
       })
   }
 

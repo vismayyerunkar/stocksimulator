@@ -36,15 +36,15 @@ export class StockDetailsComponent implements AfterViewInit {
   type: string = 'STOCK';
   //Added explisitly to check
 
-  subscribeToWebsocket() {
-    const subject: any = webSocket('wss://streamer.finance.yahoo.com');
+  // subscribeToWebsocket() {
+  //   const subject: any = webSocket('wss://streamer.finance.yahoo.com');
 
-    subject.subscribe((res: any) => {
-      console.log('Response from websocket: ' + res);
-    });
-    console.log('websocket subscribed');
-    subject.next({ subscribe: ['IRCTC'] });
-  }
+  //   subject.subscribe((res: any) => {
+  //     console.log('Response from websocket: ' + res);
+  //   });
+  //   console.log('websocket subscribed');
+  //   subject.next({ subscribe: ['IRCTC'] });
+  // }
 
   async createCryptoMap() {
     const response = await axios.get('https://api.coincap.io/v2/assets');
@@ -70,7 +70,7 @@ export class StockDetailsComponent implements AfterViewInit {
       this.ASSET_TYPE = params?.type;
     });
 
-    this.subscribeToWebsocket();
+    // this.subscribeToWebsocket();
 
     socketService.subscribeToContinousData().subscribe((data: any) => {
       console.log('socket live data : ', data);

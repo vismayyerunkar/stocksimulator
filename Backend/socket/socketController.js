@@ -48,6 +48,7 @@ export class StockDataHandler {
                         });
                     }
                     console.log("successfully subscribed to the stocks")
+                    console.log(transformedData)
                    this.socket?.emit("STATIC_STOCK_DATA",transformedData)
                 }).catch((err) => {
                     console.log("Something went wrong while fetching stock data when the market is closed")
