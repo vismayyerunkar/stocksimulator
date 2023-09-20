@@ -5,7 +5,6 @@ import  axios from 'axios';
 import { Component, OnInit } from '@angular/core';
 import { MenuItem, SelectItem } from 'primeng/api';
 import { Stock } from 'src/models/stock';
-import { StockService } from 'src/services/stock.service';
 
 @Component({
   selector: 'app-portfolio',
@@ -28,24 +27,56 @@ export class PortfolioComponent implements OnInit {
   currentAmountStocks:number = 0;
 
   investedAmountCrypto:number = 0;
-  currentAmountCrypto:number = 0;
+  currentAmountCrypto:number = 0.00;
+
+  cryptoSocket:any
+  cryptoMap:Map<string,string> = new Map();
+
+
+  subscribeToWebsocket(cryptoNames:string) {
+    console.log("cryptos subscribed")
+    this.cryptoSocket = new WebSocket(
+      `wss://ws.coincap.io/prices?assets=${cryptoNames}`
+    );   
+  }
+
+  async createCryptoMap() {
+    const response = await axios.get('https://api.coincap.io/v2/assets');
+    for (let i = 0; i < response.data.data.length; i++) {
+      this.cryptoMap.set(
+        response.data?.data[i]?.id,
+        response.data?.data[i]?.symbol
+      );
+    }
+  }
 
   //API SELL
-  sellAsset(assetId:any){
+  sellAsset(assetId:any,availableQuantity:any,currentAssetPrice:any){
+
+    if(!currentAssetPrice){
+      return alert("Cannot sell asset and current price is unknown")
+    }
+
+
+    let quantity:any = prompt("Enter the asset quantity to sell : ");
+
+    while(quantity > availableQuantity){
+      quantity = prompt("Sorry you do  not have this much quantity, please select te value from available quantity : ");
+    }
+
     axios.interceptors.request.use(function (config) {
       config.headers.Authorization = `Bearer ${localStorage.getItem("authToken")}`;
       return config;
     });
 
     console.log(assetId)
-      axios.post(`${environment.baseUrl}/api/assets/sellAsset`,{assetId:assetId}).then((res:any)=>{
+      axios.post(`${environment.baseUrl}/api/assets/sellAsset`,{assetId:assetId,assetQuantity:quantity,currentPrice:currentAssetPrice}).then((res:any)=>{
         console.log(res.data);
         alert("Asset sold successfully");
         window.location.reload();
       }).catch((err:any)=>
       console.log(err))
   }
-
 
   ngOnInit(): void {
     this.items = [
@@ -56,7 +87,10 @@ export class PortfolioComponent implements OnInit {
   }
 
   constructor(private stockService: AssetService,private socketService: SocketService) {
-    this.fetchStocks()
+    this.createCryptoMap().then(()=>{
+      this.fetchStocks()
+
+    })
     
     this.sortOptions = [
       { label: 'Symbol', value: 'symbol' },
@@ -71,23 +105,75 @@ export class PortfolioComponent implements OnInit {
       socketService.getStockData([...set]);
       console.log("symbol",this.symbols);
     },1000);
+
+    console.log(typeof this.currentAmountCrypto)
+
+    setTimeout(()=>{
+      console.log(typeof this.currentAmountCrypto)
+      if(this.cryptoSocket){
+        this.cryptoSocket.onmessage = (msg: any) => {
+          console.log(JSON.parse(msg.data));
+
+          for(let i= 0;i<this.assests.length;i++){
+            if(this.assests[i]?.assetSymbol?.toLowerCase() == Object.entries(JSON.parse(msg.data))[0][0]?.toLowerCase()){
+              const copy = this.assests[i];
+              this.assests[i] = {
+                ...this.assests[i],
+                currentPrice:parseFloat(Object.entries(JSON.parse(msg.data))[0][1] as any), // current dollar price
+                changePercent: this.calculatePercentageChange(this.assests[i].currentPrice ,(Object.entries(JSON.parse(msg.data))[0][1] as number))
+              }
+
+              // this.currentAmountCrypto += parseFloat(copy[i]?.currentPrice) -  this.assests[i]?.currentPrice
+            }
+          }
+          console.log("crypto live data : ")
+        };
+      }
+      
+    },3000);
+
+
+    setInterval(()=>{
+      //current count total
+      let c_total = 0;
+      let s_total = 0;
+      let total = 0;
+
+      this.assests.forEach((asset)=>{
+        console.log(asset);
+        if(asset.assetType == "CRYPTO"){
+          c_total += parseFloat(asset?.currentPrice * asset?.assetQuantity as any)
+        }else{
+          s_total += parseFloat(asset?.currentPrice * asset?.assetQuantity as any)
+        }
+        total += parseFloat(asset?.currentPrice * asset?.assetQuantity as any)
+      })
+
+      this.currentAmountCrypto = c_total;
+      this.currentAmountStocks = s_total;
+      this.currentAmount = total;
+
+    },1000);
    
-    // socketService.subscribeToContinousData().subscribe((data:any)=>{
-    //   //setting the live price
-    //   for(let i= 0;i<this.watchlist.length;i++){
-    //     if(this.watchlist[i]?.stockSymbol == data.id?.split(".")[0]){
-    //       this.watchlist[i] = {
-    //         ...this.watchlist[i],
-    //         currentPrice:data?.price
-    //       }
-    //     }
-    //   }
-    //   // data.map((item:any)=>{
-    //   //     console.log(item)
-    //   // });
+    setTimeout(()=>{
+      socketService.subscribeToContinousData().subscribe((data:any)=>{
+        //setting the live price
+        console.log("live socket data : ",data)
+        for(let i= 0;i<this.assests.length;i++){
+          if(this.assests[i]?.assetName?.toLowerCase() == data.id?.split(".")[0]?.toLowerCase()){
+            this.assests[i] = {
+              ...this.assests[i],
+              currentPrice:data?.price
+            }
+          }
 
-    // })
+          this.investedAmountStocks +=  this.assests[i].currentPrice
+        }
+  
+      })
+    },2000)
 
+    
     socketService.getStaticStockData()?.subscribe((data:any)=>{
       console.log("static stock data : ",data);
       console.log(data);
@@ -96,7 +182,7 @@ export class PortfolioComponent implements OnInit {
       const map = new Map();
 
       data?.forEach((ele:any) => {
-          map.set(ele?.id,ele?.price);
+          map.set(ele?.id?.toLowerCase(),ele?.price);
       });
 
       const copy:any[] = [];
@@ -104,7 +190,7 @@ export class PortfolioComponent implements OnInit {
       this.assests.map((asset:any)=>{
         const entry = {
           ...asset,
-          currentPrice:map.get(asset?.assetSymbol)
+          currentPrice:map.get(asset?.assetSymbol?.toLowerCase())
         }
 
         this.currentAmount += entry?.currentPrice * entry?.assetQuantity;
@@ -134,6 +220,16 @@ export class PortfolioComponent implements OnInit {
     // },2000);
   }
 
+  calculatePercentageChange(oldValue:number, newValue:number) {
+    var change = newValue - oldValue;
+  
+    var absoluteOldValue = Math.abs(oldValue);
+  
+    var percentageChange = (change / absoluteOldValue) * 100;
+  
+    return percentageChange;
+  }
+
   fetchStocks(): void {
         
       this.stockService.GetAssest().subscribe({
@@ -142,13 +238,24 @@ export class PortfolioComponent implements OnInit {
           if(typeof res == typeof []){
             this.assests.reverse();
           }
+
+          let cryptos = "";
+          console.log(this.cryptoMap)
           console.log(res);
           const temp:any[] = []
           res?.forEach((d:any)=>{
-            temp?.push(d?.assetSymbol?.toUpperCase())
+            temp?.push(d?.assetSymbol?.toLowerCase())
+            if(this.cryptoMap.get(d?.assetSymbol?.toLowerCase())){
+              cryptos += d?.assetSymbol?.toLowerCase() + ","
+            }
           })
 
+          if(cryptos[cryptos.length-1] == ","){
+            cryptos = cryptos.slice(0,cryptos.length - 1);
+          }
           this.symbols = temp;
+          console.log(cryptos);
+          this.subscribeToWebsocket(cryptos);
         },
       });
     }

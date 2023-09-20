@@ -153,7 +153,12 @@
           <h3 class="my-card__header-title card-title"><b>Stocks</b></h3>
           <!-- <a class="my-card__header-link" href="#">See all →</a> -->
         </div>
-        <app-crypto  [quantityMap]="cryptoQuantityMap"></app-crypto>
+        
+
+        <div *ngIf="cryptoQuantityMap.size > 0">
+          <app-crypto [investedAmt]="cryptoInvestedPrice" [percentChange]="calculateGainLossPercent(cryptoInvestedPrice,cryptoCurrentPrice)" [currentValue]="cryptoCurrentPrice" [quantityMap]="cryptoQuantityMap"></app-crypto>
+        </div>
+
 
         <div *ngFor="let stock of stocksData" class="my-card card">
           <ul class="my-list list-group list-group-flush">

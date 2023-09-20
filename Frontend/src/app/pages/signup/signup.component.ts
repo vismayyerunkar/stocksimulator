@@ -40,8 +40,8 @@ export class SignupComponent implements OnInit {
   ngOnInit() {}
   signup() {
     var body = this.signupForm.value;
-
-    this.userAuthService.login(body).subscribe({
+    console.log(body)
+    this.userAuthService.signup(body).subscribe({
       next: (res: ISignupResponse) => {
         console.log('Login Response:', res);
 

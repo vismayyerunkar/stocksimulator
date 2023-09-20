@@ -11,13 +11,14 @@
             placeholder="Search"
             [(ngModel)]="searchTerm"
             (input)="onInputChange()"
+            (keyup.enter)="searchAsset(searchTerm)"
           />
           <div class="search-results">
             <ul>
               <li
+              *ngFor="let symbol of stockSymbols"
                 class="search-list-item"
                 (click)="searchAsset(symbol)"
-                *ngFor="let symbol of stockSymbols"
               >
                 {{ symbol["1. symbol"] }}
               </li>

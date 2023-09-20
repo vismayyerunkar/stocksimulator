@@ -84,20 +84,6 @@ const getCryptoData = async(names, symbols) => {
 }
 
 
-setInterval(() => {
-    for (const user in userToCroptosMap) {
-        const data = getCryptoData(userToCroptosMap[user], "ADd the symbols array here");
-        io.to(user).emit("UPDATED_CRYPTO", data);
-    }
-    // getCryptoSymbolsAndNames()
-    //     .then((cryptoSymbolsToNames) => {
-    //         // Accessing the values using symbols as keys
-    //         console.log(cryptoSymbolsToNames.BTC); // Output: "Bitcoin"
-    //         console.log(cryptoSymbolsToNames.ETH); // Output: "Ethereum"
-    //         // ... and so on for other cryptocurrencies
-    //     });
-
-}, 8000);
 
 
 // 1) when the client needs a particular stock price He well join the particular socket room
@@ -169,8 +155,8 @@ const listenSocketEvents = (io) => {
                 handler.GetStockDataStream(payload, cb)
             });
 
-            socket.on("SUBSCRIBE_CRYPTOS", (payload, cb) => addValueToKey(payload.UID, payload.cryptos))
-            socket.on("UNSUBSCRIBE_CRYPTOS", (payload, cb) => delete userToCroptosMap[payload.UID]);
+            // socket.on("SUBSCRIBE_CRYPTOS", (payload, cb) => addValueToKey(payload.UID, payload.cryptos))
+            // socket.on("UNSUBSCRIBE_CRYPTOS", (payload, cb) => delete userToCroptosMap[payload.UID]);
             socket.on('disconnect', () => {
                 console.log('client disconnected');
             });

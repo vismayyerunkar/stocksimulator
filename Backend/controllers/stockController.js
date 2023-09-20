@@ -6,7 +6,7 @@ export const getCurrentStockPrice = async(symbol) => {
     console.log("getting price")
     try {
         const resp = await nseIndia.getEquityDetails(symbol);
-        return resp.priceInfo.lastPrice;
+        return resp.priceInfo?.lastPrice;
     } catch (err) {
         throw Error(err);
     }
