@@ -6,9 +6,11 @@ import { DashboardComponent } from './dashboard.component';
 import { HeaderModule } from '../header/header.module';
 import { TabViewModule } from 'primeng/tabview';
 import { WatchlistModule } from '../watchlist/watchlist.module';
+import { StocksComponent } from './components/stocks/stocks.component';
+import { CryptoComponent } from './components/crypto/crypto.component';
 
 @NgModule({
-  declarations: [DashboardComponent],
+  declarations: [DashboardComponent, StocksComponent, CryptoComponent],
   imports: [
     CommonModule,
     HeaderModule,

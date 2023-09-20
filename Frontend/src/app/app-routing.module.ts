@@ -13,6 +13,8 @@ import { SignupComponent } from './pages/signup/signup.component';
 import { GoalComponent } from './pages/goal/goal.component';
 import { GptComponent } from './pages/gpt/gpt.component';
 import { GoalReportComponent } from './pages/goal/components/goal-report/goal-report.component';
+import { StocksComponent } from './pages/dashboard/components/stocks/stocks.component';
+import { CryptoComponent } from './pages/dashboard/components/crypto/crypto.component';
 const routes: Routes = [
   {
     path: 'login',
@@ -36,6 +38,18 @@ const routes: Routes = [
   {
     path: 'goal-report',
     component: GoalReportComponent,
+    pathMatch: 'full',
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'stocks',
+    component: StocksComponent,
+    pathMatch: 'full',
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'crypto',
+    component: CryptoComponent,
     pathMatch: 'full',
     canActivate: [AuthGuard],
   },
