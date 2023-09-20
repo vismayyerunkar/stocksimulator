@@ -18,7 +18,8 @@
         <th>Company Logo</th>
         <th>Company Name</th>
         <th>Price</th>
-        <th>Change (%)</th>
+        <th></th>
+        <!-- <th>Change (%)</th> -->
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-watchlist>
@@ -34,9 +35,9 @@
           {{ watchlist.stockSymbol }}
         </td>
         <td>
-          <b>₹{{ watchlist.currentPrice | number : "1.2-2" }}</b>
+          <b>₹{{ (watchlist?.currentPrice | number : "1.2-2") ?? 'loading...' }}</b>
         </td>
-        <td>%</td>
+        <!-- <td>{{(watchlist?.changePercent | number : "1.2-2") ?? 'loading...'}}%</td> -->
         <td>
           <button (click)="deleteWatchlist(watchlist._id)">Delete</button>
         </td>

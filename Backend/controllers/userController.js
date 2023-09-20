@@ -24,6 +24,7 @@ class UserController {
             const saved_user = await UserModel.findOne({ email: email })
             // Generate JWT Token
             const token = jwt.sign({ userID: saved_user._id,userEmail:saved_user.email }, process.env.JWT_SECRET_KEY, { expiresIn: '1d' })
+            console.log("user registered")
             res.status(201).send({ "status": "success", "message": "Registration Success", "token": token })
           } catch (error) {
             console.log(error)
