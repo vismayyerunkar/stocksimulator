@@ -1,63 +1,75 @@
-<app-header>
-</app-header>
+<app-header> </app-header>
 <p-tabView>
-    <p-tabPanel header="ALL">
-        <app-invested-value></app-invested-value>
-        <div class="card-container">
-            <div class="mycard left-card">
-                <p-card header="Current">
-                    <p class="m-0" [ngClass]="{
-            'change-percentage-positive':
-            currentAmount > investedAmount,
-            'change-percentage-negative':
-            currentAmount <= investedAmount
-          }" style="font-size: 30px">
-                        <b>₹{{ (currentAmount | number : "1.2-2") ?? "loading..." }}</b>
-                    </p>
-                </p-card>
-            </div>
-            <div class="mycard right-card">
-                <p-card header="Invested">
-                    <p class="m-0" style="color: gray; font-size: 30px">
-                        <b>₹ {{ (investedAmount | number : "1.2-2") ?? 'loading...'}}</b>
-                    </p>
-                </p-card>
-            </div>
-        </div>
-        <div class="table">
-            <p-table [value]="assests" [paginator]="true" [rows]="10" class="ipo-table">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>Company Logo</th>
-                        <th>Company Name</th>
-                        <th>Quantity</th>
-                        <th>Buy Price</th>
-                        <th>Latest Traded Price</th>
-                        <th>current Price</th>
-                        <th>P/L</th>
-                        <th></th>
-                    </tr>
-                </ng-template>
+  <p-tabPanel header="ALL">
+    <app-invested-value></app-invested-value>
+    <div class="card-container">
+      <div class="mycard left-card">
+        <p-card header="Current">
+          <p
+            class="m-0"
+            [ngClass]="{
+              'change-percentage-positive': currentAmount > investedAmount,
+              'change-percentage-negative': currentAmount <= investedAmount
+            }"
+            style="font-size: 30px"
+          >
+            <b>₹{{ (currentAmount | number : "1.2-2") ?? "loading..." }}</b>
+          </p>
+        </p-card>
+      </div>
+      <div class="mycard right-card">
+        <p-card header="Invested">
+          <p class="m-0" style="color: gray; font-size: 30px">
+            <b>₹ {{ (investedAmount | number : "1.2-2") ?? "loading..." }}</b>
+          </p>
+        </p-card>
+      </div>
+    </div>
+    <div class="table">
+      <p-table
+        [value]="assests"
+        [paginator]="true"
+        [rows]="10"
+        class="ipo-table"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Company Logo</th>
+            <th>Company Name</th>
+            <th>Quantity</th>
+            <th>Buy Price</th>
+            <th>Latest Traded Price</th>
+            <th>current Price</th>
+            <th>P/L</th>
+            <th>Sell</th>
+          </tr>
+        </ng-template>
 
-                <ng-template pTemplate="body" let-asset>
-                    <tr>
-                        <td>
-                            <img src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK539254.png" alt="Company Logo" style="width: 20%" />
-                        </td>
-                        <td>
-                            <b>{{ asset.assetName }}</b>
-                        </td>
-                        <td>
-                            <b>{{ asset.assetQuantity }}</b>
-                        </td>
-                        <td>₹ {{ asset.assetPrice | number : "1.2-2" }}</td>
-                        <td>
-                            {{ (asset?.currentPrice | number : "1.2-2") ?? "loading..." }}
-                        </td>
-                        <td>
-                            <b>₹
+        <ng-template pTemplate="body" let-asset>
+          <tr>
+            <td>
+              <img
+                src="https://tse3.mm.bing.net/th?id=OIP.ag5nBrr4YiPHmZmBSHJypQHaHa&pid=Api&P=0&h=180"
+                alt="Company Logo"
+                style="width: 20%"
+              />
+            </td>
+            <td>
+              <b>{{ asset.assetName }}</b>
+            </td>
+            <td>
+              <b>{{ asset.assetQuantity }}</b>
+            </td>
+            <td>₹ {{ asset.assetPrice | number : "1.2-2" }}</td>
+            <td>
+              {{ (asset?.currentPrice | number : "1.2-2") ?? "loading..." }}
+            </td>
+            <td>
+              <b
+                >₹
                 {{
-                 ( asset.currentPrice * asset?.assetQuantity | number : "1.2-2") ?? "loading..."
+                  (asset.currentPrice * asset?.assetQuantity
+                    | number : "1.2-2") ?? "loading..."
                 }}</b
               >
             </td>
@@ -69,10 +81,25 @@
                   asset?.currentPrice - asset?.assetPrice < 0
               }"
             >
-              {{ (asset?.currentPrice * asset?.assetQuantity - asset?.assetPrice * asset?.assetQuantity | number : "1.2-2") ?? "loading..." }}
+              {{
+                (asset?.currentPrice * asset?.assetQuantity -
+                  asset?.assetPrice * asset?.assetQuantity
+                  | number : "1.2-2") ?? "loading..."
+              }}
             </td>
             <td>
-              <button (click)="sellAsset(asset._id,asset?.assetQuantity,asset?.currentPrice)" class="sell-btn">Sell</button>
+              <button
+                (click)="
+                  sellAsset(
+                    asset._id,
+                    asset?.assetQuantity,
+                    asset?.currentPrice
+                  )
+                "
+                class="sell-btn"
+              >
+                Sell
+              </button>
             </td>
           </tr>
         </ng-template>
@@ -86,60 +113,83 @@
     <div class="card-container">
       <div class="mycard left-card">
         <p-card header="Current">
-          <p class="m-0"[ngClass]="{
-            'change-percentage-positive':
-            currentAmountStocks > investedAmountStocks,
-            'change-percentage-negative':
-            currentAmountStocks <= investedAmountStocks
-          }" style="font-size: 30px">
-            <b>₹{{ (currentAmountStocks | number : "1.2-2") ?? 'loading...' }}</b>
-                            </p>
-                            </p-card>
-        </div>
-        <div class="mycard right-card">
-            <p-card header="Invested">
-                <p class="m-0" style="color: gray; font-size: 30px">
-                    <b>₹ {{ (investedAmountStocks | number : "1.2-2") ?? 'loading...'}}</b>
-                </p>
-            </p-card>
-        </div>
-        </div>
-        <h1><b>Stocks</b></h1>
-        <div class="table">
-            <p-table [value]="assests" [paginator]="true" [rows]="10" class="ipo-table">
-                <ng-template pTemplate="header">
-
-                    <tr>
-                        <th>Company Logo</th>
-                        <th>Company Name</th>
-                        <th>Quantity</th>
-                        <th>Buy Price</th>
-                        <th>Latest Traded Price</th>
-                        <th>current Price</th>
-                        <th>P/L</th>
-                        <th></th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-asset>
-                    <!-- Check if assetType is 'STOCK' -->
-                    <tr *ngIf="asset.assetType === 'STOCK'">
-                        <td>
-                            <img src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK539254.png" alt="Company Logo" style="width: 20%" />
-                        </td>
-                        <td>
-                            <b>{{ asset.assetName }}</b>
-                        </td>
-                        <td>
-                            <b>{{ asset.assetQuantity }}</b>
-                        </td>
-                        <td>₹ {{ (asset.assetPrice | number : "1.2-2") ?? "loading..." }}</td>
-                        <td>
-                            {{ (asset?.currentPrice | number : "1.2-2") ?? "loading..." }}
-                        </td>
-                        <td>
-                            <b>₹
+          <p
+            class="m-0"
+            [ngClass]="{
+              'change-percentage-positive':
+                currentAmountStocks > investedAmountStocks,
+              'change-percentage-negative':
+                currentAmountStocks <= investedAmountStocks
+            }"
+            style="font-size: 30px"
+          >
+            <b
+              >₹{{
+                (currentAmountStocks | number : "1.2-2") ?? "loading..."
+              }}</b
+            >
+          </p>
+        </p-card>
+      </div>
+      <div class="mycard right-card">
+        <p-card header="Invested">
+          <p class="m-0" style="color: gray; font-size: 30px">
+            <b
+              >₹
+              {{ (investedAmountStocks | number : "1.2-2") ?? "loading..." }}</b
+            >
+          </p>
+        </p-card>
+      </div>
+    </div>
+    <h1><b>Stocks</b></h1>
+    <div class="table">
+      <p-table
+        [value]="assests"
+        [paginator]="true"
+        [rows]="10"
+        class="ipo-table"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Company Logo</th>
+            <th>Company Name</th>
+            <th>Quantity</th>
+            <th>Buy Price</th>
+            <th>Latest Traded Price</th>
+            <th>current Price</th>
+            <th>P/L</th>
+            <th>Sell</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-asset>
+          <!-- Check if assetType is 'STOCK' -->
+          <tr *ngIf="asset.assetType === 'STOCK'">
+            <td>
+              <img
+                src="https://tse3.mm.bing.net/th?id=OIP.ag5nBrr4YiPHmZmBSHJypQHaHa&pid=Api&P=0&h=180"
+                alt="Company Logo"
+                style="width: 20%"
+              />
+            </td>
+            <td>
+              <b>{{ asset.assetName }}</b>
+            </td>
+            <td>
+              <b>{{ asset.assetQuantity }}</b>
+            </td>
+            <td>
+              ₹ {{ (asset.assetPrice | number : "1.2-2") ?? "loading..." }}
+            </td>
+            <td>
+              {{ (asset?.currentPrice | number : "1.2-2") ?? "loading..." }}
+            </td>
+            <td>
+              <b
+                >₹
                 {{
-                  (asset.currentPrice * asset?.assetQuantity | number : "1.2-2") ?? "loading..."
+                  (asset.currentPrice * asset?.assetQuantity
+                    | number : "1.2-2") ?? "loading..."
                 }}</b
               >
             </td>
@@ -151,18 +201,31 @@
                   asset?.currentPrice - asset?.assetPrice < 0
               }"
             >
-              {{ (asset?.currentPrice * asset?.assetQuantity - asset?.assetPrice * asset?.assetQuantity | number : "1.2-2") ?? "loading..." }}
+              {{
+                (asset?.currentPrice * asset?.assetQuantity -
+                  asset?.assetPrice * asset?.assetQuantity
+                  | number : "1.2-2") ?? "loading..."
+              }}
             </td>
             <td>
-              <button (click)="sellAsset(asset._id,asset?.assetQuantity,asset?.currentPrice)" class="sell-btn">Sell</button>
+              <button
+                (click)="
+                  sellAsset(
+                    asset._id,
+                    asset?.assetQuantity,
+                    asset?.currentPrice
+                  )
+                "
+                class="sell-btn"
+              >
+                Sell
+              </button>
             </td>
           </tr>
-     
         </ng-template>
       </p-table>
     </div>
   </p-tabPanel>
-
 
   <!-- Tab for Crypto -->
   <p-tabPanel header="Crypto">
@@ -170,60 +233,81 @@
     <div class="card-container">
       <div class="mycard left-card">
         <p-card header="Current">
-          <p class="m-0" [ngClass]="{
-            'change-percentage-positive':
-            currentAmountCrypto > investedAmountCrypto,
-            'change-percentage-negative':
-            currentAmountCrypto <= investedAmountCrypto
-          }" style="font-size: 30px">
-            <b>₹{{ (currentAmountCrypto | number : "1.2-2" ) ?? 'loading...'}}</b>
-                            </p>
-                            </p-card>
-        </div>
-        <div class="mycard right-card">
-            <p-card header="Invested">
-                <p class="m-0" style="color: gray; font-size: 30px">
-                    <b>₹ {{( investedAmountCrypto | number : "1.2-2" ) ?? 'loading...'}}</b>
-                </p>
-            </p-card>
-        </div>
-        </div>
-        <h1><b>Crypto</b></h1>
-        <div class="table">
-            <p-table [value]="assests" [paginator]="true" [rows]="10" class="ipo-table">
-                <ng-template pTemplate="header">
-
-                    <tr>
-                        <th>Company Logo</th>
-                        <th>Company Name</th>
-                        <th>Quantity</th>
-                        <th>Buy Price</th>
-                        <th>Latest Traded Price</th>
-                        <th>current Price</th>
-                        <th>P/L</th>
-                        <th></th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-asset>
-                    <!-- Check if assetType is 'STOCK' -->
-                    <tr *ngIf="asset.assetType === 'CRYPTO'">
-                        <td>
-                            <img src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK539254.png" alt="Company Logo" style="width: 20%" />
-                        </td>
-                        <td>
-                            <b>{{ asset.assetName }}</b>
-                        </td>
-                        <td>
-                            <b>{{ asset.assetQuantity }}</b>
-                        </td>
-                        <td>₹ {{ asset.assetPrice | number : "1.2-2" }}</td>
-                        <td>
-                            {{ asset?.currentPrice | number : "1.2-2" }}
-                        </td>
-                        <td>
-                            <b>₹
+          <p
+            class="m-0"
+            [ngClass]="{
+              'change-percentage-positive':
+                currentAmountCrypto > investedAmountCrypto,
+              'change-percentage-negative':
+                currentAmountCrypto <= investedAmountCrypto
+            }"
+            style="font-size: 30px"
+          >
+            <b
+              >₹{{
+                (currentAmountCrypto | number : "1.2-2") ?? "loading..."
+              }}</b
+            >
+          </p>
+        </p-card>
+      </div>
+      <div class="mycard right-card">
+        <p-card header="Invested">
+          <p class="m-0" style="color: gray; font-size: 30px">
+            <b
+              >₹
+              {{ (investedAmountCrypto | number : "1.2-2") ?? "loading..." }}</b
+            >
+          </p>
+        </p-card>
+      </div>
+    </div>
+    <h1><b>Crypto</b></h1>
+    <div class="table">
+      <p-table
+        [value]="assests"
+        [paginator]="true"
+        [rows]="10"
+        class="ipo-table"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Company Logo</th>
+            <th>Company Name</th>
+            <th>Quantity</th>
+            <th>Buy Price</th>
+            <th>Latest Traded Price</th>
+            <th>current Price</th>
+            <th>P/L</th>
+            <th>Sell</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-asset>
+          <!-- Check if assetType is 'STOCK' -->
+          <tr *ngIf="asset.assetType === 'CRYPTO'">
+            <td>
+              <img
+                src="https://tse3.mm.bing.net/th?id=OIP.ag5nBrr4YiPHmZmBSHJypQHaHa&pid=Api&P=0&h=180"
+                alt="Company Logo"
+                style="width: 20%"
+              />
+            </td>
+            <td>
+              <b>{{ asset.assetName }}</b>
+            </td>
+            <td>
+              <b>{{ asset.assetQuantity }}</b>
+            </td>
+            <td>₹ {{ asset.assetPrice | number : "1.2-2" }}</td>
+            <td>
+              {{ asset?.currentPrice | number : "1.2-2" }}
+            </td>
+            <td>
+              <b
+                >₹
                 {{
-                  (asset.currentPrice * asset?.assetQuantity | number : "1.2-2") ?? "loading..."
+                  (asset.currentPrice * asset?.assetQuantity
+                    | number : "1.2-2") ?? "loading..."
                 }}</b
               >
             </td>
@@ -235,14 +319,27 @@
                   asset?.currentPrice - asset?.assetPrice < 0
               }"
             >
-              {{ (asset?.currentPrice * asset?.assetQuantity - asset?.assetPrice * asset?.assetQuantity | number : "1.2-2") ?? "loading..." }}
+              {{
+                (asset?.currentPrice * asset?.assetQuantity -
+                  asset?.assetPrice * asset?.assetQuantity
+                  | number : "1.2-2") ?? "loading..."
+              }}
             </td>
             <td>
-              <button (click)="sellAsset(asset._id,asset?.assetQuantity,asset?.currentPrice)" class="sell-btn">Sell</button>
+              <button
+                (click)="
+                  sellAsset(
+                    asset._id,
+                    asset?.assetQuantity,
+                    asset?.currentPrice
+                  )
+                "
+                class="sell-btn"
+              >
+                Sell
+              </button>
             </td>
           </tr>
-         
-     
         </ng-template>
       </p-table>
     </div>

@@ -29,9 +29,7 @@ body {
   display: flex;
   align-items: center; /* Vertically align items */
   gap: 8px; /* Adjust the gap as needed */
- 
 }
-
 
 /* Container for trading details */
 .trading-details-container {
@@ -87,7 +85,9 @@ body {
     width: 60%;
     margin-right: 2rem; /* Add spacing between the chart and card for desktop screens */
   }
-
+  #add-watchlist {
+    margin-left: auto;
+  }
   .trade-details {
     width: 40%; /* Adjust the card width for desktop screens */
     align-items: flex-start;

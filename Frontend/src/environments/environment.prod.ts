@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  baseUrl: '',
+  baseUrl: 'http://api.richin.in',
+  socketUrl: 'http://api.richin.in',
 };
