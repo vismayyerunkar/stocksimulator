@@ -5,7 +5,7 @@ import { AssetService } from 'src/services/asset.service';
 import axios from 'axios';
 import { environment } from 'src/environments/environment';
 import { webSocket } from 'rxjs/webSocket';
-
+import { MessageService, SelectItem } from 'primeng/api';
 declare const TradingView: any;
 
 @Component({
@@ -60,7 +60,8 @@ export class StockDetailsComponent implements AfterViewInit {
   constructor(
     private route: ActivatedRoute,
     private buyreq: AssetService,
-    private socketService: SocketService
+    private socketService: SocketService,
+    private messageService: MessageService
   ) {
     // Retrieve the title parameter from the route
 
@@ -204,6 +205,11 @@ export class StockDetailsComponent implements AfterViewInit {
       })
       .then(function (response) {
         console.log(response);
+        // this.messageService.add({
+        //   severity: 'success',
+        //   summary: 'Added To the Watchlist',
+        //   detail: 'Richin',
+        // });
         alert('Added To the Watchlist');
       })
       .catch(function (error) {
