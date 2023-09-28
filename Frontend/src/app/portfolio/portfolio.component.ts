@@ -154,7 +154,7 @@ export class PortfolioComponent implements OnInit {
 
     },1000);
    
-    // setTimeout(()=>{
+    setTimeout(()=>{
       socketService.subscribeToContinousData().subscribe((data:any)=>{
         //setting the live price
         console.log("live socket data : ",data)
@@ -166,11 +166,11 @@ export class PortfolioComponent implements OnInit {
             }
           }
 
-          this.investedAmountStocks +=  this.assests[i].currentPrice
+          // this.investedAmountStocks +=  this.assests[i].currentPrice
         }
   
       })
-    // },5000)
+    },3000)
 
     
     socketService.getStaticStockData()?.subscribe((data:any)=>{
@@ -192,17 +192,19 @@ export class PortfolioComponent implements OnInit {
           currentPrice:map.get(asset?.assetSymbol?.toLowerCase())
         }
 
-        this.currentAmount += entry?.currentPrice * entry?.assetQuantity;
-        this.investedAmount += entry?.assetQuantity * entry?.assetPrice;
+        // this will be updated when we fetch the assets itself
 
-        if(asset.assetType ==='STOCK'){
-        this.currentAmountStocks += entry?.currentPrice * entry?.assetQuantity;
-        this.investedAmountStocks += entry?.assetQuantity * entry?.assetPrice
-        }
-        else{
-        this.currentAmountCrypto += entry?.currentPrice * entry?.assetQuantity;
-        this.investedAmountCrypto += entry?.assetQuantity * entry?.assetPrice
-        }
+        // this.currentAmount += entry?.currentPrice * entry?.assetQuantity;
+        // this.investedAmount += entry?.assetQuantity * entry?.assetPrice;
+
+        // if(asset.assetType ==='STOCK'){
+        // this.currentAmountStocks += entry?.currentPrice * entry?.assetQuantity;
+        // this.investedAmountStocks += entry?.assetQuantity * entry?.assetPrice
+        // }
+        // else{
+        // this.currentAmountCrypto += entry?.currentPrice * entry?.assetQuantity;
+        // this.investedAmountCrypto += entry?.assetQuantity * entry?.assetPrice
+        // }
         console.log(entry);
         copy.push(entry);
       });
@@ -247,6 +249,19 @@ export class PortfolioComponent implements OnInit {
             if(this.cryptoMap.get(d?.assetSymbol?.toLowerCase())){
               cryptos += d?.assetSymbol?.toLowerCase() + ","
             }
+
+            this.currentAmount += d?.currentPrice * d?.assetQuantity;
+            this.investedAmount += d?.assetQuantity * d?.assetPrice;
+    
+            if(d.assetType ==='STOCK'){
+            this.currentAmountStocks += d?.currentPrice * d?.assetQuantity;
+            this.investedAmountStocks += d?.assetQuantity * d?.assetPrice
+            }
+            else{
+            this.currentAmountCrypto += d?.currentPrice * d?.assetQuantity;
+            this.investedAmountCrypto += d?.assetQuantity * d?.assetPrice
+            }
+
           })
 
           if(cryptos[cryptos.length-1] == ","){
