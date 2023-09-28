@@ -139,8 +139,7 @@ export class PortfolioComponent implements OnInit {
       let s_total = 0;
       let total = 0;
 
-      this.assests.forEach((asset)=>{
-        console.log(asset);
+      this.assests?.forEach((asset)=>{
         if(asset.assetType == "CRYPTO"){
           c_total += parseFloat(asset?.currentPrice * asset?.assetQuantity as any)
         }else{
@@ -155,7 +154,7 @@ export class PortfolioComponent implements OnInit {
 
     },1000);
    
-    setTimeout(()=>{
+    // setTimeout(()=>{
       socketService.subscribeToContinousData().subscribe((data:any)=>{
         //setting the live price
         console.log("live socket data : ",data)
@@ -171,7 +170,7 @@ export class PortfolioComponent implements OnInit {
         }
   
       })
-    },2000)
+    // },5000)
 
     
     socketService.getStaticStockData()?.subscribe((data:any)=>{

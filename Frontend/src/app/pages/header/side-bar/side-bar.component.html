@@ -4,14 +4,15 @@
   [showCloseIcon]="false"
 >
   <div class="flex flex-column">
-    <div
-      class="menu-item"
-      routerLink="/dashboard"
-      routerLinkActive="menu-active"
-    >
-      <span class="highlight"></span>
-      <span class="menu-item-name">Dashboard</span>
-    </div>
+    <a [routerLink]="['/dashboard']">
+      <p-avatar
+        image="https://drive.google.com/uc?export=view&id=10nTowHx_H2gzQYNChrEMhqOY3MfMfqqJ"
+        styleClass="mr-2"
+        size="large"
+        routerLink="dashboard"
+        id="logo"
+      ></p-avatar>
+    </a>
     <div
       class="menu-item"
       routerLink="/investor-list"

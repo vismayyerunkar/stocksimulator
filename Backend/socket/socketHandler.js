@@ -122,7 +122,7 @@ setInterval(async () => {
     for (let [key, value] of tickers) {
         const filteredData = filter(key)
         if(filteredData && !temptickers.includes(filteredData+".NS")){
-            temptickers.push(filteredData + ".NS");
+            temptickers.push(filteredData?.toUpperCase() + ".NS");
         }
     }
 

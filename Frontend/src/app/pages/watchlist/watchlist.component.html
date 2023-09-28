@@ -32,12 +32,11 @@
                     {{ watchlist.stockSymbol }}
                 </td>
                 <td>
-                    <b>₹{{ watchlist.currentPrice | number : "1.2-2" }}</b>
+                    <b>₹{{ (watchlist.currentPrice | number : "1.2-2") ?? "Loading..."  }}</b>
                 </td>
-                <td>%</td>
+                <td>{{ watchlist?.changePercent ? (watchlist?.changePercent | number : "1.2-2") + " %" : watchlist.currentPrice ? "NAN" : "loading..."}}</td>
                 <td>
                     <p-button label="Delete" styleClass="p-button-danger p-button-sm" (click)="deleteWatchlist(watchlist?._id)"></p-button>
-
                 </td>
             </tr>
         </ng-template>

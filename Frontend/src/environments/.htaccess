@@ -1,0 +1,12 @@
+# Enable RewriteEngine
+RewriteEngine On
+
+# If an existing file or directory is requested, serve it directly
+RewriteCond %{REQUEST_FILENAME} -s [OR]
+RewriteCond %{REQUEST_FILENAME} -l [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^.*$ - [NC,L]
+
+# If the requested URL doesn't match a file or directory,
+# rewrite it to index.html (the entry point of your Angular app)
+RewriteRule ^(.*)$ /index.html [NC,L]

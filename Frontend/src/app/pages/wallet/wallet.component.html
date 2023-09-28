@@ -182,7 +182,7 @@
               </div>
 
               <div class="my-list-item__fee">
-                <span class="my-list-item__fee-delta">₹ {{ stock.price }}</span>
+                <span class="my-list-item__fee-delta">₹ {{ stock.price ?? "Loading..." }}</span>
                 <span
                   class="my-list-item__fee-currency"
                   [class.green]="stock.changePercentage > 0"

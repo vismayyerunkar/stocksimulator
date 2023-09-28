@@ -25,7 +25,7 @@ export class StockDataHandler {
             console.log(is_market_open)
             if (is_market_open) {
                 stocktickers.forEach((symbolData) => {
-                    this.socket.join(symbolData);
+                    this.socket.join(symbolData?.toUpperCase());
                 });
                 console.log("market is open");
                 // cb({
