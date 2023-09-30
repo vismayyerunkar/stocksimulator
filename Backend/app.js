@@ -11,6 +11,7 @@ import stockRoutes from './routes/stock.js'
 import http from 'http';
 import {handleSocket} from './socket/socketHandler.js'
 import checkUserAuth from './middlewares/auth-middleware.js';
+import GoalController from './controllers/goalController.js';
 
 // constants
 const PORT = process.env.PORT
@@ -30,6 +31,8 @@ app.use("/api/user", userRoutes);
 app.use("/api/watchlist",checkUserAuth,watchlistRoutes)
 app.use("/api/assets",checkUserAuth,assetRoutes);
 app.use("/api/transactions",checkUserAuth,transactionRoutes);
+app.post("/api/goal/create",(req,res) => GoalController.createGoal(req,res))
+app.get("/api/goal/getGoalDetails",(req,res) => GoalController.getGoalDetails(req,res))
 // app.use("/api/stock",stockRoutes);
 
 const server = http.createServer(app); // Add this
