@@ -35,8 +35,16 @@ export class LoginComponent implements OnInit, OnDestroy {
         console.log('Login Response:', res);
 
         this.loginForm.reset();
-        this.userAuthService.accessToken = (res as any).token;
-        this.router.navigate(['/dashboard']);
+
+        const token = (res as any).token;
+
+        if(token != 'undefined' && typeof token != typeof undefined){
+          this.userAuthService.accessToken = token;
+          localStorage.setItem("user",JSON.stringify((res as any)._doc))
+          this.router.navigate(['/dashboard']);
+        }else{
+          alert("Invalid credentials");
+        }
       },
       error: (err: any) => {
         this.messageService.add({
@@ -47,6 +55,10 @@ export class LoginComponent implements OnInit, OnDestroy {
         console.error('Login Error:', err);
       },
     });
+  }
+
+  navsignup(){
+    this.router.navigate(["/signup"])
   }
 
   ngOnDestroy() {

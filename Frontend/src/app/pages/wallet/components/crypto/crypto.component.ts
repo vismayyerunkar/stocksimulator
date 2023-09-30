@@ -1,38 +1,82 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-crypto',
   templateUrl: './crypto.component.html',
   styleUrls: ['./crypto.component.scss'],
 })
-export class CryptoComponent implements OnInit {
-  constructor() {}
+export class CryptoComponent implements OnInit, OnChanges {
+  @Input() quantityMap: Map<string, number>;
+  @Input() currentValue: number;
+  @Input() percentChange:number;
+  @Input() investedAmt:number;
   data: any;
   options: any;
+  names: any[] = [];
+  pricePercent: any[] = [];
+  tp: any;
+  tempBgColorsMap:Map<string,string> = new Map();
 
   ngOnInit() {
+    this.updateData();
+  }
+
+  constructor() {
+    this.tp = this.quantityMap;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.tp = this.quantityMap;
+    if (changes["quantityMap"] && !changes["quantityMap"].firstChange) {
+      this.tp = this.quantityMap;
+      this.updateData();
+    }
+  }
+
+  getRandomColor() {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
+  updateData() {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
 
+    this.names = [];
+    this.pricePercent = [];
+    
+    for (let [key, value] of this.tp.entries()) {
+      this.names.push(key);
+      this.pricePercent.push(value);
+      console.log(key,value)
+    }
+
+    let tempBgColors = new Array(this.names.length);
+
+    for(let i = 0;i<this.names.length;i++){
+      let randomColor = this.getRandomColor();
+      while(tempBgColors.includes(randomColor)){
+        randomColor = this.getRandomColor();
+      }
+      tempBgColors[i] = randomColor;
+      this.tempBgColorsMap.set(this.names[i],randomColor);
+    }
+
+
+    const backgroundColors = tempBgColors;
+    const hoverBackgroundColors = backgroundColors.slice(); // Copy the colors array
+
     this.data = {
-      labels: ['COSMOS', 'OKB', 'APTOS', 'MAKER', 'USDD'],
+      labels: [...this.names],
       datasets: [
         {
-          data: [10, 8, 12, 5, 20],
-          backgroundColor: [
-            documentStyle.getPropertyValue('--blue-500'),
-            documentStyle.getPropertyValue('--yellow-500'),
-            documentStyle.getPropertyValue('--green-500'),
-            documentStyle.getPropertyValue('--red-500'),
-            documentStyle.getPropertyValue('--pink-500'),
-          ],
-          hoverBackgroundColor: [
-            documentStyle.getPropertyValue('--blue-400'),
-            documentStyle.getPropertyValue('--yellow-400'),
-            documentStyle.getPropertyValue('--green-400'),
-            documentStyle.getPropertyValue('--red-400'),
-            documentStyle.getPropertyValue('--pink-500'),
-          ],
+          data: [...this.pricePercent],
+          backgroundColor: backgroundColors,
+          hoverBackgroundColor: hoverBackgroundColors,
         },
       ],
     };

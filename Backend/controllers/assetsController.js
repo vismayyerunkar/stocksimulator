@@ -5,8 +5,9 @@ import { getCurrentStockPrice } from './stockController.js';
 
 
 class AssetsController {
-    
+
     static purchaseAsset = async (req, res) => {
+
       const { assetSymbol, assetName,assetType,assetPrice,assetQuantity } = req.body;
         if(!assetName || !assetPrice || !assetSymbol || !assetType || !assetQuantity){
             res.send({
@@ -16,18 +17,33 @@ class AssetsController {
        }
 
       try {
-        // Find the existing user by userId
+
         const existingUser = req.user;
-          console.log(existingUser._id.toString());
-        const newAssetItem = new AssetsModel({
-          userId: existingUser._id, // Use the _id of the existing user document
-          assetSymbol: assetSymbol,
-          assetPrice:assetPrice,
-          assetName: assetName,
-          assetQuantity:assetQuantity,
-          assetType: assetType?.toLowerCase() == 'c' ? "CRYPTO" : "STOCK",
+
+        const existingAsset = await AssetsModel.findOne({
+          assetSymbol:assetSymbol?.toLowerCase(),
         });
 
+        console.log(existingAsset);
+        if(existingAsset){
+
+          existingAsset.assetQuantity += assetQuantity;
+          await existingAsset.save();
+        }else{
+
+          const newAssetItem = new AssetsModel({
+            userId: existingUser._id, // Use the _id of the existing user document
+            assetSymbol: assetSymbol?.toLowerCase(),
+            assetPrice:assetPrice,
+            assetName: assetName?.toLowerCase(),
+            assetQuantity:assetQuantity,
+            assetType: assetType,
+          });
+          await newAssetItem.save();
+        }
+
+        // Find the existing user by userId
+        console.log(existingUser._id.toString());
         // create a transaction
         const user = await UserModel.findOne({_id:req.user});
         console.log(user)
@@ -37,18 +53,19 @@ class AssetsController {
                 message:"Cannot purchase the asset due to low funds"
             });
         }
+
         user.availableTokens -= assetPrice*assetQuantity;
         await user.save();
-        await newAssetItem.save();
 
         const transaction = new Transaction({
             userId: existingUser._id,// Use the _id of the existing user document
             price:assetPrice,
             type:"BUY",
+            assetType:assetType,
             symbol:assetSymbol,
-            
+            quantity:assetQuantity,
         });
-        transaction.save();
+        await transaction.save();
         return res.status(201).send({ status: 'success', message: 'Asset Purchased successfully' });
       } catch (error) {
         console.error(error);
@@ -57,17 +74,20 @@ class AssetsController {
     };
 
     static sellAsset = async (req,res)=>{
-        const {assetId} = req.body;
-        console.log("------called")
+        let {assetId,assetQuantity,currentPrice} = req.body;
+        assetQuantity = parseFloat(assetQuantity);
+        
         try{
 
             const asset = await AssetsModel.findById({_id:assetId});
-                        if(!asset){
+            console.log(asset?.assetSymbol);
+            if(!asset){
                 return res.send({
                     status:400,
                     message:"Asset not found"
                 })
             }
+
             const user = await UserModel.findById({_id:req.user._id});
             if(!user){
                 return res.send({
@@ -76,27 +96,36 @@ class AssetsController {
                 })
             }
 
-            user.availableTokens += asset.assetQuantity * await getCurrentStockPrice(asset.assetSymbol);
+            // const currentPrice= await getCurrentStockPrice(asset?.assetSymbol);
+            console.log("curr spri : ",asset,currentPrice)
+            user.availableTokens += assetQuantity * currentPrice
             await user.save();
 
-            await AssetsModel.deleteOne({_id:assetId});
+
+            if(asset && asset.assetQuantity - assetQuantity > 0){
+              asset.assetQuantity -= assetQuantity;
+             await asset.save();
+            }else{
+              await AssetsModel.deleteOne({_id:assetId});
+            }
            
             const transaction = new Transaction({
-              userId: existingUser._id,// Use the _id of the existing user document
-              price:assetPrice,
+              userId: user._id,// Use the _id of the existing user document
+              price:currentPrice,
               type:"SELL",
               symbol:asset.assetSymbol,
-            
+              assetType:asset.assetType,
+              quantity:asset.assetQuantity,
             });
 
-            transaction.save();
+            await transaction.save();
             // create a transaction
             return res.send({
                 status:200,
                 message:"Asset sold successfully"
             });
           }catch(err){
-            console.log("Error occured while getting assets data")
+            console.log("Error occured while getting assets data",err)
           }   
     }
 

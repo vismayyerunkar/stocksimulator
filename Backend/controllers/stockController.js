@@ -6,7 +6,7 @@ export const getCurrentStockPrice = async(symbol) => {
     console.log("getting price")
     try {
         const resp = await nseIndia.getEquityDetails(symbol);
-        return resp.priceInfo.lastPrice;
+        return resp.priceInfo?.lastPrice;
     } catch (err) {
         throw Error(err);
     }
@@ -32,12 +32,18 @@ export const getStockPriceBetweenDateRange = async(req, res) => {
     }
 }
 
+
+
+
 export const getGainersAndLoosers = async(limit) => {
+
+    try{
+
     const indexData = await nseIndia.getEquityStockIndices("NIFTY 50");
 
     const gainers = [];
     const losers = [];
-    indexData.data.forEach((equityInfo) => {
+    indexData?.data?.forEach((equityInfo) => {
         if (gainers.length < limit && equityInfo.pChange > 0)
             gainers.push(equityInfo)
         else if (losers.length < limit && equityInfo.pChange <= 0) {
@@ -52,6 +58,10 @@ export const getGainersAndLoosers = async(limit) => {
         losers: [...losers].sort((a, b) => a.pChange - b.pChange)
     }
     return data;
+}catch(err){
+    console.log("Error occured while fetching top gainers and loosers")
+}
+
 }
 
 export const isMarketOpen = async() => {
@@ -59,7 +69,6 @@ export const isMarketOpen = async() => {
 
         const data = await axios.get("https://www.nseindia.com/api/marketStatus");
         const marketStatus = data.data.marketState[0].marketStatus;
-        console.log(marketStatus)
         if (marketStatus.toLowerCase() == 'closed' || marketStatus.toLowerCase() == 'close') {
             return false;
         }

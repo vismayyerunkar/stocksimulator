@@ -1,7 +1,9 @@
 <app-header></app-header>
 
 <div class="ipo-list">
-  <div class="title"><h1>All watchlists</h1></div>
+  <div class="title">
+    <h1>All watchlists</h1>
+  </div>
 
   <div class="controls">
     <div class="filter-input">
@@ -15,32 +17,35 @@
   <p-table [value]="watchlist" [paginator]="true" [rows]="4" class="ipo-table">
     <ng-template pTemplate="header">
       <tr>
-        <th>Symbol</th>
         <th>Company Logo</th>
         <th>Company Name</th>
         <th>Price</th>
         <th>Change (%)</th>
+        <th>Remove</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-watchlist>
       <tr>
-        <td>{{ watchlist.number }}</td>
         <td>
           <img
-            src="https://assets-netstorage.groww.in/stock-assets/logos/GSTK532540.png"
+            src="https://tse3.mm.bing.net/th?id=OIP.ag5nBrr4YiPHmZmBSHJypQHaHa&pid=Api&P=0&h=180"
             alt="Company Logo"
             style="width: 20%"
           />
         </td>
-        <td>{{ watchlist.stockSymbol }}</td>
-        <td>{{ watchlist.userId }}</td>
-        <td
-          [ngClass]="{
-            'change-percentage-positive': watchlist.changePercentage > 0,
-            'change-percentage-negative': watchlist.changePercentage < 0
-          }"
-        >
-          {{ watchlist.number }} %
+        <td>
+          {{ watchlist.stockSymbol }}
+        </td>
+        <td>
+          <b>₹{{ watchlist.currentPrice | number : "1.2-2" }}</b>
+        </td>
+        <td>2.6%</td>
+        <td>
+          <p-button
+            label="Delete"
+            styleClass="p-button-danger p-button-sm"
+            (click)="deleteWatchlist(watchlist?._id)"
+          ></p-button>
         </td>
       </tr>
     </ng-template>

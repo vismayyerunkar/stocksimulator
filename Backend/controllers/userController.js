@@ -24,6 +24,7 @@ class UserController {
             const saved_user = await UserModel.findOne({ email: email })
             // Generate JWT Token
             const token = jwt.sign({ userID: saved_user._id,userEmail:saved_user.email }, process.env.JWT_SECRET_KEY, { expiresIn: '1d' })
+            console.log("user registered")
             res.status(201).send({ "status": "success", "message": "Registration Success", "token": token })
           } catch (error) {
             console.log(error)
@@ -35,17 +36,24 @@ class UserController {
     }
   }
 
+
   static userLogin = async (req, res) => {
     try {
       const { email, password } = req.body
+      console.log("received login request")
       if (email && password) {
         const user = await UserModel.findOne({ email: email })
+        console.log("a")
         if (user != null) {
-          const isMatch = await bcrypt.compare(password, user.password)
+          console.log(password,user.password)
+          const isMatch = await bcrypt.compare(password, user.password,)
+          console.log("b",isMatch)
+          console.log(user.email , email,isMatch)
+          delete(user?._doc?.password)
           if ((user.email === email) && isMatch) {
             // Generate JWT Token
             const token = jwt.sign({ userID: user._id,userEmail:user.email }, process.env.JWT_SECRET_KEY, { expiresIn: '1d' })
-            res.send({ "status": "success", "message": "Login Success", "token": token })
+            res.send({ "status": "success", "message": "Login Success", "token": token ,...user})
           } else {
             res.send({ "status": "failed", "message": "Email or Password is not Valid" })
           }

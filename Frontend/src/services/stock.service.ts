@@ -93,12 +93,20 @@ export class StockService {
   
   fetchWatchList(): Observable<IWatchListResponse> {
     const token = `Bearer ${localStorage.getItem('authToken')}`;
-    const url = `${environment.baseUrl}/api/watchlist/`;
+    const url = `${environment.baseUrl}/api/watchlist/watchlists`;
     let httpOptions = {
       headers: new HttpHeaders({ Authorization: token }),
     };
     return this.http.get<IWatchListResponse>(url, httpOptions);
   }
+
+  apiKey = 'GBXGRVSC44LFEGD8'
+
+  searchStockSymbols(keyword: string): Observable<any> {
+    const url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${keyword}&apikey=${this.apiKey}`;
+    return this.http.get(url);
+  }
+
   fetchTransactions(): Observable<ITransactionsResponse> {
     const token = `Bearer ${localStorage.getItem('authToken')}`;
     const url = `${environment.baseUrl}/api/transactions/`;
